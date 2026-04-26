@@ -150,6 +150,70 @@
   .val-note { font-size: 11px; color: #888; margin-top: 2px; }
 
   .brand { text-align: right; font-size: 11px; color: #aaa; margin-top: 56px; letter-spacing: 1px; }
+
+  /* ---- MOBILE ---- */
+  .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  @media (max-width: 640px) {
+    .page { padding: 24px 16px 40px; }
+    .logo { font-size: 18px; }
+    .page-title { font-size: 17px; }
+    .page-desc { font-size: 13px; }
+
+    /* TOC: wrap into 2-row grid instead of single-row flex */
+    .toc-nav {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border: 1px solid #ddd;
+    }
+    .toc-nav a {
+      border-right: 1px solid #ddd;
+      border-bottom: 1px solid #ddd;
+      font-size: 9.5px;
+      padding: 9px 4px;
+    }
+    .toc-nav a:nth-child(3) { border-right: none; }
+    .toc-nav a:nth-child(4) { border-bottom: none; }
+    .toc-nav a:nth-child(5) { border-bottom: none; }
+
+    /* Stats bar: 2x2 + 1 on mobile */
+    .stats-bar {
+      flex-wrap: wrap;
+    }
+    .stat-block {
+      flex: 1 1 48%;
+      min-width: 0;
+      border-bottom: 1px solid #ddd;
+    }
+    .stat-block:nth-child(even) { border-right: none; }
+    .stat-block:last-child:nth-child(odd) {
+      flex: 1 1 100%;
+      border-right: none;
+      border-bottom: none;
+    }
+    .stat-value { font-size: 16px; }
+
+    /* Val strip: 2x2 on mobile */
+    .val-strip { flex-wrap: wrap; }
+    .val-block {
+      flex: 1 1 48%;
+      min-width: 0;
+      border-bottom: 1px solid #e8e8e8;
+    }
+    .val-block:nth-child(even) { border-right: none; }
+    .val-block:last-child:nth-child(odd) {
+      flex: 1 1 100%;
+      border-right: none;
+      border-bottom: none;
+    }
+
+    /* Tables: scroll */
+    .signal-table, .comp-table { font-size: 11.5px; }
+    .signal-table th, .comp-table th { font-size: 9px; }
+
+    .insight-list li { font-size: 13px; }
+    .pylon-angle { font-size: 12.5px; }
+    .flag-block, .risk-block { font-size: 12.5px; }
+  }
 </style>
 </head>
 <body>
@@ -178,6 +242,7 @@
 
   <!-- Signal Summary -->
   <div class="section-label">Signal Summary</div>
+  <div class="table-scroll">
   <table class="signal-table">
     <thead>
       <tr>
@@ -226,9 +291,11 @@
       </tr>
     </tbody>
   </table>
+  </div>
 
   <!-- Key Metrics -->
   <div class="section-label" style="margin-top:36px;">Key Metrics by League — 2023-24</div>
+  <div class="table-scroll">
   <table class="comp-table" style="margin-top:14px;">
     <thead>
       <tr>
@@ -289,6 +356,7 @@
       </tr>
     </tbody>
   </table>
+  </div>
 
   <!-- Charts -->
   <div class="chart-container" style="margin-top:36px;">
