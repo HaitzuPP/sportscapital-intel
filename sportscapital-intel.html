@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pylon Intelligence</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, sans-serif; background: #fff; color: #1a1a1a; -webkit-font-smoothing: antialiased; }
+  .page { max-width: 960px; margin: 0 auto; padding: 48px 36px 60px; }
+
+  .header { margin-bottom: 40px; border-bottom: 1.5px solid #1a1a1a; padding-bottom: 20px; }
+  .header-top { display: flex; justify-content: space-between; align-items: baseline; }
+  .logo { font-size: 24px; font-weight: 800; color: #000; letter-spacing: -0.5px; }
+  .logo span { color: #1a7a3a; }
+  .header-meta { font-size: 11px; color: #999; letter-spacing: 1px; text-transform: uppercase; }
+  .header-desc { margin-top: 10px; font-size: 13px; color: #666; line-height: 1.55; }
+
+  .section-label {
+    font-size: 10px; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; color: #888;
+  }
+  .section-divider {
+    border: none; border-top: 1px solid #e8e8e8; margin: 44px 0 32px;
+  }
+
+  /* ---- RESEARCH CARDS ---- */
+  .research-list { margin-top: 0; }
+
+  a.research-item {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 20px 0;
+    border-bottom: 1px solid #e8e8e8;
+    text-decoration: none;
+    color: inherit;
+  }
+  a.research-item:first-child { border-top: 1px solid #e8e8e8; margin-top: 16px; }
+  a.research-item:hover .item-title { text-decoration: underline; text-decoration-color: #aaa; }
+
+  .item-logo {
+    flex-shrink: 0; width: 44px; height: 44px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .item-logo img { width: 40px; height: 40px; object-fit: contain; }
+
+  .item-meta { flex-shrink: 0; text-align: right; width: 84px; }
+  .item-date { font-size: 11px; color: #999; font-weight: 700; }
+  .item-tag {
+    display: inline-block; margin-top: 6px;
+    font-size: 10px; font-weight: 700; letter-spacing: 0.5px;
+    text-transform: uppercase; color: #1a7a3a;
+  }
+  .item-body { flex: 1; }
+  .item-title { font-size: 15px; font-weight: 800; color: #000; line-height: 1.3; margin-bottom: 6px; }
+  .item-summary { font-size: 13px; color: #555; line-height: 1.62; }
+
+  /* ---- CLUB TABLE ---- */
+  .club-table {
+    width: 100%; border-collapse: collapse;
+    margin-top: 16px; font-size: 13px;
+  }
+  .club-table thead th {
+    font-size: 10px; font-weight: 700; letter-spacing: 1.2px;
+    text-transform: uppercase; color: #999;
+    padding: 8px 12px 10px 0; border-bottom: 1.5px solid #ddd;
+    text-align: left; white-space: nowrap;
+  }
+  .club-table thead th:first-child { padding-left: 0; }
+  .club-table tbody tr {
+    border-bottom: 1px solid #e8e8e8; cursor: pointer;
+  }
+  .club-table tbody tr:last-child { border-bottom: none; }
+  .club-table tbody tr:hover td { background: #fafafa; }
+  .club-table tbody td {
+    padding: 14px 12px 14px 0; vertical-align: middle;
+  }
+  .club-table tbody td:first-child { padding-left: 0; }
+
+  .club-cell { display: flex; align-items: center; gap: 12px; }
+  .club-crest { flex-shrink: 0; }
+  .club-crest img { width: 32px; height: 36px; object-fit: contain; display: block; }
+  .club-name { font-weight: 800; color: #000; font-size: 13.5px; line-height: 1.25; }
+  .club-country { font-size: 11px; color: #999; margin-top: 2px; font-weight: 400; }
+
+  .col-div { font-size: 12.5px; color: #333; }
+  .col-owner { font-size: 12.5px; color: #1a1a1a; font-weight: 700; }
+  .col-owner-sub { font-size: 11px; color: #888; margin-top: 2px; font-weight: 400; }
+  .col-model { font-size: 12px; color: #555; }
+  .col-tenure { font-size: 12px; color: #555; white-space: nowrap; }
+
+  .pill {
+    display: inline-block; font-size: 10px; font-weight: 700;
+    letter-spacing: 0.4px; padding: 3px 9px; text-transform: uppercase;
+  }
+  .pill-active { background: rgba(26,122,58,0.09); color: #1a7a3a; }
+  .pill-sold   { background: rgba(153,153,153,0.12); color: #666; }
+  .pill-exited { background: rgba(192,57,43,0.09); color: #c0392b; }
+
+
+  .filter-bar { display: flex; gap: 8px; flex-wrap: wrap; margin: 14px 0 0; }
+  .filter-btn {
+    font-size: 10px; font-weight: 700; letter-spacing: 1px;
+    text-transform: uppercase; padding: 5px 14px;
+    border: 1px solid #ddd; background: #fff; color: #999;
+    cursor: pointer; font-family: Arial, sans-serif;
+    transition: border-color 0.1s, color 0.1s, background 0.1s;
+  }
+  .filter-btn:hover { border-color: #999; color: #444; }
+  .filter-btn.f-active { border-color: #1a7a3a; color: #1a7a3a; background: rgba(26,122,58,0.07); }
+
+  .brand { text-align: right; font-size: 11px; color: #aaa; margin-top: 56px; letter-spacing: 1px; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="header">
+    <div class="header-top">
+      <div class="logo">PYLON <span>INTELLIGENCE</span></div>
+      <div class="header-meta">Pylon Partners — Internal</div>
+    </div>
+    <div class="header-desc">Investment research, entity profiles, and ownership analysis.</div>
+  </div>
+
+  <!-- ===== SECTION 1: RESEARCH ===== -->
+  <div class="section-label">Research</div>
+
+  <div class="research-list">
+
+    <a class="research-item" href="uk-football-transactions.html">
+      <div class="item-logo"><img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB4PSIyIiB5PSIyIiB3aWR0aD0iMzYiIGhlaWdodD0iMzYiIGZpbGw9IiMwMDNDOEYiIHN0cm9rZT0iIzAwMmE2YSIgc3Ryb2tlLXdpZHRoPSIxLjIiLz48dGV4dCB4PSIyMCIgeT0iMjEiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI5IiBmb250LXdlaWdodD0iODAwIiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIj5VS8KjPC90ZXh0Pjwvc3ZnPg==" alt="UK Football Transactions"></div>
+      <div class="item-meta">
+        <div class="item-date">Apr 2026</div>
+        <div class="item-tag">Market Data</div>
+      </div>
+      <div class="item-body">
+        <div class="item-title">Transaction database: 50 English football club sales across four league tiers, 2015–2025.</div>
+        <div class="item-summary">£8.5B+ in disclosed deal value. Chelsea £4.25B (BlueCo/Clearlake, 2022) is the largest single transaction. US buyers outpace all other nationalities combined. Sortable, filterable by league tier.</div>
+      </div>
+    </a>
+
+    <a class="research-item" href="crypto-sports-sponsorships.html">
+      <div class="item-logo"><img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB4PSIyIiB5PSIyIiB3aWR0aD0iMzYiIGhlaWdodD0iMzYiIGZpbGw9IiMxYTFhMWEiIHN0cm9rZT0iIzAwMCIgc3Ryb2tlLXdpZHRoPSIxLjIiLz48dGV4dCB4PSIyMCIgeT0iMjEiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI5IiBmb250LXdlaWdodD0iODAwIiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIj7igr9TUDwvdGV4dD48L3N2Zz4=" alt="Crypto Sports Sponsorships"></div>
+      <div class="item-meta">
+        <div class="item-date">Apr 2026</div>
+        <div class="item-tag">Market Data</div>
+      </div>
+      <div class="item-body">
+        <div class="item-title">Global tracker of crypto-to-sports sponsorship deals, contract sizes, and termination outcomes, 2020–2025.</div>
+        <div class="item-summary">11 contracts terminated mid-term, mostly FTX and Voyager-linked. F1 leads all sports with 13 team-level deals. $2B+ committed at peak; the collapse rate distinguishes it from any prior sponsorship category.</div>
+      </div>
+    </a>
+
+    <a class="research-item" href="european-second-division-revenue.html">
+      <div class="item-logo"><img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB4PSIyIiB5PSIyIiB3aWR0aD0iMzYiIGhlaWdodD0iMzYiIGZpbGw9IiMxYTdhM2EiIHN0cm9rZT0iIzBmNTIyOCIgc3Ryb2tlLXdpZHRoPSIxLjIiLz48dGV4dCB4PSIyMCIgeT0iMjEiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI5IiBmb250LXdlaWdodD0iODAwIiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIj7igqwyTDwvdGV4dD48L3N2Zz4=" alt="European Second Division Revenue"></div>
+      <div class="item-meta">
+        <div class="item-date">Apr 2026</div>
+        <div class="item-tag">Market Data</div>
+      </div>
+      <div class="item-body">
+        <div class="item-title">Revenue comparison across seven European second-tier leagues by income stream, 2023–24.</div>
+        <div class="item-summary">Bundesliga 2 leads the field materially; the gap widens when broadcast rights and promotion prize money are disaggregated from matchday and commercial income.</div>
+      </div>
+    </a>
+
+    <a class="research-item" href="league-breakdown.html">
+      <div class="item-logo"><img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB4PSIyIiB5PSIyIiB3aWR0aD0iMzYiIGhlaWdodD0iMzYiIGZpbGw9IiMxYTdhM2EiIHN0cm9rZT0iIzBmNTIyOCIgc3Ryb2tlLXdpZHRoPSIxLjIiLz48dGV4dCB4PSIyMCIgeT0iMjIiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI4IiBmb250LXdlaWdodD0iODAwIiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIj41IExHUzwvdGV4dD48L3N2Zz4=" alt="League Breakdown"></div>
+      <div class="item-meta">
+        <div class="item-date">Apr 2026</div>
+        <div class="item-tag">Market Data</div>
+      </div>
+      <div class="item-body">
+        <div class="item-title">Ownership access, broadcast economics, and promotion mechanics across five European second divisions.</div>
+        <div class="item-summary">La Liga 2, Serie B, Championship, Bundesliga 2, and Ligue 2 compared across deal value, average club revenue, and capital access. Serie B's €0.7m broadcast per club vs Bundesliga 2's €12.5m captures the structural divergence.</div>
+      </div>
+    </a>
+
+  </div>
+
+  <!-- ===== SECTION 2: CLUB ANALYSIS ===== -->
+  <hr class="section-divider">
+  <div class="section-label">Club Analysis</div>
+
+  <div class="filter-bar">
+    <button class="filter-btn f-active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="la-liga-2">La Liga 2</button>
+    <button class="filter-btn" data-filter="serie-b">Serie B</button>
+    <button class="filter-btn" data-filter="league-one">League One</button>
+  </div>
+
+  <table class="club-table">
+    <thead>
+      <tr>
+        <th>Club</th>
+        <th>Division</th>
+        <th>Owner</th>
+        <th>Model</th>
+        <th>Tenure</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <tr data-league="serie-b" onclick="location.href='football-club-profiles-due-diligence.html#venezia-fc'">
+        <td>
+          <div class="club-cell">
+            <div class="club-crest"><img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDQiIHZpZXdCb3g9IjAgMCA0MCA0NCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMjAsMiBMMzcsOCBMMzcsMjcgUTM3LDM4IDIwLDQyIFEzLDM4IDMsMjcgTDMsOCBaIiBmaWxsPSIjRUY3RDAwIiBzdHJva2U9IiMwMDAiIHN0cm9rZS13aWR0aD0iMS4yIi8+PHRleHQgeD0iMjAiIHk9IjI3IiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iOSIgZm9udC13ZWlnaHQ9IjgwMCIgZmlsbD0iIzAwMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSI+VkZDPC90ZXh0Pjwvc3ZnPg==" alt="Venezia FC"></div>
+            <div>
+              <div class="club-name">Venezia FC</div>
+              <div class="club-country">Italy</div>
+            </div>
+          </div>
+        </td>
+        <td class="col-div">Serie B</td>
+        <td>
+          <div class="col-owner">Duncan Niederauer</div>
+          <div class="col-owner-sub">+ Drake / APEX Capital consortium</div>
+        </td>
+        <td class="col-model">Brand-led / lifestyle</td>
+        <td class="col-tenure">2020 –</td>
+        <td><span class="pill pill-active">Active</span></td>
+      </tr>
+
+      <tr data-league="serie-b" onclick="location.href='football-club-profiles-due-diligence.html#palermo-fc'">
+        <td>
+          <div class="club-cell">
+            <div class="club-crest"><img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDQiIHZpZXdCb3g9IjAgMCA0MCA0NCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMjAsMiBMMzcsOCBMMzcsMjcgUTM3LDM4IDIwLDQyIFEzLDM4IDMsMjcgTDMsOCBaIiBmaWxsPSIjQ0MwMDQ0IiBzdHJva2U9IiM4YTAwMzAiIHN0cm9rZS13aWR0aD0iMS4yIi8+PHRleHQgeD0iMjAiIHk9IjI3IiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iOSIgZm9udC13ZWlnaHQ9IjgwMCIgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSI+UEFMPC90ZXh0Pjwvc3ZnPg==" alt="Palermo FC"></div>
+            <div>
+              <div class="club-name">Palermo FC</div>
+              <div class="club-country">Italy</div>
+            </div>
+          </div>
+        </td>
+        <td class="col-div">Serie B</td>
+        <td>
+          <div class="col-owner">City Football Group</div>
+          <div class="col-owner-sub">Sheikh Mansour / ADUG — 71%</div>
+        </td>
+        <td class="col-model">Multi-club network</td>
+        <td class="col-tenure">2022 –</td>
+        <td><span class="pill pill-active">Active</span></td>
+      </tr>
+
+      <tr data-league="la-liga-2" onclick="location.href='football-club-profiles-due-diligence.html#real-valladolid'">
+        <td>
+          <div class="club-cell">
+            <div class="club-crest"><img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDQiIHZpZXdCb3g9IjAgMCA0MCA0NCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMjAsMiBMMzcsOCBMMzcsMjcgUTM3LDM4IDIwLDQyIFEzLDM4IDMsMjcgTDMsOCBaIiBmaWxsPSIjNUIyQzhEIiBzdHJva2U9IiMzYTFhNmIiIHN0cm9rZS13aWR0aD0iMS4yIi8+PHRleHQgeD0iMjAiIHk9IjI3IiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iOSIgZm9udC13ZWlnaHQ9IjgwMCIgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSI+UlZGPC90ZXh0Pjwvc3ZnPg==" alt="Real Valladolid"></div>
+            <div>
+              <div class="club-name">Real Valladolid</div>
+              <div class="club-country">Spain</div>
+            </div>
+          </div>
+        </td>
+        <td class="col-div">La Liga 2</td>
+        <td>
+          <div class="col-owner">Ronaldo Nazario</div>
+          <div class="col-owner-sub">Sold to N. American group, May 2025</div>
+        </td>
+        <td class="col-model">Celebrity / operator</td>
+        <td class="col-tenure">2018 – 2025</td>
+        <td><span class="pill pill-sold">Sold</span></td>
+      </tr>
+
+      <tr data-league="other" onclick="location.href='malaga-al-thani-profile.html'">
+        <td>
+          <div class="club-cell">
+            <div class="club-crest"><img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDQiIHZpZXdCb3g9IjAgMCA0MCA0NCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMjAsMiBMMzcsOCBMMzcsMjcgUTM3LDM4IDIwLDQyIFEzLDM4IDMsMjcgTDMsOCBaIiBmaWxsPSIjMUU0NDk0IiBzdHJva2U9IiMxMzJlNmEiIHN0cm9rZS13aWR0aD0iMS4yIi8+PHRleHQgeD0iMjAiIHk9IjI3IiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iOSIgZm9udC13ZWlnaHQ9IjgwMCIgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSI+TUNGPC90ZXh0Pjwvc3ZnPg==" alt="Malaga CF"></div>
+            <div>
+              <div class="club-name">Malaga CF</div>
+              <div class="club-country">Spain</div>
+            </div>
+          </div>
+        </td>
+        <td class="col-div">Segunda Federacion</td>
+        <td>
+          <div class="col-owner">Sheikh A. Al-Thani</div>
+          <div class="col-owner-sub">Judicially removed Feb 2020</div>
+        </td>
+        <td class="col-model">Personal capital</td>
+        <td class="col-tenure">2010 – 2020</td>
+        <td><span class="pill pill-exited">Exited</span></td>
+      </tr>
+
+      <tr data-league="league-one" onclick="location.href='macanthony-peterborough-profile.html'">
+        <td>
+          <div class="club-cell">
+            <div class="club-crest"><img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDQiIHZpZXdCb3g9IjAgMCA0MCA0NCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMjAsMiBMMzcsOCBMMzcsMjcgUTM3LDM4IDIwLDQyIFEzLDM4IDMsMjcgTDMsOCBaIiBmaWxsPSIjMDAzQzhGIiBzdHJva2U9IiMwMDJhNmEiIHN0cm9rZS13aWR0aD0iMS4yIi8+PHRleHQgeD0iMjAiIHk9IjI3IiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iOSIgZm9udC13ZWlnaHQ9IjgwMCIgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSI+UFU8L3RleHQ+PC9zdmc+" alt="Peterborough United"></div>
+            <div>
+              <div class="club-name">Peterborough United</div>
+              <div class="club-country">England</div>
+            </div>
+          </div>
+        </td>
+        <td class="col-div">League One</td>
+        <td>
+          <div class="col-owner">Darragh MacAnthony</div>
+          <div class="col-owner-sub">Sole majority owner since 2023</div>
+        </td>
+        <td class="col-model">Transfer arbitrage</td>
+        <td class="col-tenure">2006 –</td>
+        <td><span class="pill pill-active">Active</span></td>
+      </tr>
+
+      <tr data-league="la-liga-2" onclick="location.href='second-tier-club-profiles.html#deportivo-la-coruna'">
+        <td>
+          <div class="club-cell">
+            <div class="club-crest"><img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDQiIHZpZXdCb3g9IjAgMCA0MCA0NCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMjAsMiBMMzcsOCBMMzcsMjcgUTM3LDM4IDIwLDQyIFEzLDM4IDMsMjcgTDMsOCBaIiBmaWxsPSIjMTQ2MEFBIiBzdHJva2U9IiMwZTRhODIiIHN0cm9rZS13aWR0aD0iMS4yIi8+PHRleHQgeD0iMjAiIHk9IjI3IiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iOSIgZm9udC13ZWlnaHQ9IjgwMCIgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSI+UkM8L3RleHQ+PC9zdmc+" alt="Deportivo La Coruna"></div>
+            <div>
+              <div class="club-name">Deportivo La Coruna</div>
+              <div class="club-country">Spain</div>
+            </div>
+          </div>
+        </td>
+        <td class="col-div">La Liga 2</td>
+        <td>
+          <div class="col-owner">Abanca (bank)</div>
+          <div class="col-owner-sub">Legacy creditor stake ~80%</div>
+        </td>
+        <td class="col-model">Bank creditor / passive</td>
+        <td class="col-tenure">2013 –</td>
+        <td><span class="pill pill-active">Active</span></td>
+      </tr>
+
+      <tr data-league="la-liga-2" onclick="location.href='second-tier-club-profiles.html#almeria'">
+        <td>
+          <div class="club-cell">
+            <div class="club-crest"><img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDQiIHZpZXdCb3g9IjAgMCA0MCA0NCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMjAsMiBMMzcsOCBMMzcsMjcgUTM3LDM4IDIwLDQyIFEzLDM4IDMsMjcgTDMsOCBaIiBmaWxsPSIjRDkxRTE4IiBzdHJva2U9IiNhODE1MTAiIHN0cm9rZS13aWR0aD0iMS4yIi8+PHRleHQgeD0iMjAiIHk9IjI3IiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iOSIgZm9udC13ZWlnaHQ9IjgwMCIgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSI+VUQ8L3RleHQ+PC9zdmc+" alt="UD Almeria"></div>
+            <div>
+              <div class="club-name">UD Almeria</div>
+              <div class="club-country">Spain</div>
+            </div>
+          </div>
+        </td>
+        <td class="col-div">La Liga 2</td>
+        <td>
+          <div class="col-owner">SMC Group (Al-Khereiji)</div>
+          <div class="col-owner-sub">+ Cristiano Ronaldo 25%</div>
+        </td>
+        <td class="col-model">Media-led / commercial</td>
+        <td class="col-tenure">2025 –</td>
+        <td><span class="pill pill-active">Active</span></td>
+      </tr>
+
+      <tr data-league="serie-b" onclick="location.href='second-tier-club-profiles.html#bari'">
+        <td>
+          <div class="club-cell">
+            <div class="club-crest"><img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDQiIHZpZXdCb3g9IjAgMCA0MCA0NCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMjAsMiBMMzcsOCBMMzcsMjcgUTM3LDM4IDIwLDQyIFEzLDM4IDMsMjcgTDMsOCBaIiBmaWxsPSIjOEIyMzMyIiBzdHJva2U9IiM2YTE5MjYiIHN0cm9rZS13aWR0aD0iMS4yIi8+PHRleHQgeD0iMjAiIHk9IjI3IiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iOSIgZm9udC13ZWlnaHQ9IjgwMCIgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSI+QkFSPC90ZXh0Pjwvc3ZnPg==" alt="SSC Bari"></div>
+            <div>
+              <div class="club-name">SSC Bari</div>
+              <div class="club-country">Italy</div>
+            </div>
+          </div>
+        </td>
+        <td class="col-div">Serie B</td>
+        <td>
+          <div class="col-owner">FilmAuro / De Laurentiis</div>
+          <div class="col-owner-sub">Luigi De Laurentiis, President</div>
+        </td>
+        <td class="col-model">Family / phoenix model</td>
+        <td class="col-tenure">2018 –</td>
+        <td><span class="pill pill-active">Active</span></td>
+      </tr>
+
+      <tr data-league="la-liga-2" onclick="location.href='second-tier-club-profiles.html#sporting-de-gijon'">
+        <td>
+          <div class="club-cell">
+            <div class="club-crest"><img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDQiIHZpZXdCb3g9IjAgMCA0MCA0NCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMjAsMiBMMzcsOCBMMzcsMjcgUTM3LDM4IDIwLDQyIFEzLDM4IDMsMjcgTDMsOCBaIiBmaWxsPSIjQ0MwMDAwIiBzdHJva2U9IiM5OTAwMDAiIHN0cm9rZS13aWR0aD0iMS4yIi8+PHRleHQgeD0iMjAiIHk9IjI3IiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iOSIgZm9udC13ZWlnaHQ9IjgwMCIgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSI+U0c8L3RleHQ+PC9zdmc+" alt="Sporting de Gijon"></div>
+            <div>
+              <div class="club-name">Sporting de Gijon</div>
+              <div class="club-country">Spain</div>
+            </div>
+          </div>
+        </td>
+        <td class="col-div">La Liga 2</td>
+        <td>
+          <div class="col-owner">Orlegi Sports</div>
+          <div class="col-owner-sub">Alejandro Irarragorri — 73%</div>
+        </td>
+        <td class="col-model">Multi-club / Mexican</td>
+        <td class="col-tenure">2022 –</td>
+        <td><span class="pill pill-active">Active</span></td>
+      </tr>
+
+      <tr data-league="la-liga-2" onclick="location.href='second-tier-club-profiles.html#leganes'">
+        <td>
+          <div class="club-cell">
+            <div class="club-crest"><img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDQiIHZpZXdCb3g9IjAgMCA0MCA0NCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMjAsMiBMMzcsOCBMMzcsMjcgUTM3LDM4IDIwLDQyIFEzLDM4IDMsMjcgTDMsOCBaIiBmaWxsPSIjMDAzREE1IiBzdHJva2U9IiMwMDJlN2QiIHN0cm9rZS13aWR0aD0iMS4yIi8+PHRleHQgeD0iMjAiIHk9IjI3IiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iOSIgZm9udC13ZWlnaHQ9IjgwMCIgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSI+Q0RMPC90ZXh0Pjwvc3ZnPg==" alt="CD Leganes"></div>
+            <div>
+              <div class="club-name">CD Leganes</div>
+              <div class="club-country">Spain</div>
+            </div>
+          </div>
+        </td>
+        <td class="col-div">La Liga 2</td>
+        <td>
+          <div class="col-owner">Blue Crow Sports</div>
+          <div class="col-owner-sub">Jeff Luhnow / 885 Capital — verify</div>
+        </td>
+        <td class="col-model">Data-driven / analytics</td>
+        <td class="col-tenure">2022 –</td>
+        <td><span class="pill pill-active">Active</span></td>
+      </tr>
+
+      <tr data-league="serie-b" onclick="location.href='second-tier-club-profiles.html#spezia-calcio'">
+        <td>
+          <div class="club-cell">
+            <div class="club-crest"><img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDQiIHZpZXdCb3g9IjAgMCA0MCA0NCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMjAsMiBMMzcsOCBMMzcsMjcgUTM3LDM4IDIwLDQyIFEzLDM4IDMsMjcgTDMsOCBaIiBmaWxsPSIjMWExYTFhIiBzdHJva2U9IiMwMDAwMDAiIHN0cm9rZS13aWR0aD0iMS4yIi8+PHRleHQgeD0iMjAiIHk9IjI3IiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iOSIgZm9udC13ZWlnaHQ9IjgwMCIgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSI+U1BDPC90ZXh0Pjwvc3ZnPg==" alt="Spezia Calcio"></div>
+            <div>
+              <div class="club-name">Spezia Calcio</div>
+              <div class="club-country">Italy</div>
+            </div>
+          </div>
+        </td>
+        <td class="col-div">Serie B</td>
+        <td>
+          <div class="col-owner">Thomas S. Roberts</div>
+          <div class="col-owner-sub">RAM Spezia Holdings LP — 100%</div>
+        </td>
+        <td class="col-model">PE-backed / long-term</td>
+        <td class="col-tenure">2025 –</td>
+        <td><span class="pill pill-active">Active</span></td>
+      </tr>
+
+    </tbody>
+  </table>
+
+  <div class="brand">PYLON PARTNERS</div>
+</div>
+<script>
+  (function() {
+    var btns = document.querySelectorAll('.filter-btn');
+    btns.forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        btns.forEach(function(b) { b.classList.remove('f-active'); });
+        btn.classList.add('f-active');
+        var f = btn.getAttribute('data-filter');
+        document.querySelectorAll('.club-table tbody tr').forEach(function(row) {
+          row.style.display = (f === 'all' || row.getAttribute('data-league') === f) ? '' : 'none';
+        });
+      });
+    });
+  })();
+</script>
+</body>
+</html>

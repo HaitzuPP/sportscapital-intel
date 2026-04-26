@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crypto Sports Sponsorships 2020-2025</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #fff; font-family: Arial, sans-serif; color: #1a1a1a; -webkit-font-smoothing: antialiased; }
+.page { max-width: 1240px; margin: 0 auto; padding: 48px 36px 40px; }
+h1 { font-size: 26px; font-weight: 800; color: #000; line-height: 1.25; margin-bottom: 8px; }
+.subtitle { font-size: 14px; color: #666; margin-bottom: 28px; }
+.section-label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #999; margin-bottom: 12px; margin-top: 36px; }
+
+.stats { display: flex; border: 1.5px solid #ddd; margin-bottom: 32px; }
+.stat { flex: 1; padding: 14px 16px; text-align: center; border-right: 1px solid #ddd; }
+.stat:last-child { border-right: none; }
+.stat-label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #999; margin-bottom: 6px; }
+.stat-val { font-size: 22px; font-weight: 800; color: #1a1a1a; }
+.stat-val.green { color: #1a7a3a; }
+.stat-val.red { color: #c0392b; }
+
+.filters { display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; align-items: center; }
+.filter-label { font-size: 10px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: #888; }
+.filters input, .filters select {
+  border: 1px solid #ddd; padding: 6px 10px; font-family: Arial; font-size: 12.5px;
+  color: #1a1a1a; background: #fff; outline: none;
+}
+.filters input { width: 220px; }
+.filters select { min-width: 130px; }
+.row-count { font-size: 11px; color: #999; margin-left: auto; }
+
+.table-wrap { border: 1.5px solid #ddd; overflow-x: auto; margin-bottom: 8px; }
+table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+thead th {
+  background: #f8f8f8; font-size: 10px; font-weight: 700; letter-spacing: 1px;
+  text-transform: uppercase; color: #888; padding: 10px 12px;
+  border-bottom: 1.5px solid #ddd; text-align: left; cursor: pointer;
+  user-select: none; white-space: nowrap;
+}
+thead th:hover { background: #f0f0f0; color: #555; }
+thead th.sort-asc::after { content: ' \2191'; color: #1a7a3a; }
+thead th.sort-desc::after { content: ' \2193'; color: #1a7a3a; }
+tbody tr { border-bottom: 1px solid #e8e8e8; transition: background 0.1s; }
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: #f5fdf7; }
+tbody td { padding: 9px 12px; vertical-align: middle; }
+.col-year { font-weight: 700; color: #555; font-size: 12px; }
+.brand { font-weight: 700; }
+.col-league { font-size: 11.5px; color: #555; }
+.col-team { font-size: 12.5px; }
+.col-team-league { font-size: 11px; color: #aaa; font-style: italic; }
+.value-disc { font-weight: 700; }
+.value-und { color: #aaa; font-style: italic; }
+
+.badge { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.3px; padding: 2px 7px; }
+.badge-active { background: rgba(26,122,58,0.09); color: #1a7a3a; }
+.badge-expired { background: rgba(153,153,153,0.1); color: #777; }
+.badge-terminated { background: rgba(192,57,43,0.09); color: #c0392b; }
+
+.chart-box { border: 1.5px solid #ddd; padding: 20px 24px; }
+.chart-title { font-size: 10px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: #888; margin-bottom: 4px; }
+.chart-subtitle { font-size: 12px; color: #999; margin-bottom: 14px; }
+.charts-row { display: grid; grid-template-columns: 1.4fr 1fr; gap: 20px; margin-top: 4px; }
+
+/* Tooltip */
+#tooltip {
+  position: fixed; pointer-events: none; background: #fff;
+  border: 1.5px solid #ddd; padding: 12px 14px;
+  font-family: Arial, sans-serif; font-size: 12px; color: #1a1a1a;
+  max-width: 310px; min-width: 200px; z-index: 9999; display: none;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.09);
+}
+#tooltip .tt-head { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #888; margin-bottom: 6px; }
+#tooltip .tt-count { font-size: 18px; font-weight: 800; color: #1a1a1a; margin-bottom: 8px; border-bottom: 1px solid #e8e8e8; padding-bottom: 8px; }
+#tooltip .tt-count span { font-size: 11px; font-weight: 400; color: #999; margin-left: 4px; }
+#tooltip .tt-item { font-size: 11px; color: #444; padding: 2.5px 0; display: flex; align-items: flex-start; gap: 6px; line-height: 1.4; }
+#tooltip .tt-dot { width: 5px; height: 5px; border-radius: 50%; margin-top: 4px; flex-shrink: 0; }
+#tooltip .tt-more { font-size: 10px; color: #aaa; margin-top: 6px; font-style: italic; }
+
+.footnotes { font-size: 11px; color: #999; line-height: 1.75; border-top: 1px solid #e8e8e8; padding-top: 14px; margin-top: 10px; }
+.divider { border-top: 1px solid #e8e8e8; margin: 36px 0; }
+</style>
+</head>
+<body>
+
+<div id="tooltip">
+  <div class="tt-head" id="tt-head"></div>
+  <div class="tt-count" id="tt-count"></div>
+  <div id="tt-list"></div>
+  <div class="tt-more" id="tt-more"></div>
+</div>
+
+<div class="page">
+
+<div style="margin-bottom:28px; padding-bottom:16px; border-bottom:1px solid #e0e0e0;">
+  <a href="sportscapital-intel.html" style="font-size:12px; font-weight:700; color:#1a1a1a; text-decoration:none; letter-spacing:0.3px;">&#8592; Pylon Intelligence</a>
+</div>
+
+<h1>Crypto Sports Sponsorships Peaked in 2021: 57 Deals, $2B+ Committed, 19% Collapsed Mid-Contract</h1>
+<div class="subtitle">Global tracker of crypto-to-sports deals, 2020-2025. 11 terminated contracts linked to FTX/Voyager bankruptcy or issuer non-payment. F1 has the deepest penetration of any sport with 13 team-level deals tracked.</div>
+
+<div class="stats">
+  <div class="stat"><div class="stat-label">Deals Tracked</div><div class="stat-val">57</div></div>
+  <div class="stat"><div class="stat-label">Disclosed Value</div><div class="stat-val green">$2B+</div></div>
+  <div class="stat"><div class="stat-label">Peak Year</div><div class="stat-val">2021</div></div>
+  <div class="stat"><div class="stat-label">Active</div><div class="stat-val green">29</div></div>
+  <div class="stat"><div class="stat-label">Expired</div><div class="stat-val" style="color:#777;">17</div></div>
+  <div class="stat"><div class="stat-label">Terminated</div><div class="stat-val red">11</div></div>
+</div>
+
+<div class="section-label">Full Deal Table</div>
+<div class="filters">
+  <span class="filter-label">Filter</span>
+  <input type="text" id="searchInput" placeholder="Search brand, team, league..." oninput="applyFilters()">
+  <select id="sportFilter" onchange="applyFilters()">
+    <option value="">All Sports</option>
+    <option value="football">Football / Soccer</option>
+    <option value="f1">F1</option>
+    <option value="nba">NBA</option>
+    <option value="mma">MMA / UFC</option>
+    <option value="tennis">Tennis</option>
+    <option value="mlb">MLB</option>
+    <option value="esports">Esports</option>
+    <option value="cricket">Cricket</option>
+    <option value="golf">Golf</option>
+  </select>
+  <select id="statusFilter" onchange="applyFilters()">
+    <option value="">All Statuses</option>
+    <option value="Active">Active</option>
+    <option value="Expired">Expired</option>
+    <option value="Terminated">Terminated</option>
+  </select>
+  <select id="yearFilter" onchange="applyFilters()">
+    <option value="">All Years</option>
+    <option value="2020">2020</option>
+    <option value="2021">2021</option>
+    <option value="2022">2022</option>
+    <option value="2023">2023</option>
+    <option value="2024">2024</option>
+    <option value="2025">2025</option>
+  </select>
+  <span class="row-count" id="rowCount">57 deals</span>
+</div>
+
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th onclick="sortTable(0)" id="th0">Year</th>
+        <th onclick="sortTable(1)" id="th1">Crypto Brand</th>
+        <th onclick="sortTable(2)" id="th2">League</th>
+        <th onclick="sortTable(3)" id="th3">Team</th>
+        <th onclick="sortTable(4)" id="th4">Deal Value</th>
+        <th onclick="sortTable(5)" id="th5">Type</th>
+        <th onclick="sortTable(6)" id="th6">Status</th>
+      </tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+  </table>
+</div>
+
+<div class="footnotes">
+  <b style="color:#c0392b;">†</b> Terminated following crypto firm bankruptcy. FTX filed Chapter 11 Nov 2022; Voyager Digital filed Chapter 11 Jul 2022.<br>
+  <b style="color:#c0392b;">‡</b> Terminated due to issuer non-payment. DigitalBits failed to pay Inter Milan from 2022-23 onward. Bitci.com missed payments to Cadiz CF. Velas Network failed to fulfil Ferrari obligations in 2023.<br>
+  Deal values are total contract value where publicly disclosed. Undisclosed reflects lack of public reporting, not deal size.
+</div>
+
+<div class="divider"></div>
+
+<div class="section-label">Visualisation</div>
+
+<div class="chart-box" style="margin-bottom:20px;">
+  <div class="chart-title">Deals Signed Per Year</div>
+  <div class="chart-subtitle">Hover any bar to see the deals. 2021 bull run produced 27 new deals. Crypto winter in 2023 brought activity to a near-halt before a partial recovery in 2024-25.</div>
+  <svg id="yearChart" viewBox="0 0 860 230" xmlns="http://www.w3.org/2000/svg" style="width:100%;"></svg>
+</div>
+
+<div class="charts-row">
+  <div class="chart-box">
+    <div class="chart-title">Deals by Sport</div>
+    <div class="chart-subtitle">Hover any bar to see the deals. Football leads at 47%, F1 now second at 23% with 13 team-level deals.</div>
+    <svg id="sportChart" viewBox="0 0 420 310" xmlns="http://www.w3.org/2000/svg" style="width:100%;"></svg>
+  </div>
+  <div class="chart-box">
+    <div class="chart-title">Deal Status Breakdown</div>
+    <div class="chart-subtitle">Hover any block to see the deals. All 11 terminations tied to counterparty failure, none voluntary.</div>
+    <svg id="statusChart" viewBox="0 0 340 310" xmlns="http://www.w3.org/2000/svg" style="width:100%;"></svg>
+  </div>
+</div>
+
+<div class="divider"></div>
+<div style="text-align:right; font-size:11px; color:#aaa; letter-spacing:1px;">PYLON PARTNERS</div>
+</div>
+
+<script>
+// data: [year, brand, league, team, value, type, status, sport_cat]
+const deals = [
+  // --- 2020 ---
+  [2020,"Socios.com","La Liga","FC Barcelona","Undisclosed","Fan Token Partner","Active","football"],
+  [2020,"Socios.com","Ligue 1","Paris Saint-Germain","Undisclosed","Fan Token Partner","Active","football"],
+  [2020,"Socios.com","Serie A","Juventus","Undisclosed","Fan Token Partner","Active","football"],
+  // --- 2021 ---
+  [2021,"Crypto.com","NBA","Crypto.com Arena (LA Lakers)","$700M","Naming Rights","Active","nba"],
+  [2021,"FTX","NBA","FTX Arena (Miami Heat)","$135M","Naming Rights","Terminated","nba"],
+  [2021,"Coinbase","NBA","League","$192M","Official Partner","Active","nba"],
+  [2021,"FTX","NBA","Golden State Warriors","$10M","Official Partner","Terminated","nba"],
+  [2021,"FTX","Esports","TSM","$210M","Naming Rights","Terminated","esports"],
+  [2021,"Crypto.com","Formula 1","League","$100M+","Official Partner","Active","f1"],
+  [2021,"Crypto.com","UFC","League","$175M","Official Partner","Active","mma"],
+  [2021,"FTX","MLB","League","Undisclosed","Official Partner","Terminated","mlb"],
+  [2021,"FTX","NBA / NHL","Wizards / Capitals","Undisclosed","Official Partner","Terminated","nba"],
+  [2021,"Crypto.com","NBA","Philadelphia 76ers","$10M+/yr","Jersey Patch","Active","nba"],
+  [2021,"Crypto.com","Formula 1","Aston Martin F1","Undisclosed","Team Sponsor","Expired","f1"],
+  [2021,"FTX","Formula 1","Mercedes-AMG Petronas","Undisclosed","Team Sponsor","Terminated","f1"],
+  [2021,"Velas Network","Formula 1","Ferrari F1","Undisclosed","Official Partner","Terminated","f1"],
+  [2021,"Tezos","Formula 1","McLaren F1","Undisclosed","NFT Partner","Expired","f1"],
+  [2021,"Fantom","Formula 1","AlphaTauri F1","Undisclosed","Official Partner","Expired","f1"],
+  [2021,"Tezos","Premier League","Manchester United","Undisclosed","Training Kit","Expired","football"],
+  [2021,"Crypto.com","Ligue 1","Paris Saint-Germain","Undisclosed","Official Partner","Expired","football"],
+  [2021,"DigitalBits","Serie A","AS Roma","EUR 36M","Jersey Sponsor","Expired","football"],
+  [2021,"DigitalBits","Serie A","Inter Milan","EUR 85M","Jersey Sponsor","Terminated","football"],
+  [2021,"Binance","Serie A","S.S. Lazio","Undisclosed","Official Partner","Expired","football"],
+  [2021,"Binance","International","Argentina National Team","Undisclosed","Official Partner","Expired","football"],
+  [2021,"Socios.com","Premier League","Arsenal","Undisclosed","Fan Token Partner","Active","football"],
+  [2021,"Socios.com","Serie A","AC Milan","Undisclosed","Fan Token Partner","Active","football"],
+  [2021,"Socios.com","Premier League","Manchester City","Undisclosed","Fan Token Partner","Active","football"],
+  [2021,"Bitci.com","La Liga","Cadiz CF","Undisclosed","Jersey Sponsor","Terminated","football"],
+  [2021,"FTX","ICC","Tournament","Undisclosed","Official Partner","Terminated","cricket"],
+  [2021,"Voyager Digital","NBA","Dallas Mavericks","Undisclosed","Official Partner","Terminated","nba"],
+  // --- 2022 ---
+  [2022,"Bybit","Formula 1","Red Bull Racing","$150M","Team Sponsor","Expired","f1"],
+  [2022,"OKX","Formula 1","McLaren F1","Undisclosed","Primary Sponsor","Active","f1"],
+  [2022,"Binance","Formula 1","Alpine F1","Undisclosed","Official Partner","Expired","f1"],
+  [2022,"OKX","Premier League","Manchester City","$70M","Sleeve Sponsor","Active","football"],
+  [2022,"VeChain","UFC","League","$100M","Official Partner","Active","mma"],
+  [2022,"Coinbase","Bundesliga","Borussia Dortmund","Undisclosed","Official Partner","Expired","football"],
+  [2022,"Bitpanda","Tennis","Madrid Open","Undisclosed","Tournament Sponsor","Expired","tennis"],
+  [2022,"Stake.com","Premier League","Everton FC","Undisclosed","Jersey Sponsor","Active","football"],
+  [2022,"Binance","CAF / AFCON","Tournament","Undisclosed","Tournament Sponsor","Expired","football"],
+  [2022,"Binance","Primeira Liga","FC Porto","Undisclosed","Official Partner","Expired","football"],
+  [2022,"Coinbase","NBA","Golden State Warriors","Undisclosed","Official Partner","Active","nba"],
+  [2022,"Crypto.com","Tennis","Australian Open","Undisclosed","Tournament Sponsor","Expired","tennis"],
+  [2022,"Binance","Brasileirao","League","Undisclosed","Official Partner","Expired","football"],
+  [2022,"Sorare","MLS","League","Undisclosed","Official NFT Partner","Active","football"],
+  // --- 2023 ---
+  [2023,"BingX","Premier League","Chelsea FC","$10M","Official Partner","Expired","football"],
+  [2023,"Kraken","Formula 1","Williams F1","Undisclosed","Team Sponsor","Active","f1"],
+  [2023,"Stake.com","Formula 1","Kick Sauber F1","~$100M","Title Sponsor","Active","f1"],
+  // --- 2024 ---
+  [2024,"Kraken","La Liga","Atletico Madrid","Undisclosed","Sleeve Sponsor","Active","football"],
+  [2024,"Kraken","Premier League","Tottenham Hotspur","Undisclosed","Sleeve Sponsor","Active","football"],
+  [2024,"Kraken","Bundesliga","RB Leipzig","Undisclosed","Official Partner","Active","football"],
+  [2024,"Bitpanda","Bundesliga","Bayern Munich","Undisclosed","Official Crypto Partner","Active","football"],
+  [2024,"BlockDAG","Bundesliga","Borussia Dortmund","$10M","Official Partner","Active","football"],
+  [2024,"Crypto.com","Champions League","League","Undisclosed","Official Partner","Active","football"],
+  [2024,"Crypto.com","Golf","The Showdown","$10M","Tournament Sponsor","Active","golf"],
+  // --- 2025 ---
+  [2025,"Coinbase","Formula 1","Aston Martin Aramco F1","Undisclosed","Team Sponsor","Active","f1"],
+  [2025,"Bitpanda","ATP Tour","League","Undisclosed","Tour Sponsor","Active","tennis"],
+  [2025,"Gate.io","Formula 1","Red Bull Racing","Undisclosed","Team Sponsor","Active","f1"],
+];
+
+// Brands terminated due to bankruptcy (show †)
+const bankruptBrands = new Set(["FTX","Voyager Digital"]);
+// Brands terminated due to non-payment (show ‡)
+const nonPayBrands = new Set(["DigitalBits","Bitci.com","Velas Network"]);
+
+// ── Tooltip ───────────────────────────────────────────────────
+const tooltip = document.getElementById('tooltip');
+
+function showTooltip(e, head, rows) {
+  const MAX = 14;
+  document.getElementById('tt-head').textContent = head;
+  document.getElementById('tt-count').innerHTML = `${rows.length}<span> deal${rows.length!==1?'s':''}</span>`;
+  const list = document.getElementById('tt-list');
+  const shown = rows.slice(0, MAX);
+  const dotColor = d => d[6]==='Active'?'#1a7a3a': d[6]==='Expired'?'#bbb':'#c0392b';
+  list.innerHTML = shown.map(d =>
+    `<div class="tt-item"><span class="tt-dot" style="background:${dotColor(d)};"></span><span><b>${d[1]}</b> / ${d[3]==='League'?d[2]+' (League)':d[3]} <span style="color:#aaa;">${d[0]}</span></span></div>`
+  ).join('');
+  document.getElementById('tt-more').textContent = rows.length > MAX ? `+${rows.length - MAX} more` : '';
+  tooltip.style.display = 'block';
+  positionTooltip(e);
+}
+function positionTooltip(e) {
+  const pad = 14, tw = tooltip.offsetWidth, th = tooltip.offsetHeight;
+  let x = e.clientX + pad, y = e.clientY + pad;
+  if (x + tw > window.innerWidth - 10) x = e.clientX - tw - pad;
+  if (y + th > window.innerHeight - 10) y = e.clientY - th - pad;
+  tooltip.style.left = x + 'px'; tooltip.style.top = y + 'px';
+}
+function hideTooltip() { tooltip.style.display = 'none'; }
+document.addEventListener('mousemove', e => { if (tooltip.style.display==='block') positionTooltip(e); });
+
+// ── SVG helpers ───────────────────────────────────────────────
+const NS = 'http://www.w3.org/2000/svg';
+function el(tag, attrs, text) {
+  const e = document.createElementNS(NS, tag);
+  for (const [k,v] of Object.entries(attrs)) e.setAttribute(k, String(v));
+  if (text !== undefined) e.textContent = text;
+  return e;
+}
+function hoverBar(rect, rows, label) {
+  rect.style.cursor = 'pointer';
+  rect.addEventListener('mouseenter', e => { rect.style.opacity='0.72'; showTooltip(e, label, rows); });
+  rect.addEventListener('mouseleave', () => { rect.style.opacity='1'; hideTooltip(); });
+}
+
+// ── Year Chart ────────────────────────────────────────────────
+function buildYearChart() {
+  const svg = document.getElementById('yearChart');
+  svg.innerHTML = '';
+  const BL = 175, TOP = 20, BW = 80, GAP = 40, SX = 120;
+  const years = [2020,2021,2022,2023,2024,2025];
+  const clr = {2020:'#999',2021:'#1a7a3a',2022:'#d4a017',2023:'#c0392b',2024:'#1a7a3a',2025:'#1a7a3a'};
+  const maxDeals = 30, range = BL - TOP; // 155px for 30 deals -> 1 deal = 155/30 ≈ 5.17px
+  const px = n => (n / maxDeals) * range;
+
+  // Axes
+  svg.appendChild(el('line',{x1:80,y1:BL,x2:840,y2:BL,stroke:'#1a1a1a','stroke-width':'0.8'}));
+  svg.appendChild(el('line',{x1:80,y1:TOP,x2:80,y2:BL,stroke:'#e8e8e8','stroke-width':'0.8'}));
+
+  // Grid
+  [0,5,10,15,20,25,30].forEach(n => {
+    const y = BL - px(n);
+    svg.appendChild(el('line',{x1:80,y1:y,x2:840,y2:y,stroke:'#e8e8e8','stroke-width':'0.6'}));
+    svg.appendChild(el('text',{x:72,y:y+4,'font-family':'Arial','font-size':'11',fill:'#999','font-weight':'600','text-anchor':'end'},String(n)));
+  });
+
+  years.forEach((yr, i) => {
+    const rows = deals.filter(d => d[0] === yr);
+    const count = rows.length;
+    const h = px(count);
+    const x = SX + i * (BW + GAP);
+    const y = BL - h;
+
+    const bar = el('rect',{x,y,width:BW,height:Math.max(h,2),fill:clr[yr]});
+    hoverBar(bar, rows, `${yr} Deals`);
+    svg.appendChild(bar);
+
+    // Invisible tall hit zone
+    const hit = el('rect',{x,y:TOP,width:BW,height:BL-TOP,fill:'transparent',cursor:'pointer'});
+    hit.addEventListener('mouseenter', e => { bar.style.opacity='0.72'; showTooltip(e,`${yr} Deals`,rows); });
+    hit.addEventListener('mouseleave', () => { bar.style.opacity='1'; hideTooltip(); });
+    svg.appendChild(hit);
+
+    svg.appendChild(el('text',{x:x+BW/2,y:y-5,'font-family':'Arial','font-size':'11','font-weight':'700',fill:'#1a1a1a','text-anchor':'middle'},String(count)));
+    svg.appendChild(el('text',{x:x+BW/2,y:BL+16,'font-family':'Arial','font-size':'11',fill:'#888','font-weight':'600','text-anchor':'middle'},String(yr)));
+  });
+
+  // Annotation A: FTX on 2022 bar (index 2 = x=360+40=400 centre)
+  const ax = SX + 2*(BW+GAP), aXc = ax+BW/2;
+  const aY = BL - px(deals.filter(d=>d[0]===2022).length);
+  svg.appendChild(el('circle',{cx:aXc,cy:aY,r:4,fill:'#c0392b'}));
+  svg.appendChild(el('polyline',{points:`${aXc},${aY-4} ${aXc},55 560,55`,stroke:'#aaa','stroke-width':'1','stroke-dasharray':'4,3',fill:'none'}));
+  svg.appendChild(el('rect',{x:560,y:36,width:226,height:38,fill:'rgba(255,245,245,0.97)',stroke:'rgba(192,57,43,0.5)','stroke-width':'1'}));
+  svg.appendChild(el('text',{x:570,y:51,'font-family':'Arial','font-size':'10','font-weight':'800',fill:'#c0392b'},'A  FTX COLLAPSE NOV 2022'));
+  svg.appendChild(el('text',{x:570,y:66,'font-family':'Arial','font-size':'9.5',fill:'#555'},'7 of 14 deals from this year later terminated'));
+
+  // Annotation B: Recovery on 2024 bar (index 4 = x=600, centre=640)
+  const bx = SX + 4*(BW+GAP), bXc = bx+BW/2;
+  const bY = BL - px(deals.filter(d=>d[0]===2024).length);
+  svg.appendChild(el('circle',{cx:bXc,cy:bY,r:4,fill:'#1a7a3a'}));
+  svg.appendChild(el('polyline',{points:`${bXc},${bY-4} ${bXc},112 740,112`,stroke:'#aaa','stroke-width':'1','stroke-dasharray':'4,3',fill:'none'}));
+  svg.appendChild(el('rect',{x:740,y:94,width:190,height:36,fill:'rgba(245,255,248,0.97)',stroke:'rgba(26,122,58,0.5)','stroke-width':'1'}));
+  svg.appendChild(el('text',{x:750,y:108,'font-family':'Arial','font-size':'10','font-weight':'800',fill:'#1a7a3a'},'B  MARKET RECOVERY'));
+  svg.appendChild(el('text',{x:750,y:122,'font-family':'Arial','font-size':'9.5',fill:'#555'},'Football and F1 lead rebound'));
+}
+
+// ── Sport Chart ───────────────────────────────────────────────
+function buildSportChart() {
+  const svg = document.getElementById('sportChart');
+  svg.innerHTML = '';
+  const sports = [
+    {label:'Football', key:'football', clr:'#1a7a3a'},
+    {label:'F1',       key:'f1',       clr:'#555'},
+    {label:'NBA',      key:'nba',      clr:'#999'},
+    {label:'Tennis',   key:'tennis',   clr:'#ccc'},
+    {label:'MMA / UFC',key:'mma',      clr:'#ccc'},
+    {label:'MLB',      key:'mlb',      clr:'#ddd'},
+    {label:'Esports',  key:'esports',  clr:'#ddd'},
+    {label:'Cricket',  key:'cricket',  clr:'#ddd'},
+    {label:'Golf',     key:'golf',     clr:'#ddd'},
+  ];
+  const maxW = 200, RH = 22, RG = 9, SX = 115, SY = 10;
+  svg.appendChild(el('line',{x1:SX,y1:SY,x2:SX,y2:SY+sports.length*(RH+RG)+4,stroke:'#e8e8e8','stroke-width':'0.8'}));
+
+  sports.forEach((s, i) => {
+    const rows = deals.filter(d => d[7] === s.key);
+    const count = rows.length;
+    const maxAll = deals.filter(d=>d[7]==='football').length;
+    const w = Math.max((count/maxAll)*maxW, count>0?6:0);
+    const y = SY + i*(RH+RG);
+
+    const bar = el('rect',{x:SX,y,width:w,height:RH,fill:s.clr,cursor:'pointer'});
+    hoverBar(bar, rows, s.label+' Deals');
+    svg.appendChild(bar);
+
+    const hit = el('rect',{x:SX,y,width:Math.max(w,30),height:RH,fill:'transparent',cursor:'pointer'});
+    hit.addEventListener('mouseenter', e=>{bar.style.opacity='0.7';showTooltip(e,s.label+' Deals',rows);});
+    hit.addEventListener('mouseleave', ()=>{bar.style.opacity='1';hideTooltip();});
+    svg.appendChild(hit);
+
+    svg.appendChild(el('text',{x:SX-6,y:y+RH*0.73,'font-family':'Arial','font-size':'10.5',fill:'#666','font-weight':'600','text-anchor':'end'},s.label));
+    svg.appendChild(el('text',{x:SX+w+6,y:y+RH*0.73,'font-family':'Arial','font-size':'11','font-weight':'700',fill:'#1a1a1a'},String(count)));
+  });
+}
+
+// ── Status Chart ──────────────────────────────────────────────
+function buildStatusChart() {
+  const svg = document.getElementById('statusChart');
+  svg.innerHTML = '';
+  const statusCfg = [
+    {key:'Active',     label:'ACTIVE',     clr:'#1a7a3a', bg:'rgba(26,122,58,0.08)', border:'#1a7a3a', y:20},
+    {key:'Expired',    label:'EXPIRED',    clr:'#888',    bg:'#f5f5f5',              border:'#ccc',    y:84},
+    {key:'Terminated', label:'TERMINATED', clr:'#c0392b', bg:'rgba(192,57,43,0.07)',border:'#c0392b', y:148},
+  ];
+  statusCfg.forEach(s => {
+    const rows = deals.filter(d => d[6] === s.key);
+    const pct = Math.round((rows.length/deals.length)*100);
+    const g = document.createElementNS(NS, 'g');
+    g.style.cursor = 'pointer';
+
+    const bg = el('rect',{x:20,y:s.y,width:300,height:48,fill:s.bg,stroke:s.border,'stroke-width':'1'});
+    g.appendChild(bg);
+    g.appendChild(el('text',{x:30,y:s.y+17,'font-family':'Arial','font-size':'10','font-weight':'700',fill:s.clr,'letter-spacing':'1'},s.label));
+    g.appendChild(el('text',{x:30,y:s.y+37,'font-family':'Arial','font-size':'11',fill:'#555'},`${rows.length} deals (${pct}%)`));
+    g.appendChild(el('text',{x:295,y:s.y+32,'font-family':'Arial','font-size':'22','font-weight':'800',fill:s.clr,'text-anchor':'end'},String(rows.length)));
+
+    g.addEventListener('mouseenter', e=>{bg.style.opacity='0.7'; showTooltip(e,s.label,rows);});
+    g.addEventListener('mouseleave', ()=>{bg.style.opacity='1'; hideTooltip();});
+    svg.appendChild(g);
+  });
+
+  // Notes
+  const notes = [
+    {y:222,text:'Termination breakdown:',fill:'#aaa'},
+    {y:239,dot:'#c0392b',text:'FTX / Voyager bankruptcy: 8 deals',fill:'#666'},
+    {y:255,dot:'#d4a017',text:'Issuer non-payment: 3 deals',fill:'#666'},
+    {y:272,text:'Largest deal: $700M (Crypto.com Arena, LA)',fill:'#aaa'},
+    {y:287,text:'Most active: Crypto.com (9 deals tracked)',fill:'#aaa'},
+  ];
+  notes.forEach(n => {
+    if (n.dot) {
+      svg.appendChild(el('rect',{x:20,y:n.y-8,width:7,height:7,fill:n.dot}));
+      svg.appendChild(el('text',{x:32,y:n.y,'font-family':'Arial','font-size':'10',fill:n.fill},n.text));
+    } else {
+      svg.appendChild(el('text',{x:20,y:n.y,'font-family':'Arial','font-size':'10',fill:n.fill},n.text));
+    }
+  });
+}
+
+// ── Table ─────────────────────────────────────────────────────
+let filtered = [...deals];
+let sortCol = 0, sortAsc = true;
+
+function statusBadge(d) {
+  const s = d[6];
+  let cls = s==='Active'?'badge-active': s==='Expired'?'badge-expired':'badge-terminated';
+  let suffix = '';
+  if (s==='Terminated') {
+    if (bankruptBrands.has(d[1])) suffix = '&#8224;';
+    else if (nonPayBrands.has(d[1])) suffix = '&#8225;';
+    else suffix = '&#8225;';
+  }
+  return `<span class="badge ${cls}">${s}${suffix}</span>`;
+}
+
+function renderTable(data) {
+  const tbody = document.getElementById('tableBody');
+  tbody.innerHTML = data.map(d => {
+    const teamCell = d[3]==='League'
+      ? `<span class="col-team-league">League-wide</span>`
+      : d[3]==='Tournament'
+        ? `<span class="col-team-league">Tournament</span>`
+        : `<span class="col-team">${d[3]}</span>`;
+    return `<tr>
+      <td class="col-year">${d[0]}</td>
+      <td class="brand">${d[1]}</td>
+      <td class="col-league">${d[2]}</td>
+      <td>${teamCell}</td>
+      <td class="${d[4]==='Undisclosed'?'value-und':'value-disc'}">${d[4]}</td>
+      <td style="color:#555;font-size:12px;">${d[5]}</td>
+      <td>${statusBadge(d)}</td>
+    </tr>`;
+  }).join('');
+  document.getElementById('rowCount').textContent = `${data.length} deal${data.length!==1?'s':''}`;
+}
+
+function applyFilters() {
+  const s  = document.getElementById('searchInput').value.toLowerCase();
+  const sp = document.getElementById('sportFilter').value;
+  const st = document.getElementById('statusFilter').value;
+  const yr = document.getElementById('yearFilter').value;
+  filtered = deals.filter(d => {
+    const txt = (d[1]+d[2]+d[3]+d[5]).toLowerCase();
+    return (!s  || txt.includes(s))
+        && (!sp || d[7] === sp)
+        && (!st || d[6] === st)
+        && (!yr || String(d[0]) === yr);
+  });
+  renderTable(filtered);
+}
+
+function sortTable(col) {
+  document.querySelectorAll('thead th').forEach((th,i) => {
+    th.classList.remove('sort-asc','sort-desc');
+    if (i===col) th.classList.add(sortCol===col && sortAsc?'sort-desc':'sort-asc');
+  });
+  sortAsc = sortCol===col ? !sortAsc : true;
+  sortCol = col;
+  const arr = [...filtered].sort((a,b) => {
+    let va=a[col], vb=b[col];
+    if (typeof va==='string') { va=va.toLowerCase(); vb=vb.toLowerCase(); }
+    return va<vb?(sortAsc?-1:1): va>vb?(sortAsc?1:-1):0;
+  });
+  renderTable(arr);
+}
+
+// ── Init ──────────────────────────────────────────────────────
+renderTable(deals);
+buildYearChart();
+buildSportChart();
+buildStatusChart();
+</script>
+</body>
+</html>

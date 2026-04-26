@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>European Second Division Leagues — Pylon Partners</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, sans-serif; background: #fff; color: #1a1a1a; -webkit-font-smoothing: antialiased; }
+  .page { max-width: 960px; margin: 0 auto; padding: 48px 36px 60px; }
+
+  .back-nav { font-size: 12px; color: #999; margin-bottom: 20px; }
+  .back-nav a { color: #1a7a3a; text-decoration: none; }
+  .back-nav a:hover { text-decoration: underline; }
+
+  .header { margin-bottom: 28px; border-bottom: 1.5px solid #1a1a1a; padding-bottom: 20px; }
+  .header-top { display: flex; justify-content: space-between; align-items: baseline; }
+  .logo { font-size: 24px; font-weight: 800; color: #000; letter-spacing: -0.5px; }
+  .logo span { color: #1a7a3a; }
+  .header-meta { font-size: 11px; color: #999; letter-spacing: 1px; text-transform: uppercase; }
+
+  .page-title { font-size: 21px; font-weight: 800; color: #000; line-height: 1.3; margin-bottom: 10px; }
+  .page-desc { font-size: 13.5px; color: #555; line-height: 1.65; max-width: 700px; margin-bottom: 24px; }
+
+  /* TOC Nav */
+  .toc-nav {
+    display: flex; gap: 0; border: 1px solid #ddd;
+    margin-bottom: 32px; overflow: hidden;
+  }
+  .toc-nav a {
+    flex: 1; padding: 10px 6px; text-align: center;
+    font-size: 10.5px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase;
+    text-decoration: none; border-right: 1px solid #ddd; color: #555;
+    transition: background 0.1s;
+  }
+  .toc-nav a:last-child { border-right: none; }
+  .toc-nav a:hover { background: #fafafa; }
+  .toc-nav a.sig-active { color: #1a7a3a; }
+  .toc-nav a.sig-selective { color: #a07a0f; }
+  .toc-nav a.sig-watch { color: #666; }
+  .toc-nav a.sig-avoid { color: #c0392b; }
+  .toc-nav .sig-dot {
+    display: block; width: 6px; height: 6px; border-radius: 50%;
+    margin: 0 auto 5px; background: currentColor;
+  }
+
+  /* Signal summary table */
+  .signal-table { width: 100%; border-collapse: collapse; font-size: 12.5px; margin-bottom: 36px; }
+  .signal-table th {
+    font-size: 10px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase;
+    color: #999; padding: 8px 12px 10px 0; border-bottom: 1.5px solid #ddd; text-align: left;
+  }
+  .signal-table th:first-child { padding-left: 0; }
+  .signal-table td { padding: 11px 12px 11px 0; border-bottom: 1px solid #e8e8e8; vertical-align: top; }
+  .signal-table td:first-child { padding-left: 0; font-weight: 800; color: #000; }
+  .signal-table tr:last-child td { border-bottom: none; }
+
+  /* Signal badges */
+  .badge {
+    display: inline-block; font-size: 10px; font-weight: 700;
+    letter-spacing: 0.5px; padding: 3px 9px; text-transform: uppercase; white-space: nowrap;
+  }
+  .badge-active { background: rgba(26,122,58,0.10); color: #1a7a3a; }
+  .badge-selective { background: rgba(212,160,23,0.12); color: #a07a0f; }
+  .badge-watch { background: rgba(153,153,153,0.14); color: #666; }
+  .badge-avoid { background: rgba(192,57,43,0.10); color: #c0392b; }
+
+  .section-divider { border: none; border-top: 1px solid #e8e8e8; margin: 44px 0 30px; }
+  .section-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #888; margin-bottom: 14px; }
+
+  /* League sections */
+  .league-header { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; padding-top: 4px; }
+  .league-name { font-size: 17px; font-weight: 800; color: #000; }
+
+  /* Stats bar */
+  .stats-bar { display: flex; gap: 0; border: 1px solid #ddd; margin-bottom: 22px; }
+  .stat-block { flex: 1; padding: 13px 16px; border-right: 1px solid #ddd; }
+  .stat-block:last-child { border-right: none; }
+  .stat-value { font-size: 19px; font-weight: 800; color: #000; line-height: 1.2; }
+  .stat-value.green { color: #1a7a3a; }
+  .stat-value.red { color: #c0392b; }
+  .stat-label { font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 0.8px; margin-top: 4px; font-weight: 700; }
+  .stat-sub { font-size: 11px; color: #888; margin-top: 2px; font-style: italic; }
+
+  /* Subsection labels */
+  .sub-label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #bbb; margin: 20px 0 8px; }
+
+  /* Dot-point lists */
+  .insight-list { list-style: none; padding: 0; }
+  .insight-list li {
+    padding: 8px 0 8px 18px; position: relative;
+    border-bottom: 1px solid #f2f2f2;
+    font-size: 13.5px; color: #333; line-height: 1.65;
+  }
+  .insight-list li:last-child { border-bottom: none; }
+  .insight-list li::before {
+    content: ''; position: absolute; left: 0; top: 17px;
+    width: 5px; height: 5px; border-radius: 50%; background: #ccc;
+  }
+  .insight-list li.pos::before { background: #1a7a3a; }
+  .insight-list li.neg::before { background: #c0392b; }
+  .insight-list li.amb::before { background: #d4a017; }
+
+  /* Callout blocks */
+  .flag-block {
+    background: rgba(212,160,23,0.07); border-left: 3px solid #d4a017;
+    padding: 12px 16px; margin: 14px 0; font-size: 13px; color: #444; line-height: 1.65;
+  }
+  .flag-block strong { color: #9a6800; }
+  .risk-block {
+    background: rgba(192,57,43,0.06); border-left: 3px solid #c0392b;
+    padding: 12px 16px; margin: 14px 0; font-size: 13px; color: #444; line-height: 1.65;
+  }
+  .risk-block strong { color: #c0392b; }
+  .pylon-angle {
+    background: rgba(26,122,58,0.06); border-left: 3px solid #1a7a3a;
+    padding: 13px 16px; margin: 20px 0 0; font-size: 13px; color: #1a1a1a; line-height: 1.65;
+  }
+  .pylon-angle strong { color: #1a7a3a; display: block; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 5px; }
+
+  /* Comparison tables */
+  .comp-table { width: 100%; border-collapse: collapse; font-size: 12.5px; margin-top: 14px; }
+  .comp-table th {
+    font-size: 10px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase;
+    color: #999; padding: 8px 12px 10px 0; border-bottom: 1.5px solid #ddd; text-align: left;
+  }
+  .comp-table th:first-child { padding-left: 0; }
+  .comp-table td { padding: 11px 12px 11px 0; border-bottom: 1px solid #e8e8e8; vertical-align: top; color: #444; }
+  .comp-table td:first-child { padding-left: 0; font-weight: 800; color: #000; }
+  .comp-table tr:last-child td { border-bottom: none; }
+  .comp-table .c-green { color: #1a7a3a; font-weight: 700; }
+  .comp-table .c-red { color: #c0392b; font-weight: 700; }
+  .comp-table .c-amber { color: #a07a0f; font-weight: 700; }
+  .comp-table .c-grey { color: #888; }
+
+  /* Charts */
+  .chart-container { margin: 28px 0 8px; }
+  .chart-title { font-size: 12px; font-weight: 700; color: #555; margin-bottom: 14px; }
+  .chart-note { font-size: 11px; color: #aaa; margin-top: 8px; font-style: italic; line-height: 1.5; }
+
+  /* Valuation context strip */
+  .val-strip {
+    display: flex; gap: 0; border: 1px solid #e8e8e8; margin: 16px 0;
+    background: #fafafa; font-size: 12px;
+  }
+  .val-block { flex: 1; padding: 11px 14px; border-right: 1px solid #e8e8e8; }
+  .val-block:last-child { border-right: none; }
+  .val-label { font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 700; margin-bottom: 3px; }
+  .val-num { font-weight: 800; color: #000; }
+  .val-note { font-size: 11px; color: #888; margin-top: 2px; }
+
+  .brand { text-align: right; font-size: 11px; color: #aaa; margin-top: 56px; letter-spacing: 1px; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="back-nav"><a href="sportscapital-intel.html">← Pylon Intelligence</a></div>
+
+  <div class="header">
+    <div class="header-top">
+      <div class="logo">PYLON <span>INTELLIGENCE</span></div>
+      <div class="header-meta">Pylon Partners — Internal</div>
+    </div>
+  </div>
+
+  <div class="page-title">European Second Division Leagues: Investment Overview</div>
+  <div class="page-desc">Five leagues. Two are active origination territories. One is structurally closed to control capital. One is selectively viable at individual club level. One is a post-collapse cautionary tale. The broadcast gap between Bundesliga 2 and Serie B (€12.5m per club versus €0.7m) makes the five look similar in headline revenue but operate as fundamentally different asset classes.</div>
+
+  <!-- TOC Navigation -->
+  <div class="toc-nav">
+    <a href="#la-liga-2" class="sig-active"><span class="sig-dot"></span>La Liga 2</a>
+    <a href="#serie-b" class="sig-selective"><span class="sig-dot"></span>Serie B</a>
+    <a href="#championship" class="sig-active"><span class="sig-dot"></span>Championship</a>
+    <a href="#bundesliga-2" class="sig-watch"><span class="sig-dot"></span>Bundesliga 2</a>
+    <a href="#ligue-2" class="sig-avoid"><span class="sig-dot"></span>Ligue 2</a>
+  </div>
+
+  <!-- Signal Summary -->
+  <div class="section-label">Signal Summary</div>
+  <table class="signal-table">
+    <thead>
+      <tr>
+        <th>League</th>
+        <th>Country</th>
+        <th>Signal</th>
+        <th>Entry Valuation (ref.)</th>
+        <th>One-line Rationale</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>La Liga 2</td>
+        <td>Spain</td>
+        <td><span class="badge badge-active">Active</span></td>
+        <td>€40-60M (top-6 club)</td>
+        <td>Most active foreign ownership inflow; multi-club operators dominate; promotion upside 5-10x broadcast</td>
+      </tr>
+      <tr>
+        <td>Championship</td>
+        <td>England</td>
+        <td><span class="badge badge-active">Active</span></td>
+        <td>£50-150M depending on parachute</td>
+        <td>Best commercial infrastructure; PL parachute mitigates downside; crowded and priced accordingly</td>
+      </tr>
+      <tr>
+        <td>Serie B</td>
+        <td>Italy</td>
+        <td><span class="badge badge-selective">Selective</span></td>
+        <td>€10-40M (ex-CFG clubs)</td>
+        <td>Broadcast is structurally broken (€0.7m/club); four clubs with viable ownership — engage those only</td>
+      </tr>
+      <tr>
+        <td>Bundesliga 2</td>
+        <td>Germany</td>
+        <td><span class="badge badge-watch">Watch Only</span></td>
+        <td>N/A — control unavailable</td>
+        <td>Highest broadcast per club (€12.5m); 50+1 rule blocks control capital permanently</td>
+      </tr>
+      <tr>
+        <td>Ligue 2</td>
+        <td>France</td>
+        <td><span class="badge badge-avoid">Avoid</span></td>
+        <td>N/A — avoid</td>
+        <td>Mediapro-DAZN collapse cut broadcast income 47%; no recovery timeline; Bordeaux is the template</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Key Metrics -->
+  <div class="section-label" style="margin-top:36px;">Key Metrics by League — 2023-24</div>
+  <table class="comp-table" style="margin-top:14px;">
+    <thead>
+      <tr>
+        <th>League</th>
+        <th>Clubs</th>
+        <th>TV Deal (total/yr)</th>
+        <th>Broadcast / Club</th>
+        <th>Avg Club Revenue</th>
+        <th>Capital Access</th>
+        <th>Signal</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Bundesliga 2</td>
+        <td>18</td>
+        <td>~€224m (DFL 2025)</td>
+        <td class="c-green">~€12.5m</td>
+        <td>€55-60m</td>
+        <td class="c-red">50+1 blocked</td>
+        <td><span class="badge badge-watch">Watch</span></td>
+      </tr>
+      <tr>
+        <td>Championship</td>
+        <td>24</td>
+        <td>~£112m (EFL 2024)</td>
+        <td class="c-green">~£5-7m</td>
+        <td>£25-45m</td>
+        <td class="c-green">Open</td>
+        <td><span class="badge badge-active">Active</span></td>
+      </tr>
+      <tr>
+        <td>La Liga 2</td>
+        <td>22</td>
+        <td>~€50m</td>
+        <td class="c-amber">~€2.3m</td>
+        <td>€18-27m</td>
+        <td class="c-green">Open</td>
+        <td><span class="badge badge-active">Active</span></td>
+      </tr>
+      <tr>
+        <td>Serie B</td>
+        <td>20</td>
+        <td>~€14m (DAZN)</td>
+        <td class="c-red">~€0.7m</td>
+        <td>€20-28m</td>
+        <td class="c-green">Open</td>
+        <td><span class="badge badge-selective">Selective</span></td>
+      </tr>
+      <tr>
+        <td>Ligue 2</td>
+        <td>18</td>
+        <td>Undisclosed (LFP)</td>
+        <td class="c-red">~€4-6m*</td>
+        <td>€10-20m</td>
+        <td class="c-amber">Open / distressed</td>
+        <td><span class="badge badge-avoid">Avoid</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Charts -->
+  <div class="chart-container" style="margin-top:36px;">
+    <div class="chart-title">Average total club revenue by league (€m est.) — 2023-24 season</div>
+    <svg viewBox="0 0 820 240" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:820px;display:block;">
+      <rect x="0" y="0" width="820" height="240" fill="#fff"/>
+      <line x1="160" y1="10" x2="160" y2="218" stroke="#f0f0f0" stroke-width="1"/>
+      <line x1="280" y1="10" x2="280" y2="218" stroke="#f0f0f0" stroke-width="1"/>
+      <line x1="400" y1="10" x2="400" y2="218" stroke="#f0f0f0" stroke-width="1"/>
+      <line x1="520" y1="10" x2="520" y2="218" stroke="#f0f0f0" stroke-width="1"/>
+      <line x1="640" y1="10" x2="640" y2="218" stroke="#f0f0f0" stroke-width="1"/>
+      <line x1="760" y1="10" x2="760" y2="218" stroke="#f0f0f0" stroke-width="1"/>
+      <line x1="160" y1="218" x2="790" y2="218" stroke="#ddd" stroke-width="1"/>
+      <text x="160" y="232" font-family="Arial" font-size="10" fill="#bbb" text-anchor="middle">€0m</text>
+      <text x="280" y="232" font-family="Arial" font-size="10" fill="#bbb" text-anchor="middle">€10m</text>
+      <text x="400" y="232" font-family="Arial" font-size="10" fill="#bbb" text-anchor="middle">€20m</text>
+      <text x="520" y="232" font-family="Arial" font-size="10" fill="#bbb" text-anchor="middle">€30m</text>
+      <text x="640" y="232" font-family="Arial" font-size="10" fill="#bbb" text-anchor="middle">€40m</text>
+      <text x="760" y="232" font-family="Arial" font-size="10" fill="#bbb" text-anchor="middle">€50m+</text>
+      <!-- Bundesliga 2: 58m, scale ~10px/m -->
+      <text x="155" y="36" font-family="Arial" font-size="11.5" font-weight="700" fill="#1a1a1a" text-anchor="end">Bundesliga 2</text>
+      <text x="155" y="49" font-family="Arial" font-size="10" fill="#999" text-anchor="end">Germany</text>
+      <rect x="160" y="18" width="598" height="24" fill="#1a7a3a" opacity="0.20"/>
+      <text x="766" y="34" font-family="Arial" font-size="11" font-weight="800" fill="#1a7a3a">€58m*</text>
+      <!-- Championship: ~38m -->
+      <text x="155" y="82" font-family="Arial" font-size="11.5" font-weight="700" fill="#1a1a1a" text-anchor="end">Championship</text>
+      <text x="155" y="95" font-family="Arial" font-size="10" fill="#999" text-anchor="end">England</text>
+      <rect x="160" y="64" width="391" height="24" fill="#1a7a3a" opacity="0.15"/>
+      <text x="559" y="80" font-family="Arial" font-size="11" font-weight="800" fill="#1a7a3a">~€38m</text>
+      <!-- Serie B: 24m -->
+      <text x="155" y="128" font-family="Arial" font-size="11.5" font-weight="700" fill="#1a1a1a" text-anchor="end">Serie B</text>
+      <text x="155" y="141" font-family="Arial" font-size="10" fill="#999" text-anchor="end">Italy</text>
+      <rect x="160" y="110" width="247" height="24" fill="#999" opacity="0.20"/>
+      <text x="415" y="126" font-family="Arial" font-size="11" font-weight="800" fill="#555">€24m</text>
+      <!-- La Liga 2: 22m -->
+      <text x="155" y="172" font-family="Arial" font-size="11.5" font-weight="700" fill="#1a1a1a" text-anchor="end">La Liga 2</text>
+      <text x="155" y="185" font-family="Arial" font-size="10" fill="#999" text-anchor="end">Spain</text>
+      <rect x="160" y="154" width="227" height="24" fill="#999" opacity="0.20"/>
+      <text x="395" y="170" font-family="Arial" font-size="11" font-weight="800" fill="#555">€22m</text>
+      <!-- Ligue 2: 15m -->
+      <text x="155" y="210" font-family="Arial" font-size="11.5" font-weight="700" fill="#1a1a1a" text-anchor="end">Ligue 2</text>
+      <text x="155" y="223" font-family="Arial" font-size="10" fill="#999" text-anchor="end">France</text>
+      <rect x="160" y="192" width="155" height="24" fill="#c0392b" opacity="0.14"/>
+      <text x="323" y="208" font-family="Arial" font-size="11" font-weight="800" fill="#c0392b">€15m</text>
+    </svg>
+    <div class="chart-note">*Bundesliga 2 figure inflated by recently relegated Bundesliga clubs; underlying average ex-relegations closer to €35-45m. Championship converted at £1 = €1.15. All figures estimated from club-level filings and broadcaster data.</div>
+  </div>
+
+  <div class="chart-container" style="margin-top:32px;">
+    <div class="chart-title">Broadcast distribution per club (€m) — rights income only, not total revenue. The number that drives commercial leverage.</div>
+    <svg viewBox="0 0 820 240" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:820px;display:block;">
+      <rect x="0" y="0" width="820" height="240" fill="#fff"/>
+      <line x1="160" y1="10" x2="160" y2="218" stroke="#f0f0f0" stroke-width="1"/>
+      <line x1="280" y1="10" x2="280" y2="218" stroke="#f0f0f0" stroke-width="1"/>
+      <line x1="400" y1="10" x2="400" y2="218" stroke="#f0f0f0" stroke-width="1"/>
+      <line x1="520" y1="10" x2="520" y2="218" stroke="#f0f0f0" stroke-width="1"/>
+      <line x1="640" y1="10" x2="640" y2="218" stroke="#f0f0f0" stroke-width="1"/>
+      <line x1="760" y1="10" x2="760" y2="218" stroke="#f0f0f0" stroke-width="1"/>
+      <line x1="160" y1="218" x2="790" y2="218" stroke="#ddd" stroke-width="1"/>
+      <text x="160" y="232" font-family="Arial" font-size="10" fill="#bbb" text-anchor="middle">€0</text>
+      <text x="280" y="232" font-family="Arial" font-size="10" fill="#bbb" text-anchor="middle">€2m</text>
+      <text x="400" y="232" font-family="Arial" font-size="10" fill="#bbb" text-anchor="middle">€4m</text>
+      <text x="520" y="232" font-family="Arial" font-size="10" fill="#bbb" text-anchor="middle">€6m</text>
+      <text x="640" y="232" font-family="Arial" font-size="10" fill="#bbb" text-anchor="middle">€8m</text>
+      <text x="760" y="232" font-family="Arial" font-size="10" fill="#bbb" text-anchor="middle">€12m+</text>
+      <!-- Scale: 50px per €1m; baseline x=160 -->
+      <!-- Bundesliga 2: 12.5m = 625px -->
+      <text x="155" y="36" font-family="Arial" font-size="11.5" font-weight="700" fill="#1a1a1a" text-anchor="end">Bundesliga 2</text>
+      <text x="155" y="49" font-family="Arial" font-size="10" fill="#999" text-anchor="end">Germany</text>
+      <rect x="160" y="18" width="625" height="24" fill="#1a7a3a" opacity="0.22"/>
+      <text x="793" y="34" font-family="Arial" font-size="11" font-weight="800" fill="#1a7a3a">€12.5m</text>
+      <!-- Championship: 7m = 350px -->
+      <text x="155" y="82" font-family="Arial" font-size="11.5" font-weight="700" fill="#1a1a1a" text-anchor="end">Championship</text>
+      <text x="155" y="95" font-family="Arial" font-size="10" fill="#999" text-anchor="end">England</text>
+      <rect x="160" y="64" width="350" height="24" fill="#1a7a3a" opacity="0.15"/>
+      <text x="518" y="80" font-family="Arial" font-size="11" font-weight="800" fill="#1a7a3a">~€7m</text>
+      <!-- Ligue 2: ~5m = 250px (post-collapse est.) -->
+      <text x="155" y="128" font-family="Arial" font-size="11.5" font-weight="700" fill="#1a1a1a" text-anchor="end">Ligue 2</text>
+      <text x="155" y="141" font-family="Arial" font-size="10" fill="#999" text-anchor="end">France</text>
+      <rect x="160" y="110" width="250" height="24" fill="#c0392b" opacity="0.14"/>
+      <text x="418" y="126" font-family="Arial" font-size="11" font-weight="800" fill="#c0392b">~€5m*</text>
+      <!-- La Liga 2: 2.3m = 115px -->
+      <text x="155" y="172" font-family="Arial" font-size="11.5" font-weight="700" fill="#1a1a1a" text-anchor="end">La Liga 2</text>
+      <text x="155" y="185" font-family="Arial" font-size="10" fill="#999" text-anchor="end">Spain</text>
+      <rect x="160" y="154" width="115" height="24" fill="#999" opacity="0.22"/>
+      <text x="283" y="170" font-family="Arial" font-size="11" font-weight="800" fill="#555">~€2.3m</text>
+      <!-- Serie B: 0.7m = 35px -->
+      <text x="155" y="210" font-family="Arial" font-size="11.5" font-weight="700" fill="#1a1a1a" text-anchor="end">Serie B</text>
+      <text x="155" y="223" font-family="Arial" font-size="10" fill="#999" text-anchor="end">Italy</text>
+      <rect x="160" y="192" width="35" height="24" fill="#c0392b" opacity="0.18"/>
+      <text x="203" y="208" font-family="Arial" font-size="11" font-weight="800" fill="#c0392b">€0.7m</text>
+    </svg>
+    <div class="chart-note">*Ligue 2 figure is pre-2024-25 DAZN renegotiation; actual distributions have declined materially since. Championship converted at £1 = €1.15. La Liga 2: ~€50m total / 22 clubs. Serie B: ~€14m total DAZN+Amazon / 20 clubs. Bundesliga 2: ~€224m (80:20 DFL split) / 18 clubs.</div>
+  </div>
+
+
+  <!-- ===== LA LIGA 2 ===== -->
+  <hr class="section-divider">
+  <div id="la-liga-2" class="league-header">
+    <div class="league-name">La Liga 2 / LALIGA Hypermotion</div>
+    <span class="badge badge-active">Spain — Active</span>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat-block">
+      <div class="stat-value">22</div>
+      <div class="stat-label">Clubs</div>
+      <div class="stat-sub">5-6 commercially viable</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-value">€50m</div>
+      <div class="stat-label">TV Rights / Season</div>
+      <div class="stat-sub">~€2.3m per club</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-value green">€18-27m</div>
+      <div class="stat-label">Avg Club Revenue</div>
+      <div class="stat-sub">2023-24 est.</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-value">€175m</div>
+      <div class="stat-label">La Liga 2 Earmarked</div>
+      <div class="stat-sub">2027-32 CVC deal</div>
+    </div>
+  </div>
+
+  <div class="val-strip">
+    <div class="val-block">
+      <div class="val-label">Price Discovery</div>
+      <div class="val-num">€50M</div>
+      <div class="val-note">Valladolid sale, May 2025 (Ronaldo exit)</div>
+    </div>
+    <div class="val-block">
+      <div class="val-label">Entry Price (top-6 club)</div>
+      <div class="val-num">€40-60M est.</div>
+      <div class="val-note">Based on Valladolid floor; Malaga QSI talks at €100M</div>
+    </div>
+    <div class="val-block">
+      <div class="val-label">Promotion Broadcast Uplift</div>
+      <div class="val-num">5-10x</div>
+      <div class="val-note">La Liga 2 to La Liga 1 broadcast multiplier</div>
+    </div>
+    <div class="val-block">
+      <div class="val-label">No Parachute</div>
+      <div class="val-num">1yr only</div>
+      <div class="val-note">Solidarity payment on relegation from La Liga 1</div>
+    </div>
+  </div>
+
+  <div class="sub-label">Broadcast and Economics</div>
+  <ul class="insight-list">
+    <li class="amb">Broadcast income is €2.3m per club per season — less than 15% of average revenues. Most club income comes from commercial, matchday, and player sales. The league is commercially driven, not broadcast-driven, which is both a constraint and an opportunity: a commercial partner is proportionally more valuable here than in the Championship.</li>
+    <li class="pos">CVC Capital Partners injected €2.2bn into LaLiga in 2022 in exchange for 11% of total commercial rights for 50 years. The La Liga 2 allocation in the 2027-32 rights cycle has been earmarked at approximately €175m, which would materially increase club distributions if realised.</li>
+    <li class="neg">Revenue is concentrated in six clubs: Malaga (24,857 avg attendance 2024-25, highest in the league), Deportivo (21,571, second), Sporting de Gijon (21,131, third), Almeria, Valladolid, and Leganes. The remaining sixteen clubs may operate on €8-12m in total revenue. The average figure is distorted upward by these six; the median club is structurally thinner.</li>
+    <li class="neg">No parachute equivalent to England. A La Liga 1 club relegated to La Liga 2 receives a one-year solidarity payment. The broadcast revenue cliff is real and creates balance-sheet risk for clubs that overleveraged during a La Liga 1 season.</li>
+  </ul>
+
+  <div class="sub-label">Ownership Trends</div>
+  <ul class="insight-list">
+    <li class="pos">Foreign capital has moved into La Liga 2 faster than any comparable European second division in the past three years. Two structured Mexican multi-club operators are active: Orlegi Sports (Sporting de Gijon, Santos Laguna, Club Cerro) and Grupo Ignite (Real Valladolid, acquired May 2025 for €50M). Both run professional commercial programmes across their portfolios, not single-asset family-office management.</li>
+    <li class="pos">US-adjacent capital is present. Blue Crow Sports Group (Jeff Luhnow, with KKR partner Bill Cornog and 885 Capital/UAE as investors) acquired Leganes in 2022 and Le Havre (Ligue 1) in 2025 — a genuine multi-club structure spanning Spain and France. Grupo Ignite's co-investor, Ben Oldman Partners, is a Luxembourg/Madrid/London fund that converted a prior loan into equity. The incoming ownership class is institutional, not personal.</li>
+    <li class="amb">Gulf-state capital is present but commercially passive to date: SMC Group (Mohammed Al-Khereiji) controls Almeria, with Cristiano Ronaldo taking 25% in February 2026. Sheikh Abdullah Al-Thani held Malaga until judicial removal in 2020. QSI was in advanced talks for Malaga at approximately €100M in March 2025; legal deadlock has blocked the transaction.</li>
+  </ul>
+
+  <div class="sub-label">Promotion Economics</div>
+  <ul class="insight-list">
+    <li class="pos">Promotion to La Liga 1 is the primary value-creation event. Access to the full LaLiga broadcast pool increases a club's broadcast income by 5-10x. For Deportivo (21,571 avg attendance, second-highest in the league), the combination of fanbase scale and the promotion step-change is the entire ownership thesis.</li>
+    <li class="amb">LaLiga IMPULSO financial regulations (salary cap against projected revenue) are stricter than Serie A or Ligue 1. This constrains wage overspend in pursuit of promotion but limits the downside of runaway payroll at distressed clubs.</li>
+  </ul>
+
+  <div class="pylon-angle">
+    <strong>Pylon Angle</strong>
+    La Liga 2 is our most active territory: five of eleven profiled clubs are here. Orlegi, Blue Crow, and Grupo Ignite are the three multi-club operators with the most receptive commercial posture. Any conversation framed at group or portfolio level — not single-club — gets a materially different hearing. The Valladolid transaction (€30M in 2019, €50M exit in 2025 after three relegations) is the cleanest floor valuation in the second division. Contact: Fernando González Velasco (Commercial Director, Valladolid), Iván Maroto (VP Business, Blue Crow group), Jorge Morales Concepción (Director Comercial B2B, Sporting de Gijon).
+  </div>
+
+
+  <!-- ===== SERIE B ===== -->
+  <hr class="section-divider">
+  <div id="serie-b" class="league-header">
+    <div class="league-name">Serie B</div>
+    <span class="badge badge-selective">Italy — Selective</span>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat-block">
+      <div class="stat-value">20</div>
+      <div class="stat-label">Clubs</div>
+      <div class="stat-sub">4 institutionally viable</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-value red">~€14m</div>
+      <div class="stat-label">Total TV Deal / Season</div>
+      <div class="stat-sub">DAZN + Amazon — entire league</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-value">€20-28m</div>
+      <div class="stat-label">Avg Club Revenue</div>
+      <div class="stat-sub">2023-24 est.</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-value red">80%</div>
+      <div class="stat-label">Domestic Sponsors</div>
+      <div class="stat-sub">Concentration risk</div>
+    </div>
+  </div>
+
+  <div class="risk-block"><strong>Structural constraint:</strong> Serie B's total DAZN + Amazon deal is approximately €14m per year for the entire league — €700k per club. Serie A distributes more in solidarity payments to a single relegated club than the entire Serie B broadcast pool generates. The league has no international commercial profile. All viable activity in this league is at individual club level, not league level.</div>
+
+  <div class="val-strip">
+    <div class="val-block">
+      <div class="val-label">Series B Entry (est.)</div>
+      <div class="val-num">€10-40M</div>
+      <div class="val-note">Ex-CFG clubs; Venezia higher due to brand premium</div>
+    </div>
+    <div class="val-block">
+      <div class="val-label">Serie A Promotion Uplift</div>
+      <div class="val-num">35-50x</div>
+      <div class="val-note">Broadcast multiplier: €0.7m to €25-35m in first season</div>
+    </div>
+    <div class="val-block">
+      <div class="val-label">M&amp;A Volume 2025</div>
+      <div class="val-num">14 transactions</div>
+      <div class="val-note">Second only to England; motivated sellers</div>
+    </div>
+    <div class="val-block">
+      <div class="val-label">No Parachute</div>
+      <div class="val-num">Solidarity only</div>
+      <div class="val-note">Relegation from Serie A creates immediate balance-sheet shock</div>
+    </div>
+  </div>
+
+  <div class="sub-label">Broadcast and Economics</div>
+  <ul class="insight-list">
+    <li class="neg">League-level sponsorship for Serie A is approximately $86m against the Premier League's $1.68bn — a 20x gap. Serie B's league brand has no meaningful international profile. There is no broadcast-driven commercial leverage at league level.</li>
+    <li class="neg">Approximately 80% of sponsorship portfolios across Serie A clubs are domestic Italian brands. Serie B clubs are more concentrated still. Global partner revenue is structurally limited without international broadcast distribution.</li>
+    <li class="pos">M&A volume is active: 14 transactions in Italian football in 2025, second only to England by deal count. Motivated sellers, accessible entry prices, and a clear improvement narrative for clubs with Serie A history and large regional fanbases.</li>
+    <li class="pos">Promotion to Serie A produces a 35-50x broadcast multiplier: €700k in Serie B becomes €25-35m in the first Serie A season. For clubs with genuine promotion credentials, this is the entire investment thesis.</li>
+  </ul>
+
+  <div class="sub-label">The Four Viable Clubs</div>
+  <ul class="insight-list">
+    <li class="pos">Palermo FC (CFG, 71%, Sheikh Mansour / ADUG): the CFG multi-club infrastructure — shared recruitment, commercial framework, international network — gives Palermo access to tools the rest of the league cannot match. Approach via CFG's central commercial team in Manchester, not local Palermo staff.</li>
+    <li class="pos">Spezia Calcio (Thomas S. Roberts, 100%, RAM Spezia Holdings LP): Princeton/HBS, 28 years as Managing Partner of Summit Partners ($15bn AUM). Committed over €70m including €25m more by May 2026. Stated intention to remain even in Serie C. Commercially nascent and actively building partnerships under club president Charlie Stillitano (co-founder, Relevent Sports Group). Prior Bitci deal means no category education required.</li>
+    <li class="pos">Venezia FC (Duncan Niederauer / APEX Capital / Drake): 95% of kit sales outside Italy — the most commercially international club in the league. Romano Cinelli (Head of Commerce, ex-Nike GM Southern Europe) was appointed September 2025 as a standalone commercial function. The NOCTA kit deal at €120/replica proves unconventional partnerships land here.</li>
+    <li class="amb">SSC Bari (De Laurentiis family / FilmAuro): FIGC mandated divestiture of either Bari or Napoli by July 2028. An American fund is the leading buyer candidate. Luigi De Laurentiis confirmed active negotiations in December 2025. The 2028 deadline creates a defined commercial and sale timeline — any commercial build-out now strengthens the asset's appeal to incoming buyers.</li>
+  </ul>
+
+  <div class="pylon-angle">
+    <strong>Pylon Angle</strong>
+    Serie B engagement is limited to four clubs. Palermo and Spezia have institutional ownership. Venezia is the brand case. Bari is sale-bound and commercially underdeveloped. The rest of the league is too thin. Do not approach Serie B as a league — approach the four clubs directly and independently.
+  </div>
+
+
+  <!-- ===== CHAMPIONSHIP ===== -->
+  <hr class="section-divider">
+  <div id="championship" class="league-header">
+    <div class="league-name">EFL Championship</div>
+    <span class="badge badge-active">England — Active</span>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat-block">
+      <div class="stat-value">24</div>
+      <div class="stat-label">Clubs</div>
+      <div class="stat-sub">Largest field</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-value green">£935m</div>
+      <div class="stat-label">EFL TV Deal 2024-29</div>
+      <div class="stat-sub">Sky Sports — 5yr total</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-value green">£49m</div>
+      <div class="stat-label">PL Parachute Year 1</div>
+      <div class="stat-sub">£39m Yr 2; further in Yr 3</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-value">~£25-45m</div>
+      <div class="stat-label">Avg Club Revenue</div>
+      <div class="stat-sub">Wide variance by parachute</div>
+    </div>
+  </div>
+
+  <div class="val-strip">
+    <div class="val-block">
+      <div class="val-label">Entry Price Range</div>
+      <div class="val-num">£50-150M+</div>
+      <div class="val-note">Parachute clubs at top; non-parachute at lower end</div>
+    </div>
+    <div class="val-block">
+      <div class="val-label">PL Promotion Value</div>
+      <div class="val-num">~£100m/yr</div>
+      <div class="val-note">Min PL broadcast for bottom-placed club</div>
+    </div>
+    <div class="val-block">
+      <div class="val-label">Playoff Final PV</div>
+      <div class="val-num">£150-200m</div>
+      <div class="val-note">Present-value gap between promotion and non-promotion</div>
+    </div>
+    <div class="val-block">
+      <div class="val-label">Wage Ratio</div>
+      <div class="val-num">90-100%</div>
+      <div class="val-note">Typical wages-to-revenue ratio; PSR compliance risk</div>
+    </div>
+  </div>
+
+  <div class="sub-label">Broadcast and Economics</div>
+  <ul class="insight-list">
+    <li class="pos">Sky Sports' 2024 EFL renewal at £935m over five years is the strongest second-division broadcast deal in Europe outside Germany. Championship clubs receive approximately £5-7m each per season from broadcast alone, plus merit payments, cup distributions, and PL solidarity payments. The gap between Championship and La Liga 2 broadcast income per club is approximately 3x.</li>
+    <li class="pos">Premier League parachute payments are the defining structural mechanism. A relegated PL club receives approximately £49m in year one and £39m in year two, with a third-year payment if it was a first-time promoted club. This means recently relegated PL sides operate on near-PL economics for two to three Championship seasons — a structural advantage that creates a two-tier competition within one division.</li>
+    <li class="amb">The parachute gap is also a valuation trap: a parachute-receiving club generating £70m+ in revenue attracts buyer interest at PL-adjacent multiples, inflating the division average. A non-parachute Championship club on £25m revenue is a materially different asset and must be evaluated independently.</li>
+    <li class="neg">Championship wages-to-revenue ratios consistently run at 90-100%. EFL Profitability and Sustainability Rules (PSR) cap aggregate losses but compliance is complex. Clubs that overspend on wages face points deductions — the Nottingham Forest and Everton precedents at PL level have reinforced scrutiny at Championship level. Any commercial deal that increases club revenue directly reduces PSR exposure; this is a genuine structural value-add for incoming partners.</li>
+  </ul>
+
+  <div class="sub-label">Ownership and Promotion Economics</div>
+  <ul class="insight-list">
+    <li class="pos">Approximately 4 of the 8 clubs most closely associated with recent promotion pushes have US ownership or significant US capital involvement. Burnley (ALK Capital, bought 2020, promoted 2022), Sheffield United (HRH Prince Abdullah), and multiple others have followed the Championship-to-PL route. The formula is established and understood by US buyers.</li>
+    <li class="amb">Pricing reflects the quality. Championship clubs are more expensive per seat and per fan than any comparable European second division. The expected-value case depends heavily on promotion probability. The Championship playoff final — determining the third promotion slot — is worth approximately £150-200m in present-value terms to the winner. It is a singular, high-variance binary outcome.</li>
+    <li class="neg">The market is crowded. US capital has been active for a decade and is increasingly sophisticated. Identifying a club at the right stage of a promotion cycle before consensus has priced it in is the alpha, and the window for each club is narrow.</li>
+  </ul>
+
+  <div class="pylon-angle">
+    <strong>Pylon Angle</strong>
+    The Championship is the most commercially mature European second division we cover. Peterborough United (MacAnthony, transfer arbitrage model) is our direct coverage case. The league is crowded and priced accordingly. The value here is timing and club selection within the promotion cycle, not the league itself as a discount entry point.
+  </div>
+
+
+  <!-- ===== BUNDESLIGA 2 ===== -->
+  <hr class="section-divider">
+  <div id="bundesliga-2" class="league-header">
+    <div class="league-name">Bundesliga 2</div>
+    <span class="badge badge-watch">Germany — Watch Only</span>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat-block">
+      <div class="stat-value">18</div>
+      <div class="stat-label">Clubs</div>
+      <div class="stat-sub">Well-run; conservative cost structures</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-value green">€1.121bn</div>
+      <div class="stat-label">DFL Deal (combined)</div>
+      <div class="stat-sub">2025-26 onwards, all German pro leagues</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-value green">~€12.5m</div>
+      <div class="stat-label">Broadcast / Club</div>
+      <div class="stat-sub">80:20 Bundesliga/B2 split; ~€224m total</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-value red">49%</div>
+      <div class="stat-label">Max External Stake</div>
+      <div class="stat-sub">50+1 rule; control unavailable</div>
+    </div>
+  </div>
+
+  <div class="flag-block"><strong>50+1 constraint:</strong> No external investor can hold more than 49% of a Bundesliga 2 club without member approval. Member approval for external control is almost never granted. The two exceptions in Bundesliga history — Hoffenheim (Dietmar Hopp, 35+ years of membership relationship) and RB Leipzig (Red Bull structuring a new club from 5. Liga in 2009) — are not replicable. This league is off-limits for control capital, regardless of the economics.</div>
+
+  <div class="sub-label">Economics and Structure</div>
+  <ul class="insight-list">
+    <li class="pos">The DFL's €1.121bn combined rights deal from 2025-26 is the strongest in German football history. At the 80:20 split, Bundesliga 2 receives approximately €224m per season, distributed across 18 clubs — roughly €12.5m per club. This is the highest broadcast distribution of any European second division, including the Championship.</li>
+    <li class="pos">Member-controlled governance produces conservative wage and transfer structures. Bundesliga 2 clubs are more financially stable than Championship or La Liga 2 clubs at equivalent revenue levels. The 50+1 constraint that blocks external capital also suppresses the wage inflation cycles that damage clubs in other leagues.</li>
+    <li class="neg">Without ownership control, the commercial ceiling is constrained. No external owner can drive a commercial buildout programme, negotiate kit or stadium naming deals with full principal authority, or implement a multi-club integration strategy. The broadcast income is strong; the commercial upside above that baseline is structurally limited.</li>
+    <li class="amb">Minority stakes of 10-25% are available at some clubs. Governance rights attached are limited. The practical entry point for external capital in this league is commercial partnership (sponsorship, naming rights, data agreements), not equity ownership.</li>
+  </ul>
+
+  <div class="pylon-angle">
+    <strong>Pylon Angle</strong>
+    Bundesliga 2 is covered for competitive context and benchmarking. We track which relegated Bundesliga clubs create temporary revenue distortions in the average. We do not pursue club-level ownership or commercial positions given the structural barriers. The most relevant layer is DFL and federation relationships, not individual clubs.
+  </div>
+
+
+  <!-- ===== LIGUE 2 ===== -->
+  <hr class="section-divider">
+  <div id="ligue-2" class="league-header">
+    <div class="league-name">Ligue 2 BKT</div>
+    <span class="badge badge-avoid">France — Avoid</span>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat-block">
+      <div class="stat-value">18</div>
+      <div class="stat-label">Clubs</div>
+      <div class="stat-sub">8+ at elevated financial risk</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-value red">-47%</div>
+      <div class="stat-label">Ligue 1 Gross Rights Drop</div>
+      <div class="stat-sub">€734m to €189.7m net income</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-value red">€10-20m</div>
+      <div class="stat-label">Avg Club Revenue</div>
+      <div class="stat-sub">Lowest of the five leagues</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-value red">4th tier</div>
+      <div class="stat-label">Bordeaux</div>
+      <div class="stat-sub">6x French champions — bankrupt 2021</div>
+    </div>
+  </div>
+
+  <div class="risk-block"><strong>Structural impairment:</strong> This is not a discount entry point — it is a structurally impaired market. The Mediapro collapse created lasting balance sheet damage. The replacement DAZN/beIN deal is the lowest Ligue 1 value in 20 years. Ligue 2 clubs sit downstream of that collapse with no structural safety net and no confirmed rights deal beyond the current term. Bordeaux, six-time French champions, now play in the fourth tier. Eight other Ligue 1 clubs were simultaneously flagged by the DNCG at elevated financial risk. This is systemic.</div>
+
+  <div class="sub-label">What Happened and Where It Stands</div>
+  <ul class="insight-list">
+    <li class="neg">Mediapro won Ligue 1 rights for 2020-24 at €780m/season. The company collapsed within months of paying its first invoice in October 2020. The LFP scrambled to place rights with Canal+ and beIN Sports at a fraction of the contracted value. Clubs had budgeted against income that never materialised and could not be recovered.</li>
+    <li class="neg">The 2024-28 DAZN/beIN replacement deal is the lowest-value Ligue 1 arrangement in 20 years. LFP net income from broadcast rights was €189.7m for 2024-25, against €734m gross from the prior cycle — a 47% collapse in a single rights renewal. No other European top division has experienced a contraction of this magnitude in this time frame.</li>
+    <li class="neg">Ligue 2 clubs receive a portion of LFP broadcast distributions. The pre-collapse estimate was €6-8m per club per season; distributions have declined materially since. The LFP does not publish granular Ligue 2-only figures. There is no confirmed rights arrangement that provides visibility on recovery.</li>
+    <li class="neg">PSG is the only Ligue 1 asset with genuine international commercial reach. International brands entering French football do so almost exclusively via PSG. The commercial spillover to the rest of Ligue 1 — and by extension Ligue 2 — is negligible.</li>
+  </ul>
+
+  <div class="pylon-angle">
+    <strong>Pylon Angle</strong>
+    No active Ligue 2 coverage and no plans to add it. The Blue Crow position in Le Havre (Ligue 1) is relevant context for the Leganes commercial relationship — Blue Crow spans France and Spain — but Ligue 2 is not an origination territory. The Mediapro-to-DAZN collapse is the most instructive case study in broadcast counterparty risk in European football. It applies as a reference framework when evaluating any league that relies on a single rights buyer for more than 40% of club income.
+  </div>
+
+  <div class="brand">PYLON PARTNERS</div>
+</div>
+</body>
+</html>

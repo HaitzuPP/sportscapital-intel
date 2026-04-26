@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Al-Thani's Málaga: Personal Capital, No State Backing</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, sans-serif; background: #fff; color: #1a1a1a; -webkit-font-smoothing: antialiased; }
+  .page { max-width: 1100px; margin: 0 auto; padding: 48px 36px 40px; }
+  h1 { font-size: 28px; font-weight: 800; color: #000; line-height: 1.25; margin-bottom: 10px; }
+  .subtitle { font-size: 14px; color: #666; margin-bottom: 24px; line-height: 1.55; }
+
+  .nav { display: flex; gap: 20px; border-top: 1px solid #e8e8e8; border-bottom: 1px solid #e8e8e8; padding: 10px 0; margin-bottom: 28px; flex-wrap: wrap; align-items: center; }
+  .nav a { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #888; text-decoration: none; }
+  .nav a:hover { color: #1a1a1a; }
+  .nav-back { margin-left: auto; }
+  .nav-back a { color: #999; }
+
+  .stats { display: flex; border: 1.5px solid #ddd; margin-bottom: 32px; }
+  .stat { flex: 1; padding: 14px 16px; text-align: center; border-right: 1px solid #ddd; }
+  .stat:last-child { border-right: none; }
+  .stat-label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #999; margin-bottom: 6px; }
+  .stat-val { font-size: 20px; font-weight: 800; color: #1a1a1a; }
+  .stat-val.green { color: #1a7a3a; }
+  .stat-val.red { color: #c0392b; }
+
+  .thesis-box { border: 1.5px solid #ddd; padding: 20px 24px; margin-bottom: 32px; background: #fafafa; }
+  .thesis-label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #888; margin-bottom: 10px; }
+  .thesis-text { font-size: 14px; line-height: 1.7; color: #1a1a1a; }
+  .thesis-text strong { color: #1a1a1a; }
+
+  .section { margin-bottom: 40px; }
+  .section-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #888; margin-bottom: 16px; border-top: 1px solid #e8e8e8; padding-top: 20px; }
+  .body-text { font-size: 14px; line-height: 1.7; color: #1a1a1a; margin-bottom: 14px; }
+  .body-text a { color: #1a1a1a; text-decoration: underline; text-decoration-color: #999; }
+
+  /* Timeline */
+  .timeline { position: relative; }
+  .tl-item { display: flex; position: relative; }
+  .tl-year { width: 76px; flex-shrink: 0; font-size: 12px; font-weight: 700; color: #888; padding-top: 17px; text-align: right; padding-right: 8px; }
+  .tl-spine { display: flex; flex-direction: column; align-items: center; width: 20px; flex-shrink: 0; }
+  .tl-dot { width: 12px; height: 12px; border-radius: 50%; border: 1.5px solid #999; background: #f5f5f5; margin-top: 19px; flex-shrink: 0; }
+  .tl-dot.green { border-color: #1a7a3a; background: rgba(26,122,58,0.12); }
+  .tl-dot.red { border-color: #c0392b; background: rgba(192,57,43,0.10); }
+  .tl-dot.amber { border-color: #d4a017; background: rgba(212,160,23,0.10); }
+  .tl-line { width: 1.5px; background: #ddd; flex: 1; }
+  .tl-item:last-child .tl-line { background: transparent; }
+  .tl-content { flex: 1; padding: 14px 0 14px 16px; }
+  .tl-event { font-size: 13px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px; }
+  .tl-event.green { color: #1a7a3a; }
+  .tl-event.red { color: #c0392b; }
+  .tl-event.amber { color: #b8860b; }
+  .tl-desc { font-size: 13px; color: #444; line-height: 1.65; }
+  .tl-desc a { color: #444; text-decoration: underline; text-decoration-color: #bbb; }
+
+  /* Comparison table */
+  .comp-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .comp-table th { text-align: left; font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #999; padding: 8px 12px; border-bottom: 1.5px solid #ddd; }
+  .comp-table td { padding: 10px 12px; border-bottom: 1px solid #e8e8e8; vertical-align: top; line-height: 1.55; }
+  .comp-table tr:last-child td { border-bottom: none; }
+  .comp-table td:first-child { font-weight: 700; color: #888; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; width: 160px; }
+  .signal { font-weight: 700; font-size: 13px; display: block; margin-bottom: 3px; }
+  .signal.green { color: #1a7a3a; }
+  .signal.red { color: #c0392b; }
+  .signal.amber { color: #b8860b; }
+  .comp-table td .detail { font-size: 12px; color: #666; line-height: 1.5; }
+  .comp-table th.col-malaga { background: rgba(192,57,43,0.04); }
+  .comp-table td.col-malaga { background: rgba(192,57,43,0.02); }
+
+  /* Financial table */
+  .fin-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .fin-table th { text-align: left; font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #999; padding: 8px 12px; border-bottom: 1.5px solid #ddd; }
+  .fin-table td { padding: 9px 12px; border-bottom: 1px solid #e8e8e8; vertical-align: top; }
+  .fin-table tr:last-child td { border-bottom: 1.5px solid #ddd; font-weight: 700; background: #fafafa; }
+  .fin-table a { color: #1a1a1a; text-decoration: underline; text-decoration-color: #bbb; }
+  .amount { font-weight: 700; color: #1a7a3a; }
+  .amount.out { color: #c0392b; }
+
+  /* Two-col */
+  .two-col { display: flex; gap: 24px; }
+  .col { flex: 1; }
+  .box { border: 1.5px solid #ddd; padding: 20px; margin-bottom: 20px; }
+  .box-title { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #888; margin-bottom: 12px; }
+  .box-body { font-size: 13px; line-height: 1.65; color: #1a1a1a; }
+  .box-body p { margin-bottom: 10px; }
+  .box-body p:last-child { margin-bottom: 0; }
+  .box-body a { color: #1a1a1a; text-decoration: underline; text-decoration-color: #bbb; }
+  .metric-row { display: flex; justify-content: space-between; align-items: baseline; padding: 7px 0; border-bottom: 1px solid #f0f0f0; font-size: 13px; gap: 12px; }
+  .metric-row:last-child { border-bottom: none; }
+  .metric-label { color: #666; flex-shrink: 0; }
+  .metric-val { font-weight: 700; color: #1a1a1a; text-align: right; }
+  .metric-val.red { color: #c0392b; }
+
+  .note { font-size: 11px; color: #999; margin-top: 8px; }
+  .brand { text-align: right; font-size: 11px; color: #aaa; margin-top: 40px; letter-spacing: 1px; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <h1>Al-Thani's Málaga: Personal Capital, No State Backing</h1>
+  <div class="subtitle">Sheikh Abdullah Al-Thani bought Málaga in 2010 with personal funds. Two seasons of heavy spend produced a Champions League quarter-final. When the money ran out circa 2012, the club had no institutional fallback. A decade later: third tier, criminal prosecution, contested ownership.</div>
+
+  <nav class="nav">
+    <a href="#background">Background</a>
+    <a href="#timeline">Timeline</a>
+    <a href="#financials">Financials</a>
+    <a href="#comparison">Gulf Comparison</a>
+    <a href="#legal">Legal and Current</a>
+    <span class="nav-back"><a href="sportscapital-intel.html">&#8592; Pylon Intelligence</a></span>
+  </nav>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-label">Takeover</div>
+      <div class="stat-val">Jun 2010</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Purchase Price</div>
+      <div class="stat-val">~€34m</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Peak Spend (Sum. 2011)</div>
+      <div class="stat-val green">~€60m</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">La Liga Seasons</div>
+      <div class="stat-val">10</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">CL Peak</div>
+      <div class="stat-val green">QF 2013</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Prosecution Request</div>
+      <div class="stat-val red">14 yrs</div>
+    </div>
+  </div>
+
+  <!-- THESIS -->
+  <div class="thesis-box">
+    <div class="thesis-label">Takeaway</div>
+    <div class="thesis-text">Al-Thani was not a state actor. His surname implied Qatari sovereign capital; none existed. <strong>QSI (PSG) and ADUG (Man City) had institutional money with a political mandate behind it. Al-Thani had personal capital with a real estate agenda in southern Spain.</strong> When both stalled circa 2012, there was no fallback. Champions League quarter-finalist in 2013. Third tier by 2023. Criminal trial in 2025. The Málaga case is Gulf-state football ownership without the state part.</div>
+  </div>
+
+  <!-- BACKGROUND -->
+  <div class="section" id="background">
+    <div class="section-label">Background: Who Al-Thani Is and What He Was Buying For</div>
+    <p class="body-text">
+      <a href="https://en.wikipedia.org/wiki/Abdullah_bin_Nasser_Al_Thani_(businessman)" target="_blank">Sheikh Abdullah Al-Thani</a> is a private Qatari businessman, a distant relative of Qatar's ruling family, and not a state representative. His capital is personal. There is no sovereign wealth fund or QIA-equivalent behind his Málaga investment. The Al-Thani surname reads as a proxy for Qatari state capacity; it is not one.
+    </p>
+    <p class="body-text">
+      <a href="https://www.malagacf.com/en/2010-2020-una-decada-con-al-thani" target="_blank">Al-Thani acquired Málaga on 25 June 2010 for approximately $45 million</a> (roughly €34 million at 2010 rates) from Fernando Sanz. His primary non-football project in the region was a <a href="https://www.arabnews.com/node/1248651/amp" target="_blank">proposed €400 million luxury marina at Marbella's La Bajadilla port</a>: a 900-metre pier, berths for 1,200+ yachts, and a 45,000m² leisure and commercial zone. The marina failed. Both investments ended in the same place.
+    </p>
+    <p class="body-text">
+      <a href="https://en.wikipedia.org/wiki/Manuel_Pellegrini" target="_blank">Manuel Pellegrini</a> was hired as manager. In the summer of 2011, Al-Thani spent approximately €60 million net on the squad: <a href="https://www.transfermarkt.co.uk/santi-cazorla/profil/spieler/7687" target="_blank">Santi Cazorla</a> (€21m from Villarreal), <a href="https://www.transfermarkt.co.uk/jeremy-toulalan/profil/spieler/14990" target="_blank">Jeremy Toulalan</a> (€11m from Lyon), <a href="https://www.transfermarkt.co.uk/isco/profil/spieler/102792" target="_blank">Isco</a> (€6m from Valencia), <a href="https://www.transfermarkt.co.uk/nacho-monreal/profil/spieler/76302" target="_blank">Nacho Monreal</a> (€6m from Osasuna), <a href="https://www.transfermarkt.co.uk/ruud-van-nistelrooy/profil/spieler/7349" target="_blank">Ruud van Nistelrooy</a>, and others. It was the only transformative window. By 2012, total club debt had reached approximately <a href="https://www.danielgeey.com/done-deal-blog/malaga-uefa-financial-fair-play-and-its-overdue-payables" target="_blank">€130 million</a>, with annual losses running at approximately €50 million.
+    </p>
+  </div>
+
+  <!-- TIMELINE -->
+  <div class="section" id="timeline">
+    <div class="section-label">Ownership Timeline</div>
+    <div class="timeline">
+
+      <div class="tl-item">
+        <div class="tl-year">Jun 2010</div>
+        <div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div>
+        <div class="tl-content">
+          <div class="tl-event">Takeover: $45m, Pellegrini Hired</div>
+          <div class="tl-desc"><a href="https://www.malagacf.com/en/2010-2020-una-decada-con-al-thani" target="_blank">Al-Thani formally appointed chairman on 27 July 2010.</a> Pellegrini is hired as manager. Al-Thani's parallel Marbella marina project is already in development. The football club and the real estate play are intended to reinforce each other; neither does.</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-year">Sum 2011</div>
+        <div class="tl-spine"><div class="tl-dot green"></div><div class="tl-line"></div></div>
+        <div class="tl-content">
+          <div class="tl-event green">~€60m Net Spend: The Only Transformative Window</div>
+          <div class="tl-desc"><a href="https://en.wikipedia.org/wiki/2011%E2%80%9312_M%C3%A1laga_CF_season" target="_blank">Cazorla (€21m), Toulalan (€11m), Isco (€6m), Monreal (€6m), van Nistelrooy, Joaquin, and Rondón.</a> The spend is concentrated in one summer and not repeated. Club debt is already approaching €130 million before a competitive ball is kicked.</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-year">May 2012</div>
+        <div class="tl-spine"><div class="tl-dot green"></div><div class="tl-line"></div></div>
+        <div class="tl-content">
+          <div class="tl-event green">4th in La Liga: Club Record Finish, First Champions League Qualification</div>
+          <div class="tl-desc">Málaga finish <a href="https://www.malagacf.com/en/temporada-2011-2012" target="_blank">4th in La Liga</a> under Pellegrini, the highest finish in club history, qualifying for the Champions League for the first time. The only season in which capital, coaching, and results align. Pellegrini departs at the end of the season, eventually joining Man City.</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-year">Dec 2012</div>
+        <div class="tl-spine"><div class="tl-dot amber"></div><div class="tl-line"></div></div>
+        <div class="tl-content">
+          <div class="tl-event amber">UEFA Bans the Club from European Competition While It Is Still in the Champions League</div>
+          <div class="tl-desc"><a href="https://edition.cnn.com/2012/12/21/sport/football/football-malaga-uefa-ban/index.html" target="_blank">UEFA announces exclusion</a> from its next club competition for unpaid wages, debts owed to other clubs, and outstanding Spanish tax liabilities. Fine of €300,000. Málaga is still competing in the Champions League group stage when the ban is announced. The <a href="https://www.danielgeey.com/done-deal-blog/malaga-uefa-financial-fair-play-and-its-overdue-payables" target="_blank">Court of Arbitration for Sport (CAS)</a> reduces the ban to one season after Málaga settles some overdue payables. Al-Thani has effectively stopped funding the club by this point.</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-year">Apr 2013</div>
+        <div class="tl-spine"><div class="tl-dot green"></div><div class="tl-line"></div></div>
+        <div class="tl-content">
+          <div class="tl-event green">Champions League Quarter-Final vs. Dortmund: Eliminated in Stoppage Time</div>
+          <div class="tl-desc">Málaga beat Porto in the Round of 16, draw 0-0 at home vs <a href="https://www.uefa.com/uefachampionsleague/match/2009606--b-dortmund-vs-malaga/" target="_blank">Borussia Dortmund</a>, then lead 2-1 in stoppage time in Dortmund before conceding in the 90th and 90+1 minutes. Knocked out 3-2 on aggregate. The squad being sold concurrent with this run: Cazorla had already gone to Arsenal (summer 2012, ~€17m); Isco follows to Real Madrid after the CL ends (~€30m).</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-year">2013-17</div>
+        <div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div>
+        <div class="tl-content">
+          <div class="tl-event">Four Years of La Liga Managed Decline: Asset Sales, No Reinvestment</div>
+          <div class="tl-desc">Málaga stay in La Liga through regular player sales but receive no new capital. In summer 2017, Camacho, Fornals, and Sandro Ramirez are <a href="https://www.arabnews.com/node/1248651/amp" target="_blank">sold for a combined €33 million</a>; none of the proceeds return to the squad. The <a href="https://www.skysports.com/football/news/14959/12056000/malaga-resort-to-first-team-redundancies-as-financial-struggles-deepen" target="_blank">club resorts to first-team redundancies.</a> Multiple managers cycle through.</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-year">May 2018</div>
+        <div class="tl-spine"><div class="tl-dot red"></div><div class="tl-line"></div></div>
+        <div class="tl-content">
+          <div class="tl-event red">Relegated from La Liga After 10 Consecutive Top-Flight Seasons</div>
+          <div class="tl-desc"><a href="https://thesefootballtimes.co/2018/05/18/how-malaga-went-from-rags-to-riches-to-relegation/" target="_blank">Málaga finish last in La Liga</a> in 2017-18. Relegated after 10 straight seasons in the top flight. The La Liga position was sustained through player sales rather than investment; when the sellable assets ran out, so did the results.</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-year">Feb 2020</div>
+        <div class="tl-spine"><div class="tl-dot red"></div><div class="tl-line"></div></div>
+        <div class="tl-content">
+          <div class="tl-event red">Judge Removes Al-Thani; Judicial Administrator Appointed</div>
+          <div class="tl-desc">A Málaga judge removes the Al-Thani family from club oversight following a lawsuit by the Association of Small Shareholders (APA) over alleged financial crimes. <a href="https://www.arabnews.com/node/1736401/sport" target="_blank">Jose Maria Munoz is appointed judicial administrator.</a> Spanish court papers: the Al-Thani family owe the club approximately €8.5 million in loans and credit lines. Charges: disloyal administration, misappropriation, abusive agreements.</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-year">May 2023</div>
+        <div class="tl-spine"><div class="tl-dot red"></div><div class="tl-line"></div></div>
+        <div class="tl-content">
+          <div class="tl-event red">Relegated to Third Tier: Primera RFEF, First Time Outside Professional Football in 25 Years</div>
+          <div class="tl-desc"><a href="https://www.theolivepress.es/spain-news/2023/03/26/malaga-fcs-ownership-nightmare-might-just-be-coming-to-an-end-but-how-have-other-spanish-clubs-fared-with-foreign-owners/" target="_blank">Málaga are relegated</a> from the Segunda División into the primera RFEF. First time outside professional football since 1998. The trajectory: Champions League quarter-finalist 2013 to Spain's semi-professional tier 2023.</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-year">Jan 2024</div>
+        <div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div>
+        <div class="tl-content">
+          <div class="tl-event">Supreme Court: BlueBay Hotels Gets 49%; Club Returns to Segunda</div>
+          <div class="tl-desc">Spanish Supreme Court awards <a href="https://insidersport.com/2025/03/28/malaga-acquisition-qsi-psg/" target="_blank">BlueBay Hotels (Spanish hotel and real estate group) 49% of NAS Spain 2000</a>, Al-Thani's holding company. Al-Thani retains ~51% nominally; judicial administrator still running operations. The club is promoted back to the Segunda División for 2024-25.</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-year">Jun 2025</div>
+        <div class="tl-spine"><div class="tl-dot red"></div><div class="tl-line"></div></div>
+        <div class="tl-content">
+          <div class="tl-event red">Prosecutors Seek 14-Year Sentences for Al-Thani and Three Sons</div>
+          <div class="tl-desc">Andalusian court orders Al-Thani to <a href="https://www.theolivepress.es/spain-news/2025/06/13/ex-malaga-cf-owner-sheikh-al-thani-faces-14-years-in-spain-over-decline-of-the-spanish-football-club/" target="_blank">stand trial</a>. Defendants: Abdullah, plus sons Nasser, Nayef, and Rakkan. Charges: misappropriation, unfair administration, abusive agreements (inflated family salaries, loans from club funds, property purchases using club capital). Spanish assets, including Al-Thani's shares, are subject to a preventative seizure covering an €8.5 million bond. Trial date not yet set.</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-year">Mar 2025</div>
+        <div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div>
+        <div class="tl-content">
+          <div class="tl-event">QSI and FSG Both Reported to Be Circling at ~€100m</div>
+          <div class="tl-desc"><a href="https://insidersport.com/2025/03/28/malaga-acquisition-qsi-psg/" target="_blank">Qatar Sports Investments (QSI)</a> reported to be exploring acquisition of both Al-Thani's 51% and BlueBay's 49% for approximately €100 million total. <a href="https://anfieldindex.com/80561/why-fsgs-interest-in-malaga-could-reshape-liverpools-future.html" target="_blank">Fenway Sports Group (FSG)</a> also reported interested. Any deal is complicated by the live criminal proceedings and the judicial administrator's position. Club is in the Segunda División for 2025-26. No deal confirmed as of April 2026.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FINANCIALS -->
+  <div class="section" id="financials">
+    <div class="section-label">Capital In vs. Capital Out: Known Figures</div>
+    <p class="body-text">
+      Al-Thani's net financial position at the club is not publicly audited. The figures below represent the documented and reported entries only. The pattern is clear: substantial early capital inflow, approximately €130 million in debt by 2012, then a sustained period of player asset extraction without reinvestment. The gap between identified player sale proceeds and stated debt levels implies the proceeds largely served debt obligations and operating losses rather than squad investment.
+    </p>
+    <table class="fin-table">
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Direction</th>
+          <th>Amount</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Acquisition price paid</td>
+          <td>In (investment)</td>
+          <td class="amount">~€34m</td>
+          <td>Reported as $45m; converted at 2010 rates</td>
+        </tr>
+        <tr>
+          <td>Summer 2011 net transfer spend</td>
+          <td>In (investment)</td>
+          <td class="amount">~€60m</td>
+          <td>Cazorla €21m, Toulalan €11m, Isco €6m, Monreal €6m, others</td>
+        </tr>
+        <tr>
+          <td>Total club debt by 2012</td>
+          <td>Liability</td>
+          <td class="amount out">~€130m</td>
+          <td>Creditors: Spanish tax authority, other clubs (unpaid fees), wage creditors</td>
+        </tr>
+        <tr>
+          <td>UEFA fine</td>
+          <td>Out (penalty)</td>
+          <td class="amount out">€300k</td>
+          <td>December 2012 FFP ruling</td>
+        </tr>
+        <tr>
+          <td><a href="https://www.transfermarkt.co.uk/santi-cazorla/profil/spieler/7687" target="_blank">Cazorla</a> to Arsenal (2012)</td>
+          <td>Out (sale receipt)</td>
+          <td class="amount">~€17m</td>
+          <td>Reported; proceeds used for debt service, not reinvestment</td>
+        </tr>
+        <tr>
+          <td><a href="https://www.transfermarkt.co.uk/isco/profil/spieler/102792" target="_blank">Isco</a> to Real Madrid (2013)</td>
+          <td>Out (sale receipt)</td>
+          <td class="amount">~€30m</td>
+          <td>Reported; squad not rebuilt following departure</td>
+        </tr>
+        <tr>
+          <td>Camacho + Fornals + Sandro (2017)</td>
+          <td>Out (sale receipt)</td>
+          <td class="amount">~€33m</td>
+          <td>Combined reported fee; none reinvested in squad</td>
+        </tr>
+        <tr>
+          <td>Al-Thani family loans from club (court finding)</td>
+          <td>Out (extraction)</td>
+          <td class="amount out">€8.5m</td>
+          <td>Owed back to club per 2020 court ruling; subject to ongoing criminal proceedings</td>
+        </tr>
+        <tr>
+          <td><strong>Identified player sale proceeds (3 transactions)</strong></td>
+          <td>Out (total receipts)</td>
+          <td class="amount"><strong>~€80m</strong></td>
+          <td><strong>Does not include other sales; full portfolio undisclosed</strong></td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="note">All figures are reported or estimated from public sources. Net investment position, total operating losses, and full creditor waterfall are not publicly available. Annual losses reportedly ran at ~€50m at peak (2012 figures).</p>
+  </div>
+
+  <!-- GULF COMPARISON -->
+  <div class="section" id="comparison">
+    <div class="section-label">Gulf-State Ownership: Málaga vs. PSG vs. Man City</div>
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th>Dimension</th>
+          <th class="col-malaga">Al-Thani / Málaga</th>
+          <th>QSI / PSG</th>
+          <th>ADUG / Man City</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Owner type</td>
+          <td class="col-malaga"><span class="signal red">Distant royal relative</span><span class="detail">Private individual; commercial family background; no state mandate</span></td>
+          <td><span class="signal green">Sovereign vehicle</span><span class="detail">QSI is a QIA subsidiary; Emir Tamim has final say on major decisions</span></td>
+          <td><span class="signal green">Senior state royal</span><span class="detail">Sheikh Mansour is UAE deputy PM; ADUG is state-adjacent</span></td>
+        </tr>
+        <tr>
+          <td>Capital backing</td>
+          <td class="col-malaga"><span class="signal red">Personal capital only</span><span class="detail">Dried up after ~2 active seasons; no institutional backstop</span></td>
+          <td><span class="signal green">Sovereign wealth</span><span class="detail"><a href="https://en.wikipedia.org/wiki/Qatar_Sports_Investments" target="_blank">QTA signed €1bn/5-yr nation branding deal with PSG (2012)</a>; ongoing</span></td>
+          <td><span class="signal green">State-adjacent unlimited</span><span class="detail">£1bn+ invested in first decade; no capital withdrawal</span></td>
+        </tr>
+        <tr>
+          <td>Strategic rationale</td>
+          <td class="col-malaga"><span class="signal red">Partly real estate</span><span class="detail">Football as vehicle for Marbella marina and property development; both failed</span></td>
+          <td><span class="signal green">Nation branding / soft power</span><span class="detail">Pre-2022 World Cup mandate; global audience for Qatari brand</span></td>
+          <td><span class="signal green">Soft power / platform</span><span class="detail">UAE brand building; City Football Group multi-club strategy</span></td>
+        </tr>
+        <tr>
+          <td>Durability of capital</td>
+          <td class="col-malaga"><span class="signal red">2 active seasons (2011-12)</span><span class="detail">No sustained investment after summer 2011</span></td>
+          <td><span class="signal green">14+ years, ongoing</span><span class="detail">PSG spent billions continuously since 2011; <a href="https://en.wikipedia.org/wiki/Paris_Saint-Germain_FC_ownership_and_finances" target="_blank">Champions League won 2025</a></span></td>
+          <td><span class="signal green">17+ years, ongoing</span><span class="detail">Consistent investment; Premier League titles, CL win 2023</span></td>
+        </tr>
+        <tr>
+          <td>Governance</td>
+          <td class="col-malaga"><span class="signal red">Family-run, no professional layer</span><span class="detail">Judicial administrator now in charge; four family members facing prosecution</span></td>
+          <td><span class="signal green">Professionalised</span><span class="detail">Nasser Al-Khelaifi as CEO; large commercial and sporting operation</span></td>
+          <td><span class="signal green">Institutionalised</span><span class="detail">Ferran Soriano / Txiki Begiristain model; City Football Group</span></td>
+        </tr>
+        <tr>
+          <td>Peak achievement</td>
+          <td class="col-malaga">CL quarter-final (2013); 4th in La Liga (2012)</td>
+          <td>Champions League winner (2025); serial Ligue 1 dominance</td>
+          <td>Champions League winner (2023); multiple Premier League titles</td>
+        </tr>
+        <tr>
+          <td>Current position</td>
+          <td class="col-malaga"><span class="signal red">Segunda División</span><span class="detail">Criminal trial pending; contested ownership; no European football</span></td>
+          <td><span class="signal green">Top 4 European club by revenue</span></td>
+          <td><span class="signal green">Premier League contender; global multi-club empire</span></td>
+        </tr>
+        <tr>
+          <td>Key legal risk</td>
+          <td class="col-malaga"><span class="signal red">Owner facing 14-yr sentence request</span><span class="detail">Assets seized; four family members in dock</span></td>
+          <td><span class="signal amber">UEFA FFP scrutiny ongoing</span><span class="detail">Navigated to date; no executive-level criminal charges</span></td>
+          <td><span class="signal amber">115 PL charges for financial rule breaches</span><span class="detail">Ongoing; no executive-level criminal charges</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ACQUISITION OUTLOOK + LEGAL -->
+  <div class="section" id="legal">
+    <div class="section-label">Acquisition Outlook and Legal Position</div>
+    <div class="two-col">
+      <div class="col">
+        <div class="box">
+          <div class="box-title">Acquisition Outlook</div>
+          <div class="box-body">
+            <p><strong>QSI at ~€100m.</strong> <a href="https://insidersport.com/2025/03/28/malaga-acquisition-qsi-psg/" target="_blank">Qatar Sports Investments is exploring acquisition</a> of both Al-Thani's 51% and BlueBay's 49%, reportedly at a combined ~€100 million valuation. If completed, the sovereign Qatari vehicle would acquire the club a private Qatari individual ran into the ground. No deal confirmed as of April 2026. The valuation implies QSI is buying promotion optionality and brand, not current footballing assets: the club has no European football, a contested ownership structure, and a judicial administrator still in place.</p>
+            <p><strong>FSG also reported interested.</strong> <a href="https://anfieldindex.com/80561/why-fsgs-interest-in-malaga-could-reshape-liverpools-future.html" target="_blank">Fenway Sports Group</a> has been reported as a potential bidder. Málaga's Segunda División position, large city fanbase, and Andalusian market are credible multi-club additions for FSG. Same structural complications apply: the Al-Thani shareholding is subject to criminal proceedings, and transferring it requires resolution of the judicial process.</p>
+            <p><strong>Blocker.</strong> Any sale of Al-Thani's shares needs to survive the preventative asset seizure and the judicial administrator's oversight. Buyers are effectively acquiring a distressed asset wrapped in live litigation.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="box">
+          <div class="box-title">Legal Proceedings: Key Facts</div>
+          <div class="metric-row">
+            <span class="metric-label">Judicial administrator appointed</span>
+            <span class="metric-val">Feb 2020 (Jose Maria Munoz)</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Amount owed to club (court)</span>
+            <span class="metric-val red">€8.5m</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Defendants</span>
+            <span class="metric-val">Abdullah + sons Nasser, Nayef, Rakkan</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Charges</span>
+            <span class="metric-val">Misappropriation, unfair administration, abusive agreements</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Prosecution sentence request</span>
+            <span class="metric-val red">14 years each</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Preventative seizure</span>
+            <span class="metric-val">Al-Thani's shares; €8.5m bond</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Trial date</span>
+            <span class="metric-val">Not yet set (Apr 2026)</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Current club tier</span>
+            <span class="metric-val">Segunda División (2025-26)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="brand">PYLON PARTNERS — April 2026</div>
+</div>
+</body>
+</html>

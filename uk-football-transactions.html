@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>English Football Transactions 2015-2025 — Pylon Intelligence</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, sans-serif; background: #fff; color: #1a1a1a; -webkit-font-smoothing: antialiased; font-size: 13px; }
+  .page { max-width: 1100px; margin: 0 auto; padding: 48px 36px 60px; }
+
+  /* NAV */
+  .nav-back { margin-bottom: 28px; padding-bottom: 16px; border-bottom: 1px solid #e8e8e8; }
+  .nav-back a { font-size: 12px; font-weight: 700; color: #1a1a1a; text-decoration: none; letter-spacing: 0.3px; }
+  .nav-back a:hover { color: #1a7a3a; }
+
+  /* HEADER */
+  h1 { font-size: 26px; font-weight: 800; color: #000; line-height: 1.2; margin-bottom: 10px; letter-spacing: -0.3px; }
+  .subtitle { font-size: 13.5px; color: #666; line-height: 1.65; margin-bottom: 28px; }
+
+  /* STATS BAR */
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); border: 1.5px solid #ddd; margin-bottom: 36px; }
+  .stat { padding: 16px 18px; text-align: center; border-right: 1px solid #ddd; }
+  .stat:last-child { border-right: none; }
+  .stat-label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #999; margin-bottom: 7px; }
+  .stat-val { font-size: 22px; font-weight: 800; color: #1a1a1a; line-height: 1; margin-bottom: 4px; }
+  .stat-val.green { color: #1a7a3a; }
+  .stat-sub { font-size: 11px; color: #aaa; margin-top: 4px; }
+
+  /* CHART */
+  .section-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #888; margin-bottom: 14px; }
+  .chart-wrap { border: 1.5px solid #ddd; padding: 24px 24px 16px; margin-bottom: 36px; overflow: hidden; }
+  .chart-title { font-size: 12px; font-weight: 800; color: #1a1a1a; margin-bottom: 4px; }
+  .chart-desc { font-size: 11.5px; color: #888; margin-bottom: 20px; line-height: 1.5; }
+
+  /* SEARCH + FILTERS */
+  .controls { display: flex; gap: 12px; margin-bottom: 14px; align-items: flex-start; flex-wrap: wrap; }
+  .search-wrap { flex: 1; min-width: 180px; }
+  .search-input {
+    width: 100%; padding: 7px 12px; font-family: Arial; font-size: 12.5px;
+    border: 1.5px solid #ddd; color: #1a1a1a; background: #fff; outline: none;
+  }
+  .search-input:focus { border-color: #1a7a3a; }
+  .search-input::placeholder { color: #bbb; }
+
+  .filters-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .filters { display: flex; gap: 8px; flex-wrap: nowrap; padding-bottom: 2px; }
+  .filter-btn {
+    padding: 7px 13px; font-family: Arial; font-size: 11px; font-weight: 700;
+    letter-spacing: 0.8px; text-transform: uppercase; border: 1.5px solid #ddd;
+    background: #fff; color: #888; cursor: pointer; transition: all 0.1s;
+    white-space: nowrap; flex-shrink: 0;
+  }
+  .filter-btn:hover { border-color: #999; color: #1a1a1a; }
+  .filter-btn.active { border-color: #1a7a3a; color: #1a7a3a; background: rgba(26,122,58,0.05); }
+
+  /* RESULTS COUNT */
+  .row-count { font-size: 11.5px; color: #888; margin-bottom: 10px; font-weight: 600; }
+
+  /* TABLE */
+  .table-wrap { border: 1.5px solid #ddd; overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 12px; }
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  thead th {
+    background: #fafafa; font-size: 10px; font-weight: 700; letter-spacing: 1px;
+    text-transform: uppercase; color: #888; padding: 10px 12px;
+    border-bottom: 1.5px solid #ddd; text-align: left; cursor: pointer;
+    user-select: none; white-space: nowrap;
+  }
+  thead th:hover { color: #1a1a1a; }
+  thead th.sort-asc::after { content: ' \2191'; color: #1a7a3a; }
+  thead th.sort-desc::after { content: ' \2193'; color: #1a7a3a; }
+  thead th.no-sort { cursor: default; }
+  tbody tr.deal-row { border-bottom: 1px solid #e8e8e8; transition: background 0.08s; cursor: pointer; }
+  tbody tr.deal-row:hover { background: #f5fdf7; }
+  tbody tr.deal-row.expanded { background: #f5fdf7; border-bottom: none; }
+  tbody td { padding: 11px 12px; vertical-align: middle; }
+  .col-year { font-weight: 800; color: #555; font-size: 12px; white-space: nowrap; }
+  .col-club { font-weight: 800; color: #000; }
+  .col-acquirer { color: #1a1a1a; }
+  .col-nationality { color: #555; font-size: 12px; }
+  .col-stake { font-size: 12px; color: #555; white-space: nowrap; }
+  .col-value { font-weight: 700; color: #1a1a1a; white-space: nowrap; }
+  .col-expand { color: #ccc; font-size: 14px; text-align: center; user-select: none; transition: color 0.1s; width: 28px; }
+  tbody tr.deal-row:hover .col-expand { color: #1a7a3a; }
+  tbody tr.deal-row.expanded .col-expand { color: #1a7a3a; }
+
+  /* EXPANDED DETAIL ROW */
+  tr.detail-row { display: none; background: #f9fdf9; border-bottom: 1px solid #e0edd8; }
+  tr.detail-row.open { display: table-row; }
+  tr.detail-row td { padding: 0; }
+  .detail-inner { padding: 14px 16px 16px; }
+  .detail-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px 24px; margin-bottom: 14px; }
+  .detail-field-label { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #999; margin-bottom: 4px; }
+  .detail-field-val { font-size: 12.5px; color: #1a1a1a; font-weight: 700; }
+  .detail-notes { font-size: 12.5px; color: #444; line-height: 1.65; border-top: 1px solid #e0edd8; padding-top: 12px; }
+  .detail-notes-label { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #999; margin-bottom: 6px; }
+
+  /* LEAGUE BADGE */
+  .league-badge {
+    display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.3px;
+    padding: 2px 7px; text-transform: uppercase; white-space: nowrap;
+  }
+  .badge-epl   { background: rgba(26,122,58,0.09); color: #1a7a3a; }
+  .badge-champ { background: rgba(26,26,26,0.07); color: #444; }
+  .badge-l1    { background: rgba(153,153,153,0.12); color: #666; }
+  .badge-l2    { background: rgba(153,153,153,0.08); color: #888; }
+
+  /* TYPE PILL */
+  .type-pill {
+    display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.3px;
+    padding: 2px 7px; white-space: nowrap;
+  }
+  .type-full     { background: rgba(26,122,58,0.09); color: #1a7a3a; }
+  .type-majority { background: rgba(26,26,26,0.07); color: #444; }
+  .type-minority { background: rgba(153,153,153,0.1); color: #777; }
+
+  /* EMPTY STATE */
+  .empty-state { padding: 40px; text-align: center; color: #aaa; font-size: 13px; }
+
+  .brand { text-align: right; font-size: 11px; color: #aaa; margin-top: 48px; letter-spacing: 1px; }
+
+  /* ========= MOBILE ========= */
+  @media (max-width: 640px) {
+    .page { padding: 24px 16px 40px; }
+    h1 { font-size: 20px; }
+    .subtitle { font-size: 13px; margin-bottom: 20px; }
+
+    /* Stats: 2x2 grid */
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .stat { border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; }
+    .stat:nth-child(2) { border-right: none; }
+    .stat:nth-child(3) { border-bottom: none; }
+    .stat:nth-child(4) { border-right: none; border-bottom: none; }
+    .stat-val { font-size: 18px; }
+    .stat-val[style*="16px"] { font-size: 13px !important; }
+
+    /* Chart: slightly taller to preserve legibility */
+    .chart-wrap { padding: 16px 12px 12px; }
+    .chart-desc { display: none; }
+
+    /* Controls stack vertically */
+    .controls { flex-direction: column; gap: 8px; }
+    .search-wrap { min-width: unset; }
+
+    /* Hide less critical columns on mobile */
+    .hide-mobile { display: none !important; }
+
+    /* Expand chevron always visible on mobile */
+    .col-expand { color: #999 !important; }
+
+    /* Detail grid: 2 cols on mobile */
+    .detail-grid { grid-template-columns: repeat(2, 1fr); }
+
+    .brand { margin-top: 32px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="nav-back"><a href="sportscapital-intel.html">&#8592; Pylon Intelligence</a></div>
+
+  <h1>American Capital Leads 22 of 50 English Football Transactions Since 2015</h1>
+  <div class="subtitle">All disclosed ownership changes across the top 4 English leagues, 2015-2025. Chelsea £4.25B (BlueCo / Clearlake, 2022) is the largest single transaction. US-led buyers outpace all other nationalities combined.</div>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-label">Total Deals</div>
+      <div class="stat-val">50</div>
+      <div class="stat-sub">2015 – 2025</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Disclosed Value</div>
+      <div class="stat-val green">£8.5B+</div>
+      <div class="stat-sub">Excl. undisclosed</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">US-Led Deals</div>
+      <div class="stat-val">22</div>
+      <div class="stat-sub">Largest single cohort</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Largest Deal</div>
+      <div class="stat-val" style="font-size:16px;">Chelsea £4.25B</div>
+      <div class="stat-sub">BlueCo / Clearlake 2022</div>
+    </div>
+  </div>
+
+  <!-- CHART -->
+  <div class="section-label">Deal Volume by Year</div>
+  <div class="chart-wrap">
+    <div class="chart-title">2021-2023 Was the Busiest Three-Year Period</div>
+    <div class="chart-desc">Post-COVID capital deployment and US investors entering lower divisions drove the 2021-2023 peak. 2023 produced 8 transactions, the highest single year in the dataset.</div>
+    <!-- viewBox: 0 0 1040 220. Baseline at y=185. Each deal unit = 20px. Max 8 deals = 160px. Top of tallest bar = y=25. Labels above bars have room. Year labels at y=204. -->
+    <svg viewBox="0 0 1040 212" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;">
+      <!-- Grid lines (y values: 8=25, 6=65, 4=105, 2=145, baseline=185) -->
+      <line x1="12" y1="25"  x2="1040" y2="25"  stroke="#e8e8e8" stroke-width="0.6"/>
+      <line x1="12" y1="65"  x2="1040" y2="65"  stroke="#e8e8e8" stroke-width="0.6"/>
+      <line x1="12" y1="105" x2="1040" y2="105" stroke="#e8e8e8" stroke-width="0.6"/>
+      <line x1="12" y1="145" x2="1040" y2="145" stroke="#e8e8e8" stroke-width="0.6"/>
+      <line x1="12" y1="185" x2="1040" y2="185" stroke="#ddd"    stroke-width="1"/>
+      <!-- Y-axis labels -->
+      <text x="8" y="29"  font-family="Arial" font-size="9" fill="#bbb" text-anchor="end">8</text>
+      <text x="8" y="69"  font-family="Arial" font-size="9" fill="#bbb" text-anchor="end">6</text>
+      <text x="8" y="109" font-family="Arial" font-size="9" fill="#bbb" text-anchor="end">4</text>
+      <text x="8" y="149" font-family="Arial" font-size="9" fill="#bbb" text-anchor="end">2</text>
+      <!-- Bars (x positions spaced ~84px apart starting at x=20) -->
+      <!-- 2015: 3 deals, top=125, h=60 -->
+      <rect x="20"  y="125" width="68" height="60" fill="#1a7a3a" opacity="0.75"/>
+      <text x="54"  y="119" font-family="Arial" font-size="10" fill="#666" text-anchor="middle" font-weight="800">3</text>
+      <text x="54"  y="204" font-family="Arial" font-size="10" fill="#999" text-anchor="middle" font-weight="700">2015</text>
+      <!-- 2016: 5 deals, top=85, h=100 -->
+      <rect x="104" y="85"  width="68" height="100" fill="#1a7a3a" opacity="0.82"/>
+      <text x="138" y="79"  font-family="Arial" font-size="10" fill="#666" text-anchor="middle" font-weight="800">5</text>
+      <text x="138" y="204" font-family="Arial" font-size="10" fill="#999" text-anchor="middle" font-weight="700">2016</text>
+      <!-- 2017: 5 deals -->
+      <rect x="188" y="85"  width="68" height="100" fill="#1a7a3a" opacity="0.82"/>
+      <text x="222" y="79"  font-family="Arial" font-size="10" fill="#666" text-anchor="middle" font-weight="800">5</text>
+      <text x="222" y="204" font-family="Arial" font-size="10" fill="#999" text-anchor="middle" font-weight="700">2017</text>
+      <!-- 2018: 4 deals, top=105, h=80 -->
+      <rect x="272" y="105" width="68" height="80"  fill="#1a7a3a" opacity="0.78"/>
+      <text x="306" y="99"  font-family="Arial" font-size="10" fill="#666" text-anchor="middle" font-weight="800">4</text>
+      <text x="306" y="204" font-family="Arial" font-size="10" fill="#999" text-anchor="middle" font-weight="700">2018</text>
+      <!-- 2019: 3 deals -->
+      <rect x="356" y="125" width="68" height="60"  fill="#1a7a3a" opacity="0.75"/>
+      <text x="390" y="119" font-family="Arial" font-size="10" fill="#666" text-anchor="middle" font-weight="800">3</text>
+      <text x="390" y="204" font-family="Arial" font-size="10" fill="#999" text-anchor="middle" font-weight="700">2019</text>
+      <!-- 2020: 2 deals, top=145, h=40 -->
+      <rect x="440" y="145" width="68" height="40"  fill="#1a7a3a" opacity="0.65"/>
+      <text x="474" y="139" font-family="Arial" font-size="10" fill="#666" text-anchor="middle" font-weight="800">2</text>
+      <text x="474" y="204" font-family="Arial" font-size="10" fill="#999" text-anchor="middle" font-weight="700">2020</text>
+      <!-- 2021: 7 deals, top=45, h=140 -->
+      <rect x="524" y="45"  width="68" height="140" fill="#1a7a3a" opacity="0.95"/>
+      <text x="558" y="39"  font-family="Arial" font-size="10" fill="#555" text-anchor="middle" font-weight="800">7</text>
+      <text x="558" y="204" font-family="Arial" font-size="10" fill="#999" text-anchor="middle" font-weight="700">2021</text>
+      <!-- 2022: 6 deals, top=65, h=120 -->
+      <rect x="608" y="65"  width="68" height="120" fill="#1a7a3a" opacity="0.9"/>
+      <text x="642" y="59"  font-family="Arial" font-size="10" fill="#555" text-anchor="middle" font-weight="800">6</text>
+      <text x="642" y="204" font-family="Arial" font-size="10" fill="#999" text-anchor="middle" font-weight="700">2022</text>
+      <!-- 2023: 8 deals (PEAK), top=25, h=160 -->
+      <rect x="692" y="25"  width="68" height="160" fill="#1a7a3a" opacity="1"/>
+      <text x="726" y="19"  font-family="Arial" font-size="10" fill="#1a7a3a" text-anchor="middle" font-weight="800">8 ▲</text>
+      <text x="726" y="204" font-family="Arial" font-size="10" fill="#1a1a1a" text-anchor="middle" font-weight="800">2023</text>
+      <!-- 2024: 6 deals -->
+      <rect x="776" y="65"  width="68" height="120" fill="#1a7a3a" opacity="0.9"/>
+      <text x="810" y="59"  font-family="Arial" font-size="10" fill="#555" text-anchor="middle" font-weight="800">6</text>
+      <text x="810" y="204" font-family="Arial" font-size="10" fill="#999" text-anchor="middle" font-weight="700">2024</text>
+      <!-- 2025: 1 deal, top=165, h=20 -->
+      <rect x="860" y="165" width="68" height="20"  fill="#1a7a3a" opacity="0.5"/>
+      <text x="894" y="159" font-family="Arial" font-size="10" fill="#aaa" text-anchor="middle" font-weight="800">1</text>
+      <text x="894" y="204" font-family="Arial" font-size="10" fill="#999" text-anchor="middle" font-weight="700">2025</text>
+    </svg>
+  </div>
+
+  <!-- CONTROLS -->
+  <div class="section-label">All Transactions</div>
+  <div class="controls">
+    <div class="search-wrap">
+      <input class="search-input" type="text" id="search" placeholder="Search club or acquirer..." autocomplete="off">
+    </div>
+  </div>
+  <div class="filters-wrap">
+    <div class="filters" id="filters">
+      <button class="filter-btn active" data-league="all">All (50)</button>
+      <button class="filter-btn" data-league="premier">Premier League (17)</button>
+      <button class="filter-btn" data-league="championship">Championship (17)</button>
+      <button class="filter-btn" data-league="league1">League One (12)</button>
+      <button class="filter-btn" data-league="l2nat">Lge Two / National (4)</button>
+    </div>
+  </div>
+  <div class="row-count" id="row-count" style="margin-top:12px;">Showing 50 transactions</div>
+
+  <div class="table-wrap">
+    <table id="deal-table">
+      <thead>
+        <tr>
+          <th data-col="year">Year</th>
+          <th data-col="club">Club</th>
+          <th data-col="league" class="hide-mobile">League</th>
+          <th data-col="acquirer" class="hide-mobile">Acquirer</th>
+          <th data-col="nationality" class="hide-mobile">Nationality</th>
+          <th data-col="stake" class="hide-mobile">Stake</th>
+          <th data-col="value">Value</th>
+          <th data-col="type">Type</th>
+          <th class="no-sort" style="width:28px;cursor:default;"></th>
+        </tr>
+      </thead>
+      <tbody id="deal-body"></tbody>
+    </table>
+    <div class="empty-state" id="empty-state" style="display:none;">No transactions match your search.</div>
+  </div>
+
+  <div class="brand">PYLON PARTNERS</div>
+</div>
+
+<script>
+const deals = [
+  {year:2015,club:'Sheffield Wednesday',league:'championship',leagueLabel:'Championship',acquirer:'Dejphon Chansiri',nationality:'Thai',stake:'100%',value:'£37.5M',type:'full',notes:'Full takeover from Milan Mandaric. Stabilised a club in long-term decline; funded consecutive playoff campaigns without promotion.'},
+  {year:2015,club:'Crystal Palace',league:'premier',leagueLabel:'Premier League',acquirer:'Harris / Blitzer',nationality:'American',stake:'36%',value:'£50M',type:'minority',notes:'PE veterans Josh Harris (Apollo) and David Blitzer (Blackstone) acquired a 36% minority at an implied ~£140M. Preceded the wave of US PE capital into English football. Crystal Palace value has grown to £500M+ by the mid-2020s.'},
+  {year:2015,club:'Derby County',league:'championship',leagueLabel:'Championship',acquirer:'Mel Morris',nationality:'British',stake:'100%',value:'~£49M',type:'full',notes:'Tech entrepreneur acquired full control. Frank Lampard\'s 2019 playoff final defeat masked worsening finances that ended in administration in 2021.'},
+  {year:2016,club:'Everton',league:'premier',leagueLabel:'Premier League',acquirer:'Farhad Moshiri',nationality:'Iranian-British',stake:'49.9%',value:'£87.5M',type:'minority',notes:'Spent over £500M net on transfers in eight years without landing a trophy. Sold to Friedkin Group in 2024 under administration risk.'},
+  {year:2016,club:'Wolverhampton Wanderers',league:'championship',leagueLabel:'Championship',acquirer:'Fosun International',nationality:'Chinese',stake:'100%',value:'£45M',type:'full',notes:'Jorge Mendes-Fosun relationship drove Portuguese signings under Nuno. Premier League promotion 2018; Europa League semi-final 2020.'},
+  {year:2016,club:'Aston Villa',league:'championship',leagueLabel:'Championship',acquirer:'Dr Tony Xia',nationality:'Chinese',stake:'100%',value:'£76M',type:'full',notes:'Acquired after relegation. Two missed promotions and unchecked spending drained cash and triggered a rescue sale in 2018.'},
+  {year:2016,club:'West Brom',league:'premier',leagueLabel:'Premier League',acquirer:'Guochuan Lai',nationality:'Chinese',stake:'88%',value:'~£175M',type:'full',notes:'Remote ownership and minimal infrastructure investment. Relegated 2018. Sold to Shilen Patel in 2024.'},
+  {year:2016,club:'Swansea City',league:'premier',leagueLabel:'Premier League',acquirer:'Kaplan / Levien',nationality:'American',stake:'60%',value:'£110M',type:'full',notes:'Acquired at implied ~£183M while in the Premier League. Relegated 2018; sold to Andy Coleman consortium in 2023.'},
+  {year:2017,club:'Leeds United',league:'championship',leagueLabel:'Championship',acquirer:'Andrea Radrizzani',nationality:'Italian',stake:'100%',value:'£45M',type:'full',notes:'First 50% in Jan 2017, full control May 2017. Bielsa appointment 2018; promotion 2020. 49ers Enterprises sale 2023 after Championship relegation.'},
+  {year:2017,club:'Nottingham Forest',league:'championship',leagueLabel:'Championship',acquirer:'Evangelos Marinakis',nationality:'Greek',stake:'100%',value:'~£50M',type:'full',notes:'Greek shipping magnate and Olympiakos owner. Steve Cooper delivered promotion in 2022. Dual-club UEFA implications with Olympiakos in European competition.'},
+  {year:2017,club:'Barnsley',league:'championship',leagueLabel:'Championship',acquirer:'Chien Lee / Paul Conway',nationality:'Asian-American',stake:'80%',value:'N/D',type:'majority',notes:'New City Capital and Pacific Media Group. Billy Beane among co-investors. Both principals later fined by EFL for failing to disclose full ownership structure. Departed board in 2022.'},
+  {year:2017,club:'Reading',league:'championship',leagueLabel:'Championship',acquirer:'Dai Yongge',nationality:'Chinese',stake:'100%',value:'N/D',type:'full',notes:'Multiple points deductions for financial rule breaches. Relegated to League One. Sold to Rob Couhig in 2024 to avoid collapse.'},
+  {year:2017,club:'Portsmouth',league:'league1',leagueLabel:'League One',acquirer:'Michael Eisner / Tornante Co.',nationality:'American',stake:'100%',value:'£5.67M',type:'full',notes:'Former Disney CEO acquired at League One level after the club\'s 2012 administration. Provided stability and a gradual rebuild.'},
+  {year:2018,club:'Oxford United',league:'league1',leagueLabel:'League One',acquirer:'Sumrith Thanakarnjanasuth',nationality:'Thai',stake:'100%',value:'N/D',type:'full',notes:'Former Reading co-investor acquired in League One. Subsequently sold to Indonesian businessmen Thohir and Bakrie in 2022.'},
+  {year:2018,club:'Aston Villa',league:'championship',leagueLabel:'Championship',acquirer:'Sawiris / Edens (rescue)',nationality:'Egyptian / American',stake:'55%',value:'~£50M',type:'majority',notes:'Emergency rescue capital after Tony Xia\'s funds dried up. Steve Bruce then Dean Smith delivered the 2019 playoff final. Unai Emery has since taken Villa to the Champions League.'},
+  {year:2018,club:'Plymouth Argyle',league:'l2nat',leagueLabel:'League Two',acquirer:'Simon Hallett',nationality:'British',stake:'51%',value:'N/D',type:'majority',notes:'Data scientist with a focus on sustainable development. Back-to-back promotions from League Two to the Championship under Steven Schumacher. One of the best-value rebuilds in modern EFL history.'},
+  {year:2018,club:'Leicester City',league:'premier',leagueLabel:'Premier League',acquirer:'Aiyawatt Srivaddhanaprabha',nationality:'Thai',stake:'majority',value:'N/D',type:'full',notes:'Son Aiyawatt assumed control following Vichai\'s death in October 2018. Leadership transition was seamless. FA Cup winners under Brendan Rodgers.'},
+  {year:2019,club:'Bolton Wanderers',league:'league1',leagueLabel:'League One',acquirer:'Football Ventures (Whites)',nationality:'British',stake:'100%',value:'~£10M',type:'full',notes:'Sold out of administration after Ken Anderson\'s ownership left unpaid tax and wage arrears. Rescued from liquidation.'},
+  {year:2019,club:'Blackpool',league:'league1',leagueLabel:'League One',acquirer:'Simon Sadler',nationality:'British',stake:'96%',value:'N/D',type:'full',notes:'Blackpool-born businessman acquired from the Oyston family following a protracted legal battle with supporter groups. League One promotion under Neil Critchley within two seasons.'},
+  {year:2019,club:'Charlton Athletic',league:'league1',leagueLabel:'League One',acquirer:'East Street Investments',nationality:'Multi',stake:'100%',value:'~£1M',type:'full',notes:'Immediately unravelled: principals Matt Southall and Tahnoon Nimer fell out publicly within months. Thomas Sandgaard completed rescue in September 2020.'},
+  {year:2020,club:'Burnley',league:'championship',leagueLabel:'Championship',acquirer:'ALK Capital / Alan Pace',nationality:'American',stake:'84%',value:'N/D',type:'full',notes:'US investment firm at Championship level. Promotion under Sean Dyche 2022. Relegated from Premier League 2023. ALK Capital sought exit before parachute payments expired. Pace later acquired RCD Espanyol in 2025.'},
+  {year:2020,club:'Charlton Athletic',league:'league1',leagueLabel:'League One',acquirer:'Thomas Sandgaard',nationality:'Danish-American',stake:'100%',value:'~£5M',type:'full',notes:'Danish-American medical device entrepreneur rescued Charlton from the ESI wreckage. Roland Duchatelet retained ownership of The Valley stadium under a long-term lease.'},
+  {year:2021,club:'Ipswich Town',league:'league1',leagueLabel:'League One',acquirer:'Gamechanger20',nationality:'American',stake:'100%',value:'~£40M',type:'full',notes:'Brett Johnson and Mark Detmer acquired from the Evans family. Under Kieran McKenna: back-to-back League One and Championship titles. Premier League debut 2024 for the first time since 2002.'},
+  {year:2021,club:'Sunderland',league:'league1',leagueLabel:'League One',acquirer:'Kyril Louis-Dreyfus',nationality:'Swiss-French',stake:'41%',value:'~£40M',type:'minority',notes:'23-year-old son of the Louis-Dreyfus commodity empire. Became majority owner June 2022 after Championship promotion. Methodical rebuild positioning for the Premier League.'},
+  {year:2021,club:'Wigan Athletic',league:'league1',leagueLabel:'League One',acquirer:'Phoenix 2021 / Al-Jasmi',nationality:'Bahraini',stake:'100%',value:'N/D',type:'full',notes:'Bahraini businessman rescued Wigan from administration for a nominal sum. Unstable: recurring late wage payments from summer 2022. EFL points deduction followed. Mike Danson purchased in June 2023.'},
+  {year:2021,club:'Wrexham',league:'l2nat',leagueLabel:'National Lg.',acquirer:'Reynolds / McElhenney',nationality:'American',stake:'100%',value:'£2M',type:'full',notes:'Ryan Reynolds and Rob McElhenney purchased for £2M. "Welcome to Wrexham" documentary distributed globally. Three consecutive promotions to League One. Media valuation far exceeds traditional football metrics.'},
+  {year:2021,club:'Newcastle United',league:'premier',leagueLabel:'Premier League',acquirer:'Saudi PIF / PCP / RB Sports',nationality:'Saudi / British',stake:'80%',value:'£305M',type:'full',notes:'Saudi Arabia\'s Public Investment Fund (80%), PCP Capital Partners (10%), RB Sports and Media (10%). Completed after 18-month Premier League arbitration on broadcast piracy. Reshaped top-flight power structures.'},
+  {year:2021,club:'Crystal Palace',league:'premier',leagueLabel:'Premier League',acquirer:'John Textor',nationality:'American',stake:'40%',value:'£87.5M',type:'minority',notes:'US tech entrepreneur acquired 40% for Eagle Football multi-club strategy alongside Botafogo and Lyon. FA/UEFA multi-club conflict rules eventually forced sale to Woody Johnson in 2025.'},
+  {year:2021,club:'West Ham United',league:'premier',leagueLabel:'Premier League',acquirer:'Daniel Kretinsky',nationality:'Czech',stake:'27%',value:'~£170M',type:'minority',notes:'Czech energy billionaire at implied ~£630M club valuation. Increased to ~36% in 2023. Sullivan and Gold seeking full exit, positioning Kretinsky as dominant incoming owner.'},
+  {year:2022,club:'Hull City',league:'championship',leagueLabel:'Championship',acquirer:'Acun Ilicali',nationality:'Turkish',stake:'100%',value:'£30M',type:'full',notes:'Turkish TV mogul acquired from Allam family (£20M plus £10M conditional on PL promotion). Heavy investment followed; Premier League promotion has not materialised.'},
+  {year:2022,club:'Derby County',league:'league1',leagueLabel:'League One',acquirer:'David Clowes',nationality:'British',stake:'100%',value:'£33M',type:'full',notes:'Derbyshire property developer acquired Derby out of administration after Mel Morris\'s collapse. Paid all creditors in full. Club returned to Championship under Wayne Rooney in 2023.'},
+  {year:2022,club:'Chelsea',league:'premier',leagueLabel:'Premier League',acquirer:'BlueCo / Clearlake / Boehly',nationality:'American',stake:'100%',value:'£4.25B',type:'full',notes:'Largest football club sale in history at the time. Forced sale from Roman Abramovich after UK government sanctions. Clearlake holds 60% of BlueCo. Subsequent £1B+ in transfer spending in 18 months generated significant controversy.'},
+  {year:2022,club:'Bournemouth',league:'premier',leagueLabel:'Premier League',acquirer:'Bill Foley (minority)',nationality:'American',stake:'~25%',value:'~£120M',type:'minority',notes:'Las Vegas Golden Knights owner at implied ~£480M club valuation. Multi-sport franchise-building playbook from US ice hockey.'},
+  {year:2022,club:'Oxford United',league:'league1',leagueLabel:'League One',acquirer:'Thohir / Bakrie',nationality:'Indonesian',stake:'100%',value:'N/D',type:'full',notes:'Erick Thohir (former Inter Milan co-owner, current Indonesian FA president) and Anindya Bakrie. Oxford won promotion to the Championship in 2024.'},
+  {year:2022,club:'Norwich City',league:'championship',leagueLabel:'Championship',acquirer:'Mark Attanasio (minority)',nationality:'American',stake:'~15%',value:'N/D',type:'minority',notes:'Milwaukee Brewers MLB owner acquiring English football exposure. Norwich remain in the Championship under the continuing Delia Smith / Michael Wynn-Jones tenure.'},
+  {year:2023,club:'Liverpool',league:'premier',leagueLabel:'Premier League',acquirer:'Dynasty Equity',nationality:'American',stake:'~3%',value:'~£150M',type:'minority',notes:'US PE firm at implied £5B+ club valuation. FSG crystallised partial value ahead of the Arne Slot cycle.'},
+  {year:2023,club:'Manchester United',league:'premier',leagueLabel:'Premier League',acquirer:'INEOS / Sir Jim Ratcliffe',nationality:'British',stake:'27.7%',value:'£1.26B',type:'minority',notes:'INEOS acquired 27.7% for sporting control without majority economic ownership. Split governance continues to create institutional tension. Creates INEOS multi-club portfolio with Nice and FC Lausanne.'},
+  {year:2023,club:'Leeds United',league:'championship',leagueLabel:'Championship',acquirer:'49ers Enterprises',nationality:'American',stake:'56%',value:'~£200M',type:'full',notes:'San Francisco 49ers\' vehicle acquired 56% from Radrizzani post-relegation at implied ~£357M. NFL-grade commercial infrastructure. Promotion back to the Premier League in 2024 validated the acquisition.'},
+  {year:2023,club:'Birmingham City',league:'championship',leagueLabel:'Championship',acquirer:'Knighthead Capital / Tom Brady',nationality:'American',stake:'100%',value:'N/D',type:'full',notes:'US hedge fund and NFL legend Tom Brady acquired Birmingham plus St Andrew\'s stadium. Brady was the first active NFL player to own an English football club. Club currently in League One.'},
+  {year:2023,club:'Huddersfield Town',league:'championship',leagueLabel:'Championship',acquirer:'Kevin Nagle',nationality:'American',stake:'100%',value:'N/D',type:'full',notes:'Former EnvisionRx CEO and Sacramento Kings co-investor. Multi-sport ownership template. Club faces a rebuild from the Championship after consecutive poor seasons.'},
+  {year:2023,club:'Wigan Athletic',league:'league1',leagueLabel:'League One',acquirer:'Mike Danson',nationality:'British',stake:'100%',value:'N/D',type:'full',notes:'Wigan-born billionaire and Wigan Warriors RLFC co-owner. Purchased from Phoenix 2021; immediately cleared all outstanding debts to players, staff, and creditors.'},
+  {year:2023,club:'Swansea City',league:'championship',leagueLabel:'Championship',acquirer:'Andy Coleman consortium',nationality:'Welsh / American',stake:'100%',value:'~£38M',type:'full',notes:'Acquired from Kaplan and Levien, who could not return the club to the Premier League in six Championship seasons. Supporters\' Trust retained its stake.'},
+  {year:2023,club:'Cambridge United',league:'league1',leagueLabel:'League One',acquirer:'Paul Barry',nationality:'American',stake:'majority',value:'N/D',type:'majority',notes:'American businessman continuing the pattern of US investors targeting lower-division clubs as cost-efficient entry points into the football ownership ecosystem.'},
+  {year:2024,club:'Everton',league:'premier',leagueLabel:'Premier League',acquirer:'The Friedkin Group',nationality:'American',stake:'100%',value:'£400M+',type:'full',notes:'Dan Friedkin acquired full control from Moshiri. Friedkin also owns AS Roma. Genuine multi-club play with shared commercial infrastructure. New stadium at Bramley-Moore Dock under construction.'},
+  {year:2024,club:'Aston Villa',league:'premier',leagueLabel:'Premier League',acquirer:'Atairos Group',nationality:'American',stake:'~20%',value:'N/D',type:'minority',notes:'Comcast-backed US PE acquired ~20% minority from Sawiris/Edens at a significant premium following Villa\'s Champions League return under Unai Emery.'},
+  {year:2024,club:'Sheffield United',league:'championship',leagueLabel:'Championship',acquirer:'COH Sports Group',nationality:'Turkish',stake:'100%',value:'£105M',type:'full',notes:'Turkish-backed COH Sports Group acquired from Prince Abdullah post-Premier League relegation. Broadens the Turkish and Gulf-adjacent footprint in English football.'},
+  {year:2024,club:'West Brom',league:'championship',leagueLabel:'Championship',acquirer:'Shilen Patel',nationality:'American',stake:'87.8%',value:'£60M',type:'full',notes:'American owner acquired from Guochuan Lai, ending eight years of remote Chinese stewardship that produced two Premier League relegations. Committed to infrastructure rebuild.'},
+  {year:2024,club:'Reading',league:'championship',leagueLabel:'Championship',acquirer:'Rob Couhig',nationality:'American',stake:'majority',value:'N/D',type:'full',notes:'Louisiana attorney and former Wycombe Wanderers owner acquired after years of financial mismanagement, multiple points deductions, and relegation to League One.'},
+  {year:2024,club:'Stoke City',league:'championship',leagueLabel:'Championship',acquirer:'Coates Family Restructure',nationality:'British',stake:'100%',value:'N/D',type:'full',notes:'Formally divested from the bet365 corporate structure; Coates family took direct personal ownership in response to EFL scrutiny over gambling company-affiliated ownership.'},
+  {year:2025,club:'Crystal Palace',league:'premier',leagueLabel:'Premier League',acquirer:'Woody Johnson',nationality:'American',stake:'~45%',value:'~£190M',type:'minority',notes:'New York Jets owner acquired John Textor\'s stake, resolving FA multi-club conflict created by Textor\'s simultaneous ownership of Lyon. Johnson joins Parish, Harris, and Blitzer in the Palace ownership group.'},
+];
+
+const leagueMap = { premier:'badge-epl', championship:'badge-champ', league1:'badge-l1', l2nat:'badge-l2' };
+const typeMap = {
+  full:     {cls:'type-full',     label:'Full Acq.'},
+  majority: {cls:'type-majority', label:'Majority'},
+  minority: {cls:'type-minority', label:'Minority'},
+};
+
+let currentFilter = 'all';
+let searchTerm = '';
+let sortCol = 'year';
+let sortDir = 1;
+let expandedId = null;
+
+function matchFilter(d) {
+  if (currentFilter !== 'all' && d.league !== currentFilter) return false;
+  if (searchTerm) {
+    const q = searchTerm.toLowerCase();
+    return d.club.toLowerCase().includes(q) || d.acquirer.toLowerCase().includes(q) || d.nationality.toLowerCase().includes(q);
+  }
+  return true;
+}
+
+function renderTable() {
+  const filtered = deals.filter(matchFilter);
+  const sorted = [...filtered].sort((a, b) => {
+    if (sortCol === 'year') return (a.year - b.year) * sortDir;
+    return String(a[sortCol] ?? '').localeCompare(String(b[sortCol] ?? '')) * sortDir;
+  });
+
+  const count = sorted.length;
+  document.getElementById('row-count').textContent = `Showing ${count} transaction${count !== 1 ? 's' : ''}`;
+  document.getElementById('empty-state').style.display = count === 0 ? 'block' : 'none';
+
+  const tbody = document.getElementById('deal-body');
+  tbody.innerHTML = sorted.map((d, i) => {
+    const t = typeMap[d.type] || typeMap.minority;
+    const lc = leagueMap[d.league] || 'badge-l2';
+    const isExpanded = expandedId === d.club + d.year;
+    return `<tr class="deal-row${isExpanded ? ' expanded' : ''}" data-id="${d.club}|${d.year}">
+      <td class="col-year">${d.year}</td>
+      <td class="col-club">${d.club}</td>
+      <td class="hide-mobile"><span class="league-badge ${lc}">${d.leagueLabel}</span></td>
+      <td class="col-acquirer hide-mobile">${d.acquirer}</td>
+      <td class="col-nationality hide-mobile">${d.nationality}</td>
+      <td class="col-stake hide-mobile">${d.stake}</td>
+      <td class="col-value">${d.value}</td>
+      <td><span class="type-pill ${t.cls}">${t.label}</span></td>
+      <td class="col-expand">${isExpanded ? '&#x25B4;' : '&#x25BE;'}</td>
+    </tr>
+    <tr class="detail-row${isExpanded ? ' open' : ''}" data-detail="${d.club}|${d.year}">
+      <td colspan="9">
+        <div class="detail-inner">
+          <div class="detail-grid">
+            <div><div class="detail-field-label">Acquirer</div><div class="detail-field-val">${d.acquirer}</div></div>
+            <div><div class="detail-field-label">Nationality</div><div class="detail-field-val">${d.nationality}</div></div>
+            <div><div class="detail-field-label">Stake</div><div class="detail-field-val">${d.stake}</div></div>
+            <div><div class="detail-field-label">League</div><div class="detail-field-val">${d.leagueLabel}</div></div>
+            <div><div class="detail-field-label">Value</div><div class="detail-field-val">${d.value}</div></div>
+            <div><div class="detail-field-label">Structure</div><div class="detail-field-val">${t.label}</div></div>
+          </div>
+          <div class="detail-notes">
+            <div class="detail-notes-label">Notes</div>
+            ${d.notes}
+          </div>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+// Row expand/collapse
+document.getElementById('deal-body').addEventListener('click', e => {
+  const row = e.target.closest('tr.deal-row');
+  if (!row) return;
+  const id = row.dataset.id;
+  expandedId = expandedId === id ? null : id;
+  renderTable();
+});
+
+// Filters
+document.getElementById('filters').addEventListener('click', e => {
+  const btn = e.target.closest('.filter-btn');
+  if (!btn) return;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentFilter = btn.dataset.league;
+  expandedId = null;
+  renderTable();
+});
+
+// Search
+let searchTimeout;
+document.getElementById('search').addEventListener('input', e => {
+  clearTimeout(searchTimeout);
+  searchTimeout = setTimeout(() => {
+    searchTerm = e.target.value.trim();
+    expandedId = null;
+    renderTable();
+  }, 150);
+});
+
+// Sort
+document.querySelectorAll('th[data-col]').forEach(th => {
+  th.addEventListener('click', () => {
+    const col = th.dataset.col;
+    if (sortCol === col) sortDir *= -1; else { sortCol = col; sortDir = 1; }
+    document.querySelectorAll('th').forEach(t => t.classList.remove('sort-asc','sort-desc'));
+    th.classList.add(sortDir === 1 ? 'sort-asc' : 'sort-desc');
+    renderTable();
+  });
+});
+
+renderTable();
+</script>
+</body>
+</html>

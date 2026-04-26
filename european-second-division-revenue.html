@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>European Second Division Football Revenue 2023-24</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #fff; font-family: Arial, sans-serif; color: #1a1a1a; -webkit-font-smoothing: antialiased; }
+
+.page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 48px 36px 48px;
+}
+
+h1 { font-size: 26px; font-weight: 800; color: #000; line-height: 1.25; margin-bottom: 10px; }
+.subtitle { font-size: 13.5px; color: #666; margin-bottom: 28px; line-height: 1.6; }
+
+/* ---- TABS ---- */
+.tab-nav {
+  display: flex;
+  border-bottom: 1.5px solid #ddd;
+  margin-bottom: 36px;
+  gap: 0;
+}
+.tab-btn {
+  padding: 10px 22px;
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #999;
+  background: none;
+  border: none;
+  border-bottom: 2.5px solid transparent;
+  margin-bottom: -1.5px;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+.tab-btn:hover { color: #1a1a1a; }
+.tab-btn.active { color: #1a1a1a; border-bottom-color: #1a1a1a; }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* ---- STATS BAR ---- */
+.stats { display: flex; border: 1.5px solid #ddd; margin-bottom: 40px; }
+.stat { flex: 1; padding: 14px 16px; text-align: center; border-right: 1px solid #ddd; }
+.stat:last-child { border-right: none; }
+.stat-label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #999; margin-bottom: 6px; }
+.stat-val { font-size: 20px; font-weight: 800; color: #1a1a1a; }
+.stat-val.green { color: #1a7a3a; }
+.stat-val.red { color: #c0392b; }
+
+/* ---- SECTION LABELS ---- */
+.section-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
+  text-transform: uppercase; color: #888; margin-bottom: 12px;
+}
+
+/* ---- CHART WRAPPERS ---- */
+.chart-wrapper { border: 1.5px solid #ddd; padding: 24px; margin-bottom: 36px; }
+svg { width: 100%; height: auto; display: block; }
+
+/* ---- LEAGUE CARDS (breakdown tab) ---- */
+.league-card {
+  border: 1.5px solid #ddd;
+  margin-bottom: 40px;
+}
+.league-card-header {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  padding: 18px 24px 14px;
+  border-bottom: 1px solid #e8e8e8;
+}
+.league-card-name { font-size: 18px; font-weight: 800; color: #000; }
+.league-card-country { font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #999; }
+.league-card-clubs { font-size: 12px; color: #aaa; margin-left: auto; }
+.league-card-stats {
+  display: flex;
+  border-bottom: 1px solid #e8e8e8;
+}
+.league-card-stat {
+  flex: 1; padding: 12px 16px; text-align: center; border-right: 1px solid #e8e8e8;
+}
+.league-card-stat:last-child { border-right: none; }
+.lcs-label { font-size: 9px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: #bbb; margin-bottom: 5px; }
+.lcs-val { font-size: 16px; font-weight: 800; color: #1a1a1a; }
+.lcs-val.green { color: #1a7a3a; }
+.league-card-chart { padding: 20px 24px 8px; }
+.league-card-context {
+  padding: 12px 24px 18px;
+  font-size: 12px; color: #666; line-height: 1.7;
+  border-top: 1px solid #e8e8e8;
+}
+.league-card-context strong { font-weight: 700; color: #1a1a1a; }
+
+/* ---- MISC ---- */
+.note { font-size: 11px; color: #aaa; line-height: 1.7; margin-top: 4px; }
+.brand { text-align: right; font-size: 11px; color: #aaa; margin-top: 32px; letter-spacing: 1px; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div style="margin-bottom:28px; padding-bottom:16px; border-bottom:1px solid #e0e0e0;">
+    <a href="sportscapital-intel.html" style="font-size:12px; font-weight:700; color:#1a1a1a; text-decoration:none; letter-spacing:0.3px;">&#8592; Pylon Intelligence</a>
+  </div>
+
+  <h1>European Second Division Football Revenue</h1>
+  <div class="subtitle">Estimated annual revenue across seven European second-tier leagues, 2023-24 season. The gap between Germany and the rest is wider than it appears.</div>
+
+  <div class="tab-nav">
+    <button class="tab-btn active" data-tab="overview" onclick="showTab('overview')">Overview</button>
+    <button class="tab-btn" data-tab="breakdown" onclick="showTab('breakdown')">League Breakdown</button>
+  </div>
+
+  <!-- ============================================================ TAB 1: OVERVIEW -->
+  <div id="tab-overview" class="tab-content active">
+
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-label">7-League Combined</div>
+        <div class="stat-val">~€2.0bn</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">2. Bundesliga Total</div>
+        <div class="stat-val green">€1.0bn+</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Highest Avg / Club</div>
+        <div class="stat-val green">€57.5m</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Lowest Avg / Club</div>
+        <div class="stat-val">€3m</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Revenue Ratio Top:Bottom</div>
+        <div class="stat-val">~19x</div>
+      </div>
+    </div>
+
+    <div class="section-label">Average Annual Revenue Per Club — €m (2023-24 est.)</div>
+    <div class="chart-wrapper"><svg id="bar-svg"></svg></div>
+
+    <div class="section-label">Revenue Dispersion Within Each League — Each league on its own scale</div>
+    <div class="chart-wrapper"><svg id="box-svg"></svg></div>
+
+    <div class="section-label">Aggregate League Revenue — €m (2023-24 est.)</div>
+    <div class="chart-wrapper"><svg id="total-svg"></svg></div>
+
+    <p class="note">Sources: DFL Economic Report 2023-24; LFP, LaLiga, FIGC published data; broadcaster contract values. Sweden, Netherlands, Belgium in EUR equivalent. Distributions estimated from club-level filings, relegation patterns, and parachute payment structures. 2. Bundesliga elevated by relegated Schalke and Hertha Berlin in 2023-24.</p>
+
+  </div>
+
+  <!-- ============================================================ TAB 2: BREAKDOWN -->
+  <div id="tab-breakdown" class="tab-content">
+    <div id="league-cards"></div>
+    <p class="note">Per-club revenue figures are estimated based on league-level aggregate data, broadcaster distributions, known parachute payment structures, and available club financial filings. Revenue is assigned to clubs in approximate ranked order — exact per-club breakdowns are not publicly reported for most of these divisions. Club rosters reflect the 2023-24 season (2023 for Superettan).</p>
+  </div>
+
+  <div class="brand">PYLON PARTNERS</div>
+</div>
+
+<script>
+// ===== TAB SWITCHING =====
+function showTab(id) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  document.querySelector(`[data-tab="${id}"]`).classList.add('active');
+}
+
+// ===== DESIGN CONSTANTS =====
+const GREEN      = '#1a7a3a';
+const GREEN_FILL = 'rgba(26,122,58,0.09)';
+const GREY       = '#888';
+const GREY_FILL  = 'rgba(180,180,180,0.13)';
+const BORDER     = '#ddd';
+const GRID       = '#e8e8e8';
+const TEXT       = '#1a1a1a';
+const MUTED      = '#999';
+const FAINT      = '#aaa';
+const FAINTEST   = '#ccc';
+
+// ===== LEAGUE DATA =====
+const leagues = [
+  {
+    name: "2. Bundesliga",
+    country: "Germany",
+    clubs: 18,
+    avg: 57.5,
+    total: 1035,
+    min: 20, q1: 35, med: 50, q3: 72, max: 120,
+    clubRevenues: [120, 105, 90, 80, 72, 65, 60, 56, 52, 48, 45, 42, 38, 35, 32, 28, 25, 20],
+    clubNames: ["Hamburg SV","Schalke 04","Hertha BSC","Hannover 96","FC St. Pauli","1. FC Nürnberg","Fortuna Düsseldorf","Holstein Kiel","Kaiserslautern","Greuther Fürth","Karlsruher SC","SC Paderborn","SV Elversberg","1. FC Magdeburg","E. Braunschweig","VfL Osnabrück","Wehen Wiesbaden","Hansa Rostock"],
+    context: "<strong>Most commercially developed second division in Europe.</strong> Strong broadcaster interest (DAZN, Sky), high average attendance (~21,000/match), and a structural pattern of large historic clubs cycling between divisions creates a persistent upper tail. The 2023-24 total crossed €1bn for the first time, partly because Schalke and Hertha were both in the division carrying large Bundesliga-era cost bases. Strip those two out and the average drops to roughly €45m.",
+    relLabel: "Top 3: Hamburg, Schalke, Hertha — all carry Bundesliga-era commercial infrastructure"
+  },
+  {
+    name: "Serie B",
+    country: "Italy",
+    clubs: 20,
+    avg: 24,
+    total: 480,
+    min: 8, q1: 15, med: 20, q3: 30, max: 75,
+    clubRevenues: [75, 60, 45, 38, 32, 28, 25, 22, 20, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8],
+    clubNames: ["Sampdoria","Venezia FC","Hellas Verona","Parma","Como 1907","Spezia","Cremonese","Bari","Palermo","Cittadella","Catanzaro","Cosenza","Modena FC","Reggiana","Brescia","Südtirol","FeralpiSalò","Lecco","Ascoli","Ternana"],
+    context: "<strong>Revenue is heavily skewed by parachute payments.</strong> Clubs recently relegated from Serie A receive multi-year distributions that inflate the top 3-4 clubs substantially. The broadcaster deal for Serie B is approximately €14m/year total league-wide (re-tendered for 2024-25), versus Serie A's ~€900m. The bottom half of the league operates on budgets comparable to Belgium's Pro League. The median club (€20m) is a better reference point than the mean.",
+    relLabel: "Top clubs: Sampdoria, Venezia, Verona — recently relegated with Serie A parachute distributions"
+  },
+  {
+    name: "LaLiga Hypermotion",
+    country: "Spain",
+    clubs: 22,
+    avg: 22.5,
+    total: 495,
+    min: 5, q1: 12, med: 18, q3: 28, max: 70,
+    clubRevenues: [70, 55, 45, 38, 32, 27, 24, 21, 19, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5],
+    clubNames: ["Espanyol","Elche CF","Valladolid","Levante","Sp. Gijón","Eibar","Real Oviedo","Leganés","Villarreal B","Huesca","Zaragoza","Tenerife","Burgos CF","Mirandés","Andorra CF","Albacete","FC Cartagena","Racing Stdr.","Eldense","Amorebieta","UD Ibiza","Alcorcón"],
+    context: "<strong>Similar structure to Serie B but slightly more compressed at the top.</strong> La Liga parachute payments give relegated clubs a clear revenue advantage. With 22 clubs versus Serie B's 20, the average is diluted by a deeper lower tier. The bottom 8-10 clubs (€5-12m) operate on near semi-professional budgets. Espanyol, Elche, and Valladolid all carry significant La Liga-era commercial bases that inflate the top of the distribution.",
+    relLabel: "Top clubs: Espanyol, Elche, Valladolid — all relegated from La Liga 2022-23"
+  },
+  {
+    name: "Ligue 2",
+    country: "France",
+    clubs: 18,
+    avg: 15,
+    total: 270,
+    min: 4, q1: 8, med: 11, q3: 18, max: 35,
+    clubRevenues: [35, 28, 22, 20, 18, 16, 14, 13, 12, 11, 10, 9, 9, 8, 7, 7, 6, 4],
+    clubNames: ["AJ Auxerre","Angers SCO","Troyes AC","Saint-Étienne","Paris FC","Bordeaux","Guingamp","Caen","Valenciennes","Rodez AF","Amiens SC","Laval","Grenoble","Bastia","Pau FC","Dunkerque","Niort","QRM"],
+    context: "<strong>The most egalitarian distribution among the Big 4 second divisions.</strong> The LFP's rights allocation model is more balanced than Spain or Italy, capping the upper tail. The top three (Auxerre, Angers, Troyes) were all relegated from Ligue 1 in 2022-23 and retain parachute-equivalent distributions. Bordeaux (historic club in financial difficulty) is an outlier case. Ligue 2 dropped from 20 to 18 clubs in 2023-24.",
+    relLabel: "Top 3: AJ Auxerre, Angers, Troyes — all relegated Ligue 1 clubs"
+  },
+  {
+    name: "Challenger Pro",
+    country: "Belgium",
+    clubs: 16,
+    avg: 5,
+    total: 80,
+    min: 1, q1: 2.5, med: 4, q3: 6, max: 12,
+    clubRevenues: [12, 9, 7, 6, 5.5, 5, 5, 4, 4, 3.5, 3, 3, 2.5, 2, 2, 1],
+    clubNames: ["Beerschot","RWDM","Zulte Waregem","Lommel Utd","SK Beveren","Lierse K.","Deinze","RFC Liège","Club NXT","AFC Tubize","Seraing","Patro Eisden","Virton","Francs Borains","Crossing","Dessel Sport"],
+    context: "<strong>A development-oriented division with limited standalone commercial value.</strong> Several clubs are de facto reserve vehicles for Pro League sides (Club NXT = Club Brugge, AFC Tubize = Anderlecht affiliate). Revenue is dominated by matchday gates and local sponsorship. No meaningful national broadcaster deal at second-division level. Beerschot and RWDM are the only clubs with genuine independent commercial scale. The league expanded to 16 teams in 2023-24.",
+    relLabel: "Club NXT (Club Brugge reserve) and AFC Tubize (Anderlecht-linked) among the lower earners"
+  },
+  {
+    name: "Eerste Divisie",
+    country: "Netherlands",
+    clubs: 20,
+    avg: 3,
+    total: 60,
+    min: 0.5, q1: 1.5, med: 2.5, q3: 4, max: 10,
+    clubRevenues: [10, 7, 5, 4.5, 4, 3.5, 3, 3, 2.5, 2.5, 2, 2, 1.5, 1.5, 1.5, 1, 1, 1, 0.8, 0.5],
+    clubNames: ["FC Emmen","FC Groningen","Jong Ajax","Jong PSV","Roda JC","ADO Den Haag","FC Eindhoven","VVV-Venlo","Jong AZ","De Graafschap","FC Den Bosch","MVV Maastricht","Jong FC Utrecht","FC Dordrecht","TOP Oss","SC Telstar","Helmond Sport","Jong Sparta","Jong FC Twente","Koninklijke HFC"],
+    context: "<strong>The least commercially scaled second tier in this analysis.</strong> FC Emmen and FC Groningen (both relegated from Eredivisie) generate the highest revenues. Multiple Jong (reserve) sides of Eredivisie clubs (Ajax, PSV, AZ, Utrecht, Sparta, Twente) generate minimal independent commercial revenue and depress the league average. The division functions primarily as a development pathway rather than a self-sustaining commercial enterprise.",
+    relLabel: "Jong reserve clubs account for 6 of 20 slots; Emmen and Groningen at top after Eredivisie relegation"
+  },
+  {
+    name: "Superettan",
+    country: "Sweden",
+    clubs: 16,
+    avg: 3,
+    total: 48,
+    min: 1, q1: 2, med: 2.8, q3: 3.8, max: 8,
+    clubRevenues: [8, 5.5, 4.5, 4, 3.5, 3.5, 3, 3, 2.8, 2.5, 2.5, 2, 2, 1.8, 1.5, 1],
+    clubNames: ["Örebro SK","Halmstads BK","GIF Sundsvall","IK Brommapojkarna","Jönköpings Södra","Östersunds FK","Örgryte IS","Landskrona BoIS","Skövde AIK","Utsiktens BK","FC Trollhättan","Sandvikens IF","Dalkurd FF","Bodens BK","IF Lödde","Lindome GIF"],
+    context: "<strong>The smallest revenue pool on this list, with the tightest internal distribution.</strong> Total league revenue is approximately SEK 500-550m (~€45-50m). Transfer income is proportionally significant: SEK 47m in 2023 represents roughly 10% of the total, a ratio far higher than any other league here. Allsvenskan clubs average ~€10m, so the absolute gap between Sweden's first and second divisions is narrow but structurally important.",
+    relLabel: "Transfer income (~10% of total revenue) is unusually significant relative to operating budgets"
+  }
+];
+
+// ===== SVG TEXT HELPER =====
+function t(x, y, str, { anchor='start', size=12, weight=400, fill=TEXT } = {}) {
+  return `<text x="${x}" y="${y}" text-anchor="${anchor}" font-family="Arial" font-size="${size}" font-weight="${weight}" fill="${fill}">${str}</text>`;
+}
+
+// ===================================================== OVERVIEW CHARTS
+
+// BAR CHART: Avg per club
+(function drawBarChart() {
+  const W = 1020, lm = 210, rm = 120, tm = 12, barH = 26, rowH = 54;
+  const barZone = W - lm - rm, maxVal = 62, sc = barZone / maxVal;
+  const H = tm + leagues.length * rowH + 42;
+  let svg = '';
+
+  [0, 10, 20, 30, 40, 50, 60].forEach(v => {
+    const x = lm + v * sc;
+    svg += `<line x1="${x}" y1="${tm}" x2="${x}" y2="${tm + leagues.length * rowH}" stroke="${GRID}" stroke-width="${v === 0 ? 1 : 0.7}"/>`;
+    if (v > 0) svg += t(x, tm + leagues.length * rowH + 18, `€${v}m`, { anchor: 'middle', size: 11, fill: FAINT });
+  });
+  svg += `<line x1="${lm}" y1="${tm + leagues.length * rowH}" x2="${W - rm}" y2="${tm + leagues.length * rowH}" stroke="${BORDER}" stroke-width="1"/>`;
+
+  leagues.forEach((l, i) => {
+    const y = tm + i * rowH;
+    const isTop = i === 0;
+    const stroke = isTop ? GREEN : GREY;
+    const fill   = isTop ? GREEN_FILL : GREY_FILL;
+    const valFill = isTop ? GREEN : TEXT;
+    const bW = l.avg * sc;
+
+    svg += t(lm - 10, y + barH/2 + 2,  l.name,                           { anchor:'end', size:13, weight:700, fill:TEXT });
+    svg += t(lm - 10, y + barH/2 + 16, `${l.country} · ${l.clubs} clubs`, { anchor:'end', size:10, fill:MUTED });
+    svg += `<rect x="${lm}" y="${y+2}" width="${bW}" height="${barH}" fill="${fill}" stroke="${stroke}" stroke-width="1.2"/>`;
+    svg += t(lm + bW + 8,  y + barH/2 + 6, `€${l.avg}m`, { size:13, weight:800, fill:valFill });
+    const tot = l.total >= 1000 ? `(~€${(l.total/1000).toFixed(1)}bn total)` : `(~€${l.total}m total)`;
+    svg += t(lm + bW + 64, y + barH/2 + 6, tot, { size:11, fill:FAINTEST });
+  });
+
+  // Annotation: 2. Bundesliga first €1bn
+  const annBx = lm + 57.5 * sc - 172;
+  const annBy = tm;
+  svg += `<rect x="${annBx}" y="${annBy}" width="168" height="40" fill="rgba(245,255,248,0.97)" stroke="rgba(26,122,58,0.45)" stroke-width="1"/>`;
+  svg += t(annBx + 8, annBy + 13, 'A  FIRST €1BN SEASON', { size:9.5, weight:800, fill:GREEN });
+  svg += t(annBx + 8, annBy + 27, 'Schalke + Hertha inflated 2023-24 aggregate', { size:8.5, fill:'#555' });
+  const lx2 = lm + 57.5 * sc, ly2 = tm + barH/2 + 2;
+  svg += `<polyline points="${annBx+168},${annBy+20} ${lx2},${annBy+20} ${lx2},${ly2}" fill="none" stroke="${FAINT}" stroke-width="1" stroke-dasharray="4,3"/>`;
+  svg += `<circle cx="${lx2}" cy="${ly2}" r="3" fill="${GREEN}"/>`;
+
+  const el = document.getElementById('bar-svg');
+  el.innerHTML = svg;
+  el.setAttribute('viewBox', `0 0 ${W} ${H}`);
+})();
+
+
+// BOX PLOT: Dispersion all leagues
+(function drawBoxChart() {
+  const W = 1020, lp = 30, rp = 30, tp = 52, chartH = 360, bp = 72;
+  const colW = (W - lp - rp) / leagues.length;
+  const boxW = 46, H = tp + chartH + bp;
+  let svg = '';
+
+  [0, 50, 100].forEach(pct => {
+    const y = tp + chartH * (1 - pct/100);
+    svg += `<line x1="${lp}" y1="${y}" x2="${W-rp}" y2="${y}" stroke="${GRID}" stroke-width="${pct===0||pct===100?1:0.6}" stroke-dasharray="${pct===50?'4,4':''}"/>`;
+  });
+  svg += t(W/2, tp-26, 'Each column uses its own scale. Read shapes and spreads, not absolute heights. Box = Q1-Q3 range. Dot = median.', { anchor:'middle', size:10.5, fill:FAINT });
+
+  leagues.forEach((l, i) => {
+    const cx = lp + colW * i + colW/2;
+    const range = l.max - l.min;
+    const norm = v => tp + chartH - ((v - l.min) / range) * chartH;
+    const yMin = norm(l.min), yQ1 = norm(l.q1), yMed = norm(l.med), yQ3 = norm(l.q3), yMax = norm(l.max);
+    const isTop = i === 0;
+    const stroke = isTop ? GREEN : GREY;
+    const fill   = isTop ? GREEN_FILL : GREY_FILL;
+    const medC   = isTop ? GREEN : '#2a2a2a';
+
+    if (i > 0) svg += `<line x1="${lp+colW*i}" y1="${tp-10}" x2="${lp+colW*i}" y2="${tp+chartH+14}" stroke="${GRID}" stroke-width="0.6"/>`;
+
+    svg += `<line x1="${cx}" y1="${yMax}" x2="${cx}" y2="${yMin}" stroke="${stroke}" stroke-width="1.2" stroke-dasharray="3,2"/>`;
+    svg += `<line x1="${cx-8}" y1="${yMax}" x2="${cx+8}" y2="${yMax}" stroke="${stroke}" stroke-width="1.5"/>`;
+    svg += `<line x1="${cx-8}" y1="${yMin}" x2="${cx+8}" y2="${yMin}" stroke="${stroke}" stroke-width="1.5"/>`;
+
+    const boxT = Math.min(yQ1, yQ3), boxB = Math.max(yQ1, yQ3);
+    svg += `<rect x="${cx-boxW/2}" y="${boxT}" width="${boxW}" height="${boxB-boxT}" fill="${fill}" stroke="${stroke}" stroke-width="1.5"/>`;
+    svg += `<line x1="${cx-boxW/2}" y1="${yMed}" x2="${cx+boxW/2}" y2="${yMed}" stroke="${medC}" stroke-width="2.5"/>`;
+    svg += `<circle cx="${cx}" cy="${yMed}" r="3.5" fill="${medC}"/>`;
+
+    const rOff = boxW/2 + 5, lOff = boxW/2 + 5;
+    svg += t(cx+rOff, yMax+4,  `€${l.max}m`, { size:9.5, weight:700, fill:stroke });
+    svg += t(cx-lOff, yMed+4,  `€${l.med}m`, { anchor:'end', size:10, weight:700, fill:medC });
+    svg += t(cx+rOff, yMin+4,  `€${l.min}m`, { size:9, fill:FAINT });
+    svg += t(cx-lOff, yQ3-2,   `Q3 €${l.q3}m`, { anchor:'end', size:8.5, fill:FAINTEST });
+    svg += t(cx-lOff, yQ1+10,  `Q1 €${l.q1}m`, { anchor:'end', size:8.5, fill:FAINTEST });
+
+    const labelY = tp + chartH + 22;
+    const words = l.name.split(' ');
+    const line1 = words.length > 2 ? words.slice(0,2).join(' ') : l.name;
+    const line2 = words.length > 2 ? words.slice(2).join(' ')   : null;
+    svg += t(cx, labelY,    line1,      { anchor:'middle', size:11, weight:700, fill:TEXT });
+    if (line2) {
+      svg += t(cx, labelY+13, line2,    { anchor:'middle', size:11, weight:700, fill:TEXT });
+      svg += t(cx, labelY+26, l.country,{ anchor:'middle', size:10, fill:MUTED });
+    } else {
+      svg += t(cx, labelY+13, l.country,{ anchor:'middle', size:10, fill:MUTED });
+    }
+    svg += t(cx, tp-12, `0-€${l.max}m`, { anchor:'middle', size:9, fill:FAINTEST });
+  });
+
+  const el = document.getElementById('box-svg');
+  el.innerHTML = svg;
+  el.setAttribute('viewBox', `0 0 ${W} ${H}`);
+})();
+
+
+// TOTAL REVENUE BAR CHART
+(function drawTotalChart() {
+  const W = 1020, lm = 210, rm = 100, tm = 12, barH = 26, rowH = 54;
+  const barZone = W - lm - rm, maxVal = 1100, sc = barZone / maxVal;
+  const sorted = [...leagues].sort((a, b) => b.total - a.total);
+  const H = tm + sorted.length * rowH + 42;
+  let svg = '';
+
+  [0, 200, 400, 600, 800, 1000].forEach(v => {
+    const x = lm + v * sc;
+    svg += `<line x1="${x}" y1="${tm}" x2="${x}" y2="${tm+sorted.length*rowH}" stroke="${GRID}" stroke-width="${v===0?1:0.7}"/>`;
+    if (v > 0) svg += t(x, tm+sorted.length*rowH+18, `€${v}m`, { anchor:'middle', size:11, fill:FAINT });
+  });
+  svg += `<line x1="${lm}" y1="${tm+sorted.length*rowH}" x2="${W-rm}" y2="${tm+sorted.length*rowH}" stroke="${BORDER}" stroke-width="1"/>`;
+
+  sorted.forEach((l, i) => {
+    const y = tm + i * rowH;
+    const isTop = l.name === "2. Bundesliga";
+    const stroke  = isTop ? GREEN : GREY;
+    const fill    = isTop ? GREEN_FILL : GREY_FILL;
+    const valFill = isTop ? GREEN : TEXT;
+    const bW = l.total * sc;
+
+    svg += t(lm-10, y+barH/2+2,  l.name,                           { anchor:'end', size:13, weight:700, fill:TEXT });
+    svg += t(lm-10, y+barH/2+16, `${l.country} · ${l.clubs} clubs`, { anchor:'end', size:10, fill:MUTED });
+    svg += `<rect x="${lm}" y="${y+2}" width="${bW}" height="${barH}" fill="${fill}" stroke="${stroke}" stroke-width="1.2"/>`;
+    const totStr = l.total >= 1000 ? `~€${(l.total/1000).toFixed(2)}bn` : `~€${l.total}m`;
+    svg += t(lm+bW+8,  y+barH/2+6, totStr,            { size:13, weight:800, fill:valFill });
+    svg += t(lm+bW+80, y+barH/2+6, `€${l.avg}m avg/club`, { size:11, fill:FAINTEST });
+  });
+
+  // Annotation: Italy + Spain combined still under Germany
+  const itIdx = sorted.findIndex(l => l.name === 'Serie B');
+  const esIdx = sorted.findIndex(l => l.name === 'LaLiga Hypermotion');
+  const annBx = lm + 530 * sc;
+  const annBy = tm + Math.min(itIdx, esIdx) * rowH + 4;
+  svg += `<rect x="${annBx}" y="${annBy}" width="195" height="40" fill="rgba(245,245,245,0.97)" stroke="rgba(150,150,150,0.5)" stroke-width="1"/>`;
+  svg += t(annBx+8, annBy+13, 'B  COMBINED ITALY + SPAIN', { size:9.5, weight:800, fill:'#666' });
+  svg += t(annBx+8, annBy+28, '€975m -- still below 2. Bundesliga alone', { size:8.5, fill:'#555' });
+
+  const el = document.getElementById('total-svg');
+  el.innerHTML = svg;
+  el.setAttribute('viewBox', `0 0 ${W} ${H}`);
+})();
+
+
+// ===================================================== LEAGUE BREAKDOWN CHARTS
+
+function computeGini(arr) {
+  const sorted = [...arr].sort((a, b) => a - b);
+  const n = sorted.length;
+  const mean = sorted.reduce((s, v) => s + v, 0) / n;
+  let num = 0;
+  for (let i = 0; i < n; i++) {
+    for (let j = 0; j < n; j++) {
+      num += Math.abs(sorted[i] - sorted[j]);
+    }
+  }
+  return (num / (2 * n * n * mean)).toFixed(2);
+}
+
+function drawLeagueChart(containerId, l) {
+  const W = 960;
+  const lm = 10, rm = 10, tm = 55, bm = 105; // bm extended for rotated club name labels
+  const n = l.clubRevenues.length;
+  const colW = (W - lm - rm) / n;
+  const barW = Math.max(colW * 0.70, 7);
+  const chartH = 220;
+  const H = tm + chartH + bm;
+
+  const maxRev = l.max;
+  const sc = chartH / maxRev;
+
+  let svg = '';
+
+  // Horizontal grid lines + y-axis labels
+  const gridSteps = 4;
+  for (let s = 0; s <= gridSteps; s++) {
+    const val = (maxRev / gridSteps) * s;
+    const y   = tm + chartH - val * sc;
+    svg += `<line x1="${lm}" y1="${y}" x2="${W-rm}" y2="${y}" stroke="${GRID}" stroke-width="${s===0 ? 1 : 0.6}" stroke-dasharray="${s===0 ? '' : '3,3'}"/>`;
+    if (s > 0) svg += t(lm + 2, y - 3, `€${Math.round(val)}m`, { size:9, fill:FAINTEST });
+  }
+
+  // Reference lines: Q1, median, Q3
+  const yMed = tm + chartH - l.med * sc;
+  const yQ3  = tm + chartH - l.q3  * sc;
+  const yQ1  = tm + chartH - l.q1  * sc;
+
+  svg += `<line x1="${lm}" y1="${yQ1}"  x2="${W-rm}" y2="${yQ1}"  stroke="${FAINTEST}" stroke-width="0.8" stroke-dasharray="4,4"/>`;
+  svg += `<line x1="${lm}" y1="${yMed}" x2="${W-rm}" y2="${yMed}" stroke="${GREY}"     stroke-width="1.2" stroke-dasharray="4,3"/>`;
+  svg += `<line x1="${lm}" y1="${yQ3}"  x2="${W-rm}" y2="${yQ3}"  stroke="${FAINTEST}" stroke-width="0.8" stroke-dasharray="4,4"/>`;
+
+  svg += t(W-rm-4, yMed-4,  `Median €${l.med}m`, { anchor:'end', size:9, weight:700, fill:GREY });
+  svg += t(W-rm-4, yQ3-4,   `Q3 €${l.q3}m`,      { anchor:'end', size:8.5, fill:FAINTEST });
+  svg += t(W-rm-4, yQ1+11,  `Q1 €${l.q1}m`,      { anchor:'end', size:8.5, fill:FAINTEST });
+
+  // Bars + labels
+  l.clubRevenues.forEach((rev, i) => {
+    const cx  = lm + colW * i + colW / 2;
+    const x   = cx - barW / 2;
+    const bH  = rev * sc;
+    const y   = tm + chartH - bH;
+
+    const isAboveMedian = rev >= l.med;
+    const isTop3 = i < 3;
+
+    let fill, stroke;
+    if (isTop3) {
+      fill = 'rgba(26,122,58,0.15)'; stroke = GREEN;
+    } else if (isAboveMedian) {
+      fill = GREEN_FILL; stroke = GREEN;
+    } else {
+      fill = GREY_FILL; stroke = '#bbb';
+    }
+
+    svg += `<rect x="${x}" y="${y}" width="${barW}" height="${bH}" fill="${fill}" stroke="${stroke}" stroke-width="1"/>`;
+
+    // Revenue label above bar (top 5 + min + max)
+    if (i < 5 || i === n - 1) {
+      const labelY = y - 4;
+      if (labelY > tm + 8) {
+        svg += t(cx, labelY, `€${rev}m`, { anchor:'middle', size:8.5, weight:700, fill: isAboveMedian ? GREEN : MUTED });
+      }
+    }
+
+    // Rotated club name label below x-axis
+    const name = (l.clubNames && l.clubNames[i]) ? l.clubNames[i] : `#${i+1}`;
+    const ly = tm + chartH + 6;
+    svg += `<text transform="translate(${cx}, ${ly}) rotate(-50)" text-anchor="end" dominant-baseline="middle" font-family="Arial" font-size="${n > 18 ? 8.5 : 9}" fill="${isAboveMedian ? '#444' : MUTED}">${name}</text>`;
+  });
+
+  return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">${svg}</svg>`;
+}
+
+// Build league cards
+(function buildLeagueCards() {
+  const container = document.getElementById('league-cards');
+
+  leagues.forEach(l => {
+    const revenues = l.clubRevenues;
+    const gini = computeGini(revenues);
+    const range = l.max - l.min;
+    const iqr   = l.q3 - l.q1;
+
+    const card = document.createElement('div');
+    card.className = 'league-card';
+
+    card.innerHTML = `
+      <div class="league-card-header">
+        <span class="league-card-name">${l.name}</span>
+        <span class="league-card-country">${l.country}</span>
+        <span class="league-card-clubs">${l.clubs} clubs</span>
+      </div>
+
+      <div class="league-card-stats">
+        <div class="league-card-stat">
+          <div class="lcs-label">Total Revenue</div>
+          <div class="lcs-val green">${l.total >= 1000 ? '~€' + (l.total/1000).toFixed(2) + 'bn' : '~€' + l.total + 'm'}</div>
+        </div>
+        <div class="league-card-stat">
+          <div class="lcs-label">Avg / Club</div>
+          <div class="lcs-val">€${l.avg}m</div>
+        </div>
+        <div class="league-card-stat">
+          <div class="lcs-label">Median / Club</div>
+          <div class="lcs-val">€${l.med}m</div>
+        </div>
+        <div class="league-card-stat">
+          <div class="lcs-label">Top Club Est.</div>
+          <div class="lcs-val">€${l.max}m</div>
+        </div>
+        <div class="league-card-stat">
+          <div class="lcs-label">Bottom Club Est.</div>
+          <div class="lcs-val">€${l.min}m</div>
+        </div>
+        <div class="league-card-stat">
+          <div class="lcs-label">IQR Spread</div>
+          <div class="lcs-val">€${iqr}m</div>
+        </div>
+        <div class="league-card-stat">
+          <div class="lcs-label">Gini Coefficient</div>
+          <div class="lcs-val">${gini}</div>
+        </div>
+      </div>
+
+      <div class="league-card-chart">
+        <div class="section-label" style="margin-bottom:10px;">Estimated Revenue Per Club — all ${l.clubs} clubs, ranked highest to lowest (€m)</div>
+        ${drawLeagueChart('chart-' + l.name.replace(/\s/g,''), l)}
+        <div style="font-size:10px;color:#bbb;margin-top:8px;padding-bottom:4px;">${l.relLabel}</div>
+      </div>
+
+      <div class="league-card-context">${l.context}</div>
+    `;
+
+    container.appendChild(card);
+  });
+})();
+</script>
+</body>
+</html>

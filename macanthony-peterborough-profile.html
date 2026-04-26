@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MacAnthony at Peterborough: 19 Years of Buying Cheap and Selling Dear</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, sans-serif; background: #fff; color: #1a1a1a; -webkit-font-smoothing: antialiased; }
+  .page { max-width: 1100px; margin: 0 auto; padding: 48px 36px 40px; }
+  h1 { font-size: 28px; font-weight: 800; color: #000; line-height: 1.25; margin-bottom: 10px; }
+  .subtitle { font-size: 14px; color: #666; margin-bottom: 24px; line-height: 1.55; }
+
+  /* Nav */
+  .nav { display: flex; gap: 20px; border-top: 1px solid #e8e8e8; border-bottom: 1px solid #e8e8e8; padding: 10px 0; margin-bottom: 28px; flex-wrap: wrap; align-items: center; }
+  .nav a { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #888; text-decoration: none; }
+  .nav a:hover { color: #1a1a1a; }
+  .nav-back { margin-left: auto; }
+  .nav-back a { color: #999; }
+
+  /* Stats */
+  .stats { display: flex; border: 1.5px solid #ddd; margin-bottom: 32px; }
+  .stat { flex: 1; padding: 14px 16px; text-align: center; border-right: 1px solid #ddd; }
+  .stat:last-child { border-right: none; }
+  .stat-label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #999; margin-bottom: 6px; }
+  .stat-val { font-size: 20px; font-weight: 800; color: #1a1a1a; }
+  .stat-val.green { color: #1a7a3a; }
+  .stat-val.red { color: #c0392b; }
+
+  /* Thesis box */
+  .thesis-box { border: 1.5px solid #ddd; padding: 20px 24px; margin-bottom: 32px; background: #fafafa; }
+  .thesis-label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #888; margin-bottom: 10px; }
+  .thesis-text { font-size: 14px; line-height: 1.7; color: #1a1a1a; }
+  .thesis-text strong { color: #1a1a1a; }
+
+  /* Sections */
+  .section { margin-bottom: 40px; }
+  .section-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #888; margin-bottom: 16px; border-top: 1px solid #e8e8e8; padding-top: 20px; }
+  .body-text { font-size: 14px; line-height: 1.7; color: #1a1a1a; margin-bottom: 14px; }
+  .body-text a { color: #1a1a1a; text-decoration: underline; text-decoration-color: #999; }
+  .body-text a:hover { text-decoration-color: #1a1a1a; }
+
+  /* Timeline */
+  .timeline { position: relative; }
+  .tl-item { display: flex; position: relative; }
+  .tl-year { width: 68px; flex-shrink: 0; font-size: 12px; font-weight: 700; color: #888; padding-top: 17px; text-align: right; padding-right: 8px; }
+  .tl-spine { display: flex; flex-direction: column; align-items: center; width: 20px; flex-shrink: 0; }
+  .tl-dot { width: 12px; height: 12px; border-radius: 50%; border: 1.5px solid #999; background: #f5f5f5; margin-top: 19px; flex-shrink: 0; }
+  .tl-dot.green { border-color: #1a7a3a; background: rgba(26,122,58,0.12); }
+  .tl-dot.red { border-color: #c0392b; background: rgba(192,57,43,0.10); }
+  .tl-line { width: 1.5px; background: #ddd; flex: 1; }
+  .tl-item:last-child .tl-line { background: transparent; }
+  .tl-content { flex: 1; padding: 14px 0 14px 16px; }
+  .tl-event { font-size: 13px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px; }
+  .tl-event.green { color: #1a7a3a; }
+  .tl-event.red { color: #c0392b; }
+  .tl-desc { font-size: 13px; color: #444; line-height: 1.65; }
+  .tl-desc a { color: #444; text-decoration: underline; text-decoration-color: #bbb; }
+
+  /* Transfer table */
+  .transfer-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .transfer-table th { text-align: left; font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #999; padding: 8px 12px; border-bottom: 1.5px solid #ddd; }
+  .transfer-table td { padding: 10px 12px; border-bottom: 1px solid #e8e8e8; vertical-align: top; }
+  .transfer-table tr:last-child td { border-bottom: 1.5px solid #ddd; }
+  .transfer-table .total-row td { font-weight: 700; background: #fafafa; }
+  .transfer-table a { color: #1a1a1a; text-decoration: underline; text-decoration-color: #bbb; }
+  .fee { font-weight: 700; }
+  .fee.green { color: #1a7a3a; }
+
+  /* Two-col */
+  .two-col { display: flex; gap: 24px; }
+  .col { flex: 1; }
+  .box { border: 1.5px solid #ddd; padding: 20px; margin-bottom: 20px; }
+  .box-title { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #888; margin-bottom: 12px; }
+  .box-body { font-size: 13px; line-height: 1.65; color: #1a1a1a; }
+  .box-body p { margin-bottom: 10px; }
+  .box-body p:last-child { margin-bottom: 0; }
+  .box-body a { color: #1a1a1a; text-decoration: underline; text-decoration-color: #bbb; }
+  .metric-row { display: flex; justify-content: space-between; align-items: baseline; padding: 7px 0; border-bottom: 1px solid #f0f0f0; font-size: 13px; }
+  .metric-row:last-child { border-bottom: none; }
+  .metric-label { color: #666; }
+  .metric-val { font-weight: 700; color: #1a1a1a; text-align: right; max-width: 55%; }
+  .metric-val.green { color: #1a7a3a; }
+
+  .brand { text-align: right; font-size: 11px; color: #aaa; margin-top: 40px; letter-spacing: 1px; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <h1>MacAnthony at Peterborough: 19 Years of Buying Cheap and Selling Dear</h1>
+  <div class="subtitle">Darragh MacAnthony bought Peterborough United for £1 in 2007 and built a transfer arbitrage operation: acquire undervalued talent, extract compounding value through structured sell-on clauses. Still at the helm in League One, 2026.</div>
+
+  <nav class="nav">
+    <a href="#background">Background</a>
+    <a href="#timeline">Timeline</a>
+    <a href="#model">Transfer Model</a>
+    <a href="#ownership">Ownership</a>
+    <a href="#managers">Managers</a>
+    <span class="nav-back"><a href="sportscapital-intel.html">&#8592; Pylon Intelligence</a></span>
+  </nav>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-label">Takeover</div>
+      <div class="stat-val">2006 / 07</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Purchase Price</div>
+      <div class="stat-val green">£1</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Named Exit Fees (7 Sales)</div>
+      <div class="stat-val green">£35m+</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Promotions</div>
+      <div class="stat-val">4</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Relegations</div>
+      <div class="stat-val red">3</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Current Division</div>
+      <div class="stat-val red">League One</div>
+    </div>
+  </div>
+
+  <!-- THESIS -->
+  <div class="thesis-box">
+    <div class="thesis-label">Takeaway</div>
+    <div class="thesis-text">MacAnthony's core insight is that lower-league English football is systematically inefficient at pricing young strikers. Peterborough is the extraction vehicle: acquire players others have passed on or let go, develop them in a goal-heavy environment, and exit with compounding sell-on rights that keep Peterborough in the deal flow for years after a player leaves. The model generates documented transfer income far exceeding what a club of Peterborough's commercial base would normally produce. <strong>The structural risk is key-man dependency:</strong> the transfer network, the deal negotiation, and the public profile of the club all run through MacAnthony personally. He has no apparent institutional succession plan, and the relationship with his longest-serving manager (Darren Ferguson, 4 stints) has now ended for the fourth and likely final time.</div>
+  </div>
+
+  <!-- BACKGROUND -->
+  <div class="section" id="background">
+    <div class="section-label">Background</div>
+    <p class="body-text">
+      MacAnthony founded <a href="https://www.irishtimes.com/business/multimillionaire-buys-football-team-for-1-1.955001" target="_blank">MacAnthony Realty International (MRI)</a> in Marbella in 2000, selling overseas holiday homes to Irish and British buyers across the Bahamas, Bulgaria, Cyprus, and the Dominican Republic. At peak, MRI was shifting approximately 11,000 units per year across 16 countries. The <a href="https://www.thetimes.co.uk/article/sunday-times-rich-list" target="_blank">Sunday Times Rich List</a> put his net worth at £150 million in 2007. His operating background is sales, not finance or corporate management.
+    </p>
+    <p class="body-text">
+      The 2008 financial crisis collapsed MRI's market. The Rich List revised his wealth to £68 million by 2008. MRI's UK subsidiary entered liquidation in 2010. MacAnthony <a href="https://www.diarmaidcondon.com/darragh-macanthony-appears-in-marbella-court/" target="_blank">appeared in a Marbella court in April 2012</a> on charges of "Theft and Swindle" relating to undelivered furniture packs sold to MRI clients. The case was shelved in 2013 for lack of evidence. He has not returned to property at scale and is now based in Florida. Under the new <a href="https://www.peterboroughtoday.co.uk/sport/football/peterborough-united/peterborough-united-chairman-insists-his-club-are-the-template-for-a-well-run-league-one-club-6386021" target="_blank">English football regulator's owners and directors test</a>, the 2012 proceedings are documented public record, though the case did not result in a conviction.
+    </p>
+  </div>
+
+  <!-- TIMELINE -->
+  <div class="section" id="timeline">
+    <div class="section-label">Ownership Timeline</div>
+    <div class="timeline">
+
+      <div class="tl-item">
+        <div class="tl-year">2006</div>
+        <div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div>
+        <div class="tl-content">
+          <div class="tl-event">Chairman Appointment</div>
+          <div class="tl-desc">MacAnthony becomes chairman of <a href="https://www.theposh.com" target="_blank">Peterborough United</a> in September 2006, aged 30, making him the youngest owner of an English football club. Outgoing chairman <a href="https://www.theposhtrust.co.uk/museum/chairmen" target="_blank">Barry Fry</a> credits the Sky One documentary <em>Big Ron Manager</em> as the catalyst that first drew MacAnthony's interest.</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-year">2007</div>
+        <div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div>
+        <div class="tl-content">
+          <div class="tl-event">Full Ownership for £1 + Promotion Promise</div>
+          <div class="tl-desc"><a href="https://www.irishtimes.com/business/multimillionaire-buys-football-team-for-1-1.955001" target="_blank">MacAnthony formally acquires the club in August 2007</a> for a nominal £1, assuming approximately £1.7 million in existing debts. <a href="https://en.wikipedia.org/wiki/Darren_Ferguson" target="_blank">Darren Ferguson</a> is appointed player-manager in January 2007. MacAnthony publicly promises promotion from League Two to the Championship within two seasons.</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-year">2008</div>
+        <div class="tl-spine"><div class="tl-dot green"></div><div class="tl-line"></div></div>
+        <div class="tl-content">
+          <div class="tl-event green">Promotion 1: League Two to League One</div>
+          <div class="tl-desc">Peterborough win the <a href="https://en.wikipedia.org/wiki/2007-08_Football_League_Two" target="_blank">League Two title</a> in 2007-08 under Ferguson. First of two promised promotions delivered on schedule.</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-year">2009</div>
+        <div class="tl-spine"><div class="tl-dot green"></div><div class="tl-line"></div></div>
+        <div class="tl-content">
+          <div class="tl-event green">Promotion 2: League One to Championship</div>
+          <div class="tl-desc">Peterborough promoted from <a href="https://en.wikipedia.org/wiki/2008-09_Football_League_One" target="_blank">League One</a> in 2008-09 under Ferguson. Both promotions delivered within the promised two-season window, ahead of schedule.</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-year">2009-10</div>
+        <div class="tl-spine"><div class="tl-dot red"></div><div class="tl-line"></div></div>
+        <div class="tl-content">
+          <div class="tl-event red">Relegation 1: Championship + First Ferguson Exit</div>
+          <div class="tl-desc">Peterborough bottom of the Championship by November 2009. Ferguson is sacked. Two interim managers (Cooper, Gannon) fail to reverse the decline. Posh are relegated. See Manager Record below for full detail on the Ferguson cycle.</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-year">2011</div>
+        <div class="tl-spine"><div class="tl-dot green"></div><div class="tl-line"></div></div>
+        <div class="tl-content">
+          <div class="tl-event green">Promotion 3: League One Play-Off Final</div>
+          <div class="tl-desc">Ferguson re-appointed January 2011 (second stint). Peterborough win the <a href="https://en.wikipedia.org/wiki/2010-11_Football_League_One_play-offs" target="_blank">League One play-off final</a> at Old Trafford 3-0 against Huddersfield Town. Back in the Championship within one year of relegation.</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-year">2013</div>
+        <div class="tl-spine"><div class="tl-dot red"></div><div class="tl-line"></div></div>
+        <div class="tl-content">
+          <div class="tl-event red">Relegation 2: Championship on Final Day, then Gayle Sold to the Relegating Club</div>
+          <div class="tl-desc">Peterborough <a href="https://en.wikipedia.org/wiki/Peterborough_United_F.C." target="_blank">relegated</a> on 4 May 2013, losing to Crystal Palace 3-2 on the final day. Weeks later, <a href="https://www.transfermarkt.co.uk/dwight-gayle/profil/spieler/157043" target="_blank">Dwight Gayle</a> is sold to Crystal Palace for £6 million. The same club that relegated Posh pays a record fee for Posh's best player. Peterborough begin an eight-year League One stint (2013-2021).</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-year">2014</div>
+        <div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div>
+        <div class="tl-content">
+          <div class="tl-event">Assombalonga Sold; Ferguson Exits Again in 2015</div>
+          <div class="tl-desc"><a href="https://www.transfermarkt.co.uk/britt-assombalonga/profil/spieler/124038" target="_blank">Britt Assombalonga</a> joins Nottingham Forest for £5.5-6.2 million in August 2014. Ferguson departs February 2015 following a 3-0 defeat to MK Dons (third exit). Four managers cycle through between Ferguson stints: Robertson, Westley, McCann, Evans.</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-year">2018</div>
+        <div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div>
+        <div class="tl-content">
+          <div class="tl-event">50% Stake Sold to Kelgary; Ivan Toney Acquired from Newcastle</div>
+          <div class="tl-desc">In March 2018, MacAnthony <a href="https://www.the42.ie/darragh-macanthony-peterborough-united-3881766-Mar2018/" target="_blank">sells 50% of his stake</a> to Canadian businessmen Jason Neale and Stewart Thompson via <a href="https://www.skysports.com/football/news/11764/11272895/peterborough-chairman-darragh-macanthony-confirms-new-co-owners-of-league-one-club" target="_blank">Kelgary Sports and Entertainment Ltd</a>. Both join the board with equal voice. No purchase price disclosed. In the same window, <a href="https://www.peterboroughtoday.co.uk/sport/football/peterborough-united/peterborough-united-chairman-opens-up-on-that-ivan-toney-deal-and-making-profits-from-big-player-sales-4482355" target="_blank">Ivan Toney is signed from Newcastle United</a> for £350,000 spread over three years, with Newcastle retaining a 30% sell-on clause on any future transfer profit Peterborough generates from him.</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-year">2020</div>
+        <div class="tl-spine"><div class="tl-dot green"></div><div class="tl-line"></div></div>
+        <div class="tl-content">
+          <div class="tl-event green">Ivan Toney Sold to Brentford: Model at Peak</div>
+          <div class="tl-desc"><a href="https://footballleagueworld.co.uk/nottingham-forest-brentford-fond-of-peterborough-united-britt-assombalonga-ivan-toney-55m-fee/" target="_blank">Toney joins Brentford</a> for an initial £5 million. Including structured payments on Brentford's future transfer profit, Peterborough ultimately receive approximately £10 million in total. Brentford subsequently sell Toney to Arsenal for a reported £40+ million, triggering Newcastle's 30% share of Posh's net gain. Gross return on the £350k acquisition: approximately 28x before clause income. See Transfer Model section for the full chain mechanics.</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-year">2021</div>
+        <div class="tl-spine"><div class="tl-dot green"></div><div class="tl-line"></div></div>
+        <div class="tl-content">
+          <div class="tl-event green">Promotion 4: Back to the Championship After 8 Years</div>
+          <div class="tl-desc">On 1 May 2021, <a href="https://en.wikipedia.org/wiki/2020-21_EFL_League_One" target="_blank">Peterborough are promoted</a> after coming back from 3-0 down to draw 3-3 with Lincoln City. Darren Ferguson in charge for his fourth stint. Eight-year League One absence ends.</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-year">2022</div>
+        <div class="tl-spine"><div class="tl-dot red"></div><div class="tl-line"></div></div>
+        <div class="tl-content">
+          <div class="tl-event red">Relegation 3: One Season, Then MacAnthony Signals Sale</div>
+          <div class="tl-desc">Peterborough relegated from the Championship after a single season (2021-22). Ferguson resigns February 2022. In September 2022, MacAnthony publicly states he intends to step away, inviting bids from Kelgary or a third party. The stated intention does not result in a sale.</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-year">Dec 2023</div>
+        <div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div>
+        <div class="tl-content">
+          <div class="tl-event">MacAnthony Buys Out Kelgary: Sole Control Returns</div>
+          <div class="tl-desc"><a href="https://www.peterboroughtoday.co.uk/sport/football/peterborough-united/peterborough-united-is-back-under-darragh-macanthonys-control-as-he-buys-out-his-co-owners-and-agrees-a-settlement-deal-over-key-debt-4446776" target="_blank">MacAnthony reacquires the Kelgary shares</a>, becoming sole majority shareholder again. Neale and Thompson resign from the board. MacAnthony simultaneously agrees a settlement on a key outstanding debt. The Kelgary co-ownership lasted five and a half years. No terms disclosed on either the 2018 sale or the 2023 buyback.</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-year">Oct 2025</div>
+        <div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div>
+        <div class="tl-content">
+          <div class="tl-event">Ferguson Sacked (4th Time); Luke Williams Appointed</div>
+          <div class="tl-desc"><a href="https://www.lep.co.uk/sport/football/preston-north-end/preston-fc-news-darren-ferguson-peterborough-darragh-macanthony-wrexham-doncaster-manchesterr-united-5375431" target="_blank">MacAnthony terminates Ferguson's contract for the fourth time</a> on 25 October 2025. Luke Williams is appointed. Williams delivers five wins from seven League One matches, lifting Posh from bottom to 16th. The summer 2025 window generated <a href="https://www.peterboroughtoday.co.uk/sport/football/peterborough-united/peterborough-united-have-raked-in-ps45-million-of-pure-profit-after-a-sensational-day-in-the-market-5206316" target="_blank">£4.5 million in pure transfer profit</a> from the sales of Emmanuel Fernandez (Rangers, £3.5 million) and Malik Mothersille, both signed for zero.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- TRANSFER MODEL -->
+  <div class="section" id="model">
+    <div class="section-label">Business Model: The Transfer Engine</div>
+    <p class="body-text">
+      The model has three components. First, <strong>acquisition arbitrage:</strong> target players released from Premier League academies or underused at higher-division clubs, where the selling club assigns low value. MacAnthony buys at a discount because the player has not yet performed at an appropriate level. Second, <strong>development and exposure:</strong> Peterborough operate in a high-scoring, attack-focused system that generates impressive individual statistics. This raises buyer perception of the player's value. Third, <strong>structured exit:</strong> MacAnthony builds compounding sell-on clauses into all outgoing transfers, keeping the club in the deal flow for years after a player leaves. He is <a href="https://www.balls.ie/football/darragh-macanthony-breaks-down-the-fascinating-intricacies-of-clauses-in-transfer-deals-323050" target="_blank">unusually transparent about clause mechanics</a> in public media.
+    </p>
+    <p class="body-text">
+      The Ivan Toney chain is the most complete illustration. Posh paid £350,000 for Toney from Newcastle, with Newcastle retaining a 30% sell-on on any future Posh profit. Posh sold to Brentford for £5 million with their own sell-on structure. Brentford sold Toney to Arsenal for £40+ million, triggering payments back through the chain. Posh ultimately received approximately £10 million in total, a gross return of ~28x on the initial outlay. Beyond Toney, milestone bonuses are embedded in other sales: <a href="https://www.peterboroughtoday.co.uk" target="_blank">Peterborough are entitled to £1 million</a> each if Coventry City (Ephron Mason-Clark) or Sheffield United (Harrison Burrows) reach the Premier League.
+    </p>
+    <p class="body-text">
+      Seven named sales account for over £35 million in documented exit fees. MacAnthony himself has said Peterborough have made 11 individual million-pound sales since his takeover, with total undisclosed proceeds across the full portfolio unquantified in public reporting. Net return after wages, infrastructure, and operating costs is not public.
+    </p>
+
+    <div style="margin-top: 20px;">
+      <table class="transfer-table">
+        <thead>
+          <tr>
+            <th>Player</th>
+            <th>Year</th>
+            <th>Signed From</th>
+            <th>Fee In</th>
+            <th>Sold To</th>
+            <th>Fee Out</th>
+            <th>Clause / Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><a href="https://www.transfermarkt.co.uk/dwight-gayle/profil/spieler/157043" target="_blank">Dwight Gayle</a></td>
+            <td>2013</td>
+            <td>Dagenham &amp; Redbridge</td>
+            <td>Free</td>
+            <td>Crystal Palace</td>
+            <td class="fee green">£6m</td>
+            <td>Palace relegated Posh on the final day; paid a club record weeks later</td>
+          </tr>
+          <tr>
+            <td><a href="https://www.transfermarkt.co.uk/britt-assombalonga/profil/spieler/124038" target="_blank">Britt Assombalonga</a></td>
+            <td>2014</td>
+            <td>Watford (development)</td>
+            <td>Low</td>
+            <td>Nottingham Forest</td>
+            <td class="fee green">~£6m</td>
+            <td>Fee reported between £5.5m and £6.2m including add-ons</td>
+          </tr>
+          <tr>
+            <td><a href="https://www.transfermarkt.co.uk/jack-marriott/profil/spieler/218990" target="_blank">Jack Marriott</a></td>
+            <td>2018</td>
+            <td>Internal / lower league</td>
+            <td>Low</td>
+            <td>Derby County</td>
+            <td class="fee green">£3m</td>
+            <td>Part of the 11+ seven-figure sales</td>
+          </tr>
+          <tr>
+            <td><a href="https://www.transfermarkt.co.uk/ivan-toney/profil/spieler/259669" target="_blank">Ivan Toney</a></td>
+            <td>2020</td>
+            <td>Newcastle United</td>
+            <td>£350k (3yrs)</td>
+            <td>Brentford</td>
+            <td class="fee green">~£10m (total)</td>
+            <td>Newcastle retained 30% sell-on; Brentford sold to Arsenal for £40m+, triggering further payments; ~28x gross return</td>
+          </tr>
+          <tr>
+            <td><a href="https://www.transfermarkt.co.uk/harrison-burrows/profil/spieler/528826" target="_blank">Harrison Burrows</a></td>
+            <td>2023</td>
+            <td>Academy</td>
+            <td>Zero</td>
+            <td>Sheffield United</td>
+            <td class="fee green">£6m</td>
+            <td>£1m bonus triggered if Sheff Utd reach Premier League</td>
+          </tr>
+          <tr>
+            <td><a href="https://www.transfermarkt.co.uk/ephron-mason-clark/profil/spieler/556286" target="_blank">Ephron Mason-Clark</a></td>
+            <td>2023</td>
+            <td>Barnet</td>
+            <td>Low</td>
+            <td>Coventry City</td>
+            <td class="fee green">Undisclosed</td>
+            <td>£1m bonus triggered if Coventry reach Premier League</td>
+          </tr>
+          <tr>
+            <td><a href="https://eflanalysis.com/news/darragh-macanthony-claims-peterborough-united-can-make-millions-more-from-rangers-transfer-they-got-a-bargain/" target="_blank">Emmanuel Fernandez</a></td>
+            <td>2025</td>
+            <td>Free</td>
+            <td>Zero</td>
+            <td>Rangers</td>
+            <td class="fee green">£3.5m + add-ons</td>
+            <td>MacAnthony states Rangers got a bargain; further clause income expected</td>
+          </tr>
+          <tr class="total-row">
+            <td colspan="5">Named exits total (7 sales, fees confirmed or estimated)</td>
+            <td class="fee green">£35m+</td>
+            <td>MacAnthony says 11 total million-pound sales; full portfolio undisclosed</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- OWNERSHIP STRUCTURE + CURRENT -->
+  <div class="section" id="ownership">
+    <div class="section-label">Ownership Structure and Forward Position</div>
+    <div class="two-col">
+      <div class="col">
+        <div class="box">
+          <div class="box-title">Ownership: Key Facts</div>
+          <div class="metric-row">
+            <span class="metric-label">Initial purchase price</span>
+            <span class="metric-val green">£1 + ~£1.7m debts assumed</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Co-investors (2018-2023)</span>
+            <span class="metric-val">Kelgary Sports and Entertainment Ltd</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Kelgary principals</span>
+            <span class="metric-val">Jason Neale, Stewart Thompson (Canada)</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Stake sold to Kelgary (2018)</span>
+            <span class="metric-val">50%; no price disclosed</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Kelgary buyback (Dec 2023)</span>
+            <span class="metric-val">MacAnthony reacquires; no price disclosed</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Current structure</span>
+            <span class="metric-val green">MacAnthony sole majority owner</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Stadium site</span>
+            <span class="metric-val">London Road Peterborough Properties Ltd (MacAnthony + former co-owners hold the entity; £5.265m site cost)</span>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="box">
+          <div class="box-title">Open Questions</div>
+          <div class="box-body">
+            <p><strong>Stadium.</strong> The <a href="https://footballgroundguide.com/news/peterborough-united-to-move-to-new-stadium.html" target="_blank">planned 19,000-capacity arena at The Embankment</a> originally targeted a 2023 opening and has not broken ground. As of August 2024, MacAnthony was targeting a long-term plan by end of 2025. No cost estimate or funding structure has been made public. The project faces planning opposition. Until resolved, stadium ownership structure is complicated by former co-owners retaining an interest in the property vehicle.</p>
+            <p><strong>US acquisition.</strong> <a href="https://www.peterboroughtoday.co.uk/sport/football/peterborough-united/peterborough-united-owner-darragh-macanthony-expresses-intention-to-buy-club-in-america-4715001" target="_blank">MacAnthony has stated</a> he wants to buy a USL-level US club for £8-10 million, projecting a 2-3x return in five years. No confirmed deal as of April 2026.</p>
+            <p><strong>Key-man risk.</strong> The transfer network, deal negotiation, and Posh's media profile all run through MacAnthony personally. His primary management relationship (Ferguson, four stints) has now ended. There is no visible institutional succession plan and no indication the model has been codified beyond MacAnthony's individual judgment.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MANAGER RECORD -->
+  <div class="section" id="managers">
+    <div class="section-label">Manager Record Under MacAnthony</div>
+    <table class="transfer-table">
+      <thead>
+        <tr>
+          <th>Manager</th>
+          <th>Period</th>
+          <th>Outcome</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><a href="https://en.wikipedia.org/wiki/Darren_Ferguson" target="_blank">Darren Ferguson</a> (Stint 1)</td>
+          <td>Jan 2007 - Nov 2009</td>
+          <td>Two consecutive promotions (League Two title 2008, League One 2009); sacked bottom of Championship</td>
+        </tr>
+        <tr>
+          <td>Mark Cooper</td>
+          <td>Nov 2009 - Feb 2010</td>
+          <td>13 games; relegated from Championship</td>
+        </tr>
+        <tr>
+          <td>Jim Gannon</td>
+          <td>Feb 2010 - May 2010</td>
+          <td>Remainder of relegated season</td>
+        </tr>
+        <tr>
+          <td><a href="https://en.wikipedia.org/wiki/Darren_Ferguson" target="_blank">Darren Ferguson</a> (Stint 2)</td>
+          <td>Jan 2011 - 2011</td>
+          <td>League One play-off final win at Old Trafford (3-0 v Huddersfield)</td>
+        </tr>
+        <tr>
+          <td>Gary Johnson, Dave Robertson, others</td>
+          <td>2011-2015</td>
+          <td>Championship relegation 2013; Assombalonga sale 2014</td>
+        </tr>
+        <tr>
+          <td><a href="https://en.wikipedia.org/wiki/Darren_Ferguson" target="_blank">Darren Ferguson</a> (Stint 3)</td>
+          <td>Within 2011-2015 period</td>
+          <td>Left February 2015 after 3-0 defeat to MK Dons</td>
+        </tr>
+        <tr>
+          <td>Graham Westley, Grant McCann, Steve Evans</td>
+          <td>2015-2021</td>
+          <td>Eight-year League One period; <a href="https://en.wikipedia.org/wiki/2020-21_EFL_League_One" target="_blank">McCann delivered 2021 Championship promotion</a></td>
+        </tr>
+        <tr>
+          <td><a href="https://en.wikipedia.org/wiki/Darren_Ferguson" target="_blank">Darren Ferguson</a> (Stint 4)</td>
+          <td>2021 - Oct 2025</td>
+          <td>Immediate Championship relegation 2022; four years in League One; sacked October 2025</td>
+        </tr>
+        <tr>
+          <td><a href="https://footballleagueworld.co.uk/peterborough-united-manager-search-luke-williams-remains-leading-candidate-but-process-taking-longer-than-expected/" target="_blank">Luke Williams</a></td>
+          <td>Oct 2025 - Present</td>
+          <td>5 wins from 7 League One matches; club lifted from bottom to 16th</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="brand">PYLON PARTNERS</div>
+</div>
+</body>
+</html>
