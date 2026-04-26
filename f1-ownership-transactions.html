@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>F1 Team Ownership Transactions — Pylon Partners</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Arial, sans-serif; background: #fff; color: #1a1a1a; -webkit-font-smoothing: antialiased; }
+.page { max-width: 1100px; margin: 0 auto; padding: 48px 36px 60px; }
+
+.back-nav { font-size: 12px; color: #999; margin-bottom: 20px; }
+.back-nav a { color: #1a7a3a; text-decoration: none; }
+.back-nav a:hover { text-decoration: underline; }
+
+.header { margin-bottom: 28px; border-bottom: 1.5px solid #1a1a1a; padding-bottom: 20px; }
+.header-top { display: flex; justify-content: space-between; align-items: baseline; }
+.logo { font-size: 24px; font-weight: 800; color: #000; letter-spacing: -0.5px; }
+.logo span { color: #1a7a3a; }
+.header-meta { font-size: 11px; color: #999; letter-spacing: 1px; text-transform: uppercase; }
+
+.page-title { font-size: 21px; font-weight: 800; color: #000; margin-bottom: 8px; }
+.page-desc { font-size: 13.5px; color: #555; line-height: 1.65; max-width: 720px; margin-bottom: 28px; }
+
+.section-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #888; margin-bottom: 14px; }
+.section-divider { border: none; border-top: 1px solid #e8e8e8; margin: 44px 0 30px; }
+
+.stats { display: flex; border: 1px solid #ddd; margin-bottom: 32px; }
+.stat { flex: 1; padding: 14px 16px; border-right: 1px solid #ddd; }
+.stat:last-child { border-right: none; }
+.stat-val { font-size: 20px; font-weight: 800; color: #000; line-height: 1.2; }
+.stat-val.green { color: #1a7a3a; }
+.stat-val.red { color: #c0392b; }
+.stat-val.amber { color: #a07a0f; }
+.stat-label { font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 0.8px; margin-top: 4px; font-weight: 700; }
+.stat-sub { font-size: 11px; color: #888; margin-top: 2px; font-style: italic; }
+
+.table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.txn-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.txn-table thead th {
+  font-size: 10px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase;
+  color: #999; padding: 8px 12px 10px 0; border-bottom: 1.5px solid #ddd; text-align: left;
+  white-space: nowrap; cursor: pointer; user-select: none;
+}
+.txn-table thead th:first-child { padding-left: 0; }
+.txn-table thead th:hover { color: #555; }
+.txn-table tbody tr { border-bottom: 1px solid #e8e8e8; }
+.txn-table tbody tr:last-child { border-bottom: none; }
+.txn-table tbody tr:hover td { background: #fafafa; }
+.txn-table tbody td { padding: 12px 12px 12px 0; vertical-align: top; }
+.txn-table tbody td:first-child { padding-left: 0; }
+
+.col-year { font-weight: 800; color: #555; font-size: 12px; white-space: nowrap; }
+.col-team { font-weight: 800; color: #000; }
+.col-buyer { font-size: 13px; color: #1a1a1a; }
+.col-buyer-sub { font-size: 11px; color: #888; margin-top: 2px; }
+.col-value { font-weight: 700; color: #000; white-space: nowrap; }
+.col-value-und { font-size: 12px; color: #aaa; font-style: italic; }
+.col-note { font-size: 12px; color: #555; line-height: 1.55; }
+
+.badge { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.4px; padding: 3px 8px; text-transform: uppercase; white-space: nowrap; }
+.badge-control { background: rgba(26,122,58,0.10); color: #1a7a3a; }
+.badge-minority { background: rgba(212,160,23,0.12); color: #a07a0f; }
+.badge-distressed { background: rgba(192,57,43,0.10); color: #c0392b; }
+.badge-pending { background: rgba(153,153,153,0.14); color: #666; }
+
+.pending-row td { background: rgba(153,153,153,0.04); color: #666; }
+
+.val-journey { margin-top: 8px; }
+.val-row { display: flex; align-items: center; gap: 0; border: 1px solid #ddd; }
+.val-row + .val-row { border-top: none; }
+.val-cell { flex: 1; padding: 11px 16px; border-right: 1px solid #ddd; font-size: 13px; }
+.val-cell:last-child { border-right: none; }
+.val-year { font-size: 11px; font-weight: 700; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 3px; }
+.val-event { color: #444; font-size: 12.5px; }
+.val-num { font-size: 18px; font-weight: 800; color: #000; }
+.val-num.green { color: #1a7a3a; }
+.val-arrow { color: #ddd; font-size: 20px; align-self: center; }
+
+.pylon-angle { background: rgba(26,122,58,0.06); border-left: 3px solid #1a7a3a; padding: 13px 16px; margin: 28px 0 0; font-size: 13px; color: #1a1a1a; line-height: 1.65; }
+.pylon-angle strong { color: #1a7a3a; display: block; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 5px; }
+
+.flag-block { background: rgba(212,160,23,0.07); border-left: 3px solid #d4a017; padding: 12px 16px; margin: 14px 0; font-size: 13px; color: #444; line-height: 1.65; }
+.flag-block strong { color: #9a6800; }
+
+.note-block { font-size: 11.5px; color: #888; line-height: 1.6; margin-top: 14px; font-style: italic; }
+.brand { text-align: right; font-size: 11px; color: #aaa; margin-top: 56px; letter-spacing: 1px; }
+
+.table-scroll { overflow-x: auto; }
+
+@media (max-width: 640px) {
+  .page { padding: 24px 16px 40px; }
+  .logo { font-size: 18px; }
+  .stats { flex-wrap: wrap; }
+  .stat { flex: 1 1 48%; border-bottom: 1px solid #ddd; }
+  .stat:nth-child(even) { border-right: none; }
+  .stat-val { font-size: 17px; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="back-nav"><a href="index.html">← Pylon Intelligence</a></div>
+
+  <div class="header">
+    <div class="header-top">
+      <div class="logo">PYLON <span>INTELLIGENCE</span></div>
+      <div class="header-meta">Pylon Partners — Internal</div>
+    </div>
+  </div>
+
+  <div class="page-title">Formula 1 Team Ownership: Equity Transaction Database</div>
+  <div class="page-desc">Sourced equity events across all F1 teams, 2016 to present. Excludes commercial partnerships and branding arrangements (Carlyle/Red Bull). Pending transactions marked separately. As of April 2026.</div>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-val">12</div>
+      <div class="stat-label">Equity Events</div>
+      <div class="stat-sub">2016 to Apr 2026</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val green">$6bn</div>
+      <div class="stat-label">Mercedes Implied Value</div>
+      <div class="stat-sub">Kurtz deal, 2025</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val">$4.1bn</div>
+      <div class="stat-label">McLaren Racing Value</div>
+      <div class="stat-sub">Mumtalakat/CYVN, Sep 2025</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val amber">$1.4bn</div>
+      <div class="stat-label">Arctos Acquisition</div>
+      <div class="stat-sub">KKR deal, expected Q2 2026</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val red">2</div>
+      <div class="stat-label">Distressed Events</div>
+      <div class="stat-sub">Lotus/Renault, Force India admin</div>
+    </div>
+  </div>
+
+  <div class="section-label">Transaction Log — 2016 to Present</div>
+  <div class="table-scroll">
+  <table class="txn-table">
+    <thead>
+      <tr>
+        <th>Year</th>
+        <th>Team</th>
+        <th>Buyer / New Owner</th>
+        <th>Value</th>
+        <th>Type</th>
+        <th>Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="col-year">2016</td>
+        <td class="col-team">Renault (ex-Lotus)</td>
+        <td>
+          <div class="col-buyer">Renault Sport</div>
+          <div class="col-buyer-sub">Completes Lotus acquisition</div>
+        </td>
+        <td><span class="col-value">£1 nominal</span><div class="col-value-und">~€100m debt assumed</div></td>
+        <td><span class="badge badge-distressed">Distressed</span></td>
+        <td class="col-note">Renault acquires Lotus F1 from administrators; team relaunched as Renault Sport F1 for 2016 season.</td>
+      </tr>
+      <tr>
+        <td class="col-year">2018</td>
+        <td class="col-team">Racing Point (ex-Force India)</td>
+        <td>
+          <div class="col-buyer">Lawrence Stroll consortium</div>
+          <div class="col-buyer-sub">Desmarais, Idol, McCaw Jr., Chou</div>
+        </td>
+        <td><span class="col-value">£90m ($118m)</span></td>
+        <td><span class="badge badge-distressed">Distressed</span></td>
+        <td class="col-note">Force India enters administration July 2018 under creditor pressure; Racing Point UK acquires assets, relaunches mid-season as Racing Point Force India.</td>
+      </tr>
+      <tr>
+        <td class="col-year">2020</td>
+        <td class="col-team">Williams Racing</td>
+        <td>
+          <div class="col-buyer">Dorilton Capital</div>
+          <div class="col-buyer-sub">100% acquisition</div>
+        </td>
+        <td><span class="col-value">~$200m</span></td>
+        <td><span class="badge badge-control">Control</span></td>
+        <td class="col-note">Ends four decades of Williams family ownership. Team now valued north of $2.5bn per Forbes — a 12x+ step-up in five years.</td>
+      </tr>
+      <tr>
+        <td class="col-year">2020</td>
+        <td class="col-team">McLaren Racing</td>
+        <td>
+          <div class="col-buyer">MSP Sports Capital</div>
+          <div class="col-buyer-sub">15% stake; Mumtalakat retains majority</div>
+        </td>
+        <td><span class="col-value">£185m</span><div class="col-value-und">~£1.2bn implied</div></td>
+        <td><span class="badge badge-minority">Minority</span></td>
+        <td class="col-note">MSP enters alongside Bahrain SWF Mumtalakat. MSP subsequently increased to 33% in 2022 before full exit in 2025.</td>
+      </tr>
+      <tr>
+        <td class="col-year">2020</td>
+        <td class="col-team">Mercedes-AMG Petronas</td>
+        <td>
+          <div class="col-buyer">INEOS (Sir Jim Ratcliffe)</div>
+          <div class="col-buyer-sub">33.33% stake; Wolff and Mercedes each retain 33.33%</div>
+        </td>
+        <td><span class="col-value">£208m</span><div class="col-value-und">~£624m implied</div></td>
+        <td><span class="badge badge-minority">Minority</span></td>
+        <td class="col-note">Mercedes-Benz AG reduces from ~60% to 33.33%. Three-way split: INEOS, Mercedes-Benz AG, Toto Wolff. Implied value has since risen to ~$6bn.</td>
+      </tr>
+      <tr>
+        <td class="col-year">2022</td>
+        <td class="col-team">McLaren Racing</td>
+        <td>
+          <div class="col-buyer">MSP Sports Capital</div>
+          <div class="col-buyer-sub">Increase from 15% to 33%</div>
+        </td>
+        <td><span class="col-value-und">Undisclosed</span></td>
+        <td><span class="badge badge-minority">Minority</span></td>
+        <td class="col-note">MSP deepens commitment alongside Mumtalakat ahead of McLaren's on-track resurgence. Exits fully in 2025 at $4.1bn valuation.</td>
+      </tr>
+      <tr>
+        <td class="col-year">2023</td>
+        <td class="col-team">Sauber / Audi F1</td>
+        <td>
+          <div class="col-buyer">Audi AG</div>
+          <div class="col-buyer-sub">Minority stake, increasing to 100% in 2024</div>
+        </td>
+        <td><span class="col-value-und">Undisclosed</span></td>
+        <td><span class="badge badge-control">Control</span></td>
+        <td class="col-note">Audi announces 2026 works entry; takes minority stake Jan 2023, increases to 100% March 2024. QIA then acquires ~30% from Audi, Nov 2024, at ~$1.2bn implied valuation.</td>
+      </tr>
+      <tr>
+        <td class="col-year">2023</td>
+        <td class="col-team">Alpine F1</td>
+        <td>
+          <div class="col-buyer">Otro Capital / RedBird / Maximum Effort</div>
+          <div class="col-buyer-sub">24% combined; Renault retains ~76%</div>
+        </td>
+        <td><span class="col-value">€200m</span><div class="col-value-und">~$900m implied</div></td>
+        <td><span class="badge badge-minority">Minority</span></td>
+        <td class="col-note">Ryan Reynolds/Rob McElhenney-backed Maximum Effort is part of the consortium. Otro Capital exploring exit as of October 2025; Christian Horner reportedly in talks to acquire the stake (Dec 2025, unconfirmed).</td>
+      </tr>
+      <tr>
+        <td class="col-year">2023</td>
+        <td class="col-team">Aston Martin Aramco</td>
+        <td>
+          <div class="col-buyer">Arctos Partners</div>
+          <div class="col-buyer-sub">Sub-10% minority stake</div>
+        </td>
+        <td><span class="col-value-und">Undisclosed</span><div class="col-value-und">£1bn implied</div></td>
+        <td><span class="badge badge-minority">Minority</span></td>
+        <td class="col-note">Arctos's first F1 entry. KKR subsequently agreed to acquire Arctos itself at a $1.4bn valuation (early 2026, expected close Q2 2026).</td>
+      </tr>
+      <tr>
+        <td class="col-year">2024</td>
+        <td class="col-team">Sauber / Audi F1</td>
+        <td>
+          <div class="col-buyer">Qatar Investment Authority (QIA)</div>
+          <div class="col-buyer-sub">~30% minority stake from Audi</div>
+        </td>
+        <td><span class="col-value">~$360m</span><div class="col-value-und">~$1.2bn implied</div></td>
+        <td><span class="badge badge-minority">Minority</span></td>
+        <td class="col-note">QIA acquires stake in the Audi-controlled Sauber entity ahead of 2026 works entry. Expected deal close mid-2025.</td>
+      </tr>
+      <tr>
+        <td class="col-year">2025</td>
+        <td class="col-team">McLaren Racing</td>
+        <td>
+          <div class="col-buyer">Mumtalakat + CYVN Holdings</div>
+          <div class="col-buyer-sub">100% — buys out MSP and all minorities</div>
+        </td>
+        <td><span class="col-value">$4.1bn</span></td>
+        <td><span class="badge badge-control">Control</span></td>
+        <td class="col-note">CYVN Holdings (Abu Dhabi government-backed) takes non-controlling stake alongside Mumtalakat as majority. MSP fully exits. Bahrain and Abu Dhabi SWFs now jointly own the team.</td>
+      </tr>
+      <tr>
+        <td class="col-year">2025</td>
+        <td class="col-team">Mercedes-AMG Petronas</td>
+        <td>
+          <div class="col-buyer">George Kurtz (CrowdStrike founder)</div>
+          <div class="col-buyer-sub">15% of Wolff's holding = 5% of team</div>
+        </td>
+        <td><span class="col-value green">$6bn implied</span></td>
+        <td><span class="badge badge-minority">Minority</span></td>
+        <td class="col-note">Wolff retains 28.33% post-sale. The Kurtz deal crystallises the step-change in F1 team values: Mercedes at ~$165m implied in 2013 is now $6bn — a 36x in 12 years.</td>
+      </tr>
+      <tr class="pending-row">
+        <td class="col-year">Pending</td>
+        <td class="col-team">Alpine F1</td>
+        <td>
+          <div class="col-buyer">Otro Capital exit / Horner (reported)</div>
+          <div class="col-buyer-sub">24% stake — no deal confirmed</div>
+        </td>
+        <td><span class="col-value-und">TBD</span></td>
+        <td><span class="badge badge-pending">Pending</span></td>
+        <td class="col-note">Otro Capital exploring sale of its 24% stake (Oct 2025). Christian Horner in reported discussions to acquire; no confirmation as of April 2026.</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="note-block">Haas and Red Bull have seen no material equity ownership changes in this period. Ferrari's Exor/Piero Ferrari controlling structure is stable since the 2015-16 spin-off. The Carlyle Group's 2025 arrangement with Red Bull is a commercial/branding partnership, not an equity transaction.</div>
+
+  <hr class="section-divider">
+
+  <div class="section-label">Valuation Journey: Mercedes-AMG Petronas F1 Team</div>
+  <div style="font-size:13px;color:#555;margin-bottom:14px;line-height:1.6;">Three disclosed transactions over 12 years show the full repricing of the asset. Each entry point looks obvious in hindsight.</div>
+
+  <div class="val-journey">
+    <div class="val-row">
+      <div class="val-cell" style="flex:0.6;">
+        <div class="val-year">2013</div>
+        <div class="val-event">Toto Wolff acquires 30%</div>
+      </div>
+      <div class="val-cell" style="flex:1.2;">
+        <div class="val-num">~$165M</div>
+        <div style="font-size:11px;color:#888;margin-top:3px;">Implied team value</div>
+      </div>
+    </div>
+    <div class="val-row">
+      <div class="val-cell" style="flex:0.6;">
+        <div class="val-year">2020</div>
+        <div class="val-event">INEOS acquires 33.33% — £208m</div>
+      </div>
+      <div class="val-cell" style="flex:1.2;">
+        <div class="val-num">~$800M</div>
+        <div style="font-size:11px;color:#888;margin-top:3px;">~5x on 2013 entry in 7 years</div>
+      </div>
+    </div>
+    <div class="val-row">
+      <div class="val-cell" style="flex:0.6;">
+        <div class="val-year">2025</div>
+        <div class="val-event">Kurtz acquires 5% — implied at $6bn</div>
+      </div>
+      <div class="val-cell" style="flex:1.2;">
+        <div class="val-num green">~$6B</div>
+        <div style="font-size:11px;color:#888;margin-top:3px;">36x on 2013 entry; 7.5x on 2020 INEOS entry</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <div class="section-label">Live Opportunity</div>
+
+  <div class="flag-block">
+    <strong>Alpine stake — Otro Capital exit:</strong> The one live transaction in F1 is Otro Capital's reported exploration of its 24% Alpine stake sale (Oct 2025). At the €200m entry in 2023 (implied $900m valuation), buyers entering now are paying a premium over that basis. Christian Horner's reported interest adds a credibility signal; no confirmed deal as of April 2026. This is the only accessible F1 entry point where price discovery is still open.
+  </div>
+
+  <div class="pylon-angle">
+    <strong>Pylon Angle</strong>
+    Williams was acquired for ~$200m in 2020 and is now valued north of $2.5bn. McLaren transacted at $4.1bn in September 2025 versus a £1.2bn implied valuation at MSP's 2020 entry. The F1 repricing cycle is largely complete for established teams. The remaining opportunity set: Alpine's contested 24% stake, and structural access via fund vehicles (Arctos/KKR post-close). Direct control acquisition of a competitive team is not available at rational multiples. The Dorilton/Williams entry in 2020 was the last clean control deal in the cycle.
+  </div>
+
+  <div class="brand">PYLON PARTNERS</div>
+</div>
+</body>
+</html>

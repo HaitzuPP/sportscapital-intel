@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A-League Ownership Transactions — Pylon Partners</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Arial, sans-serif; background: #fff; color: #1a1a1a; -webkit-font-smoothing: antialiased; }
+.page { max-width: 1100px; margin: 0 auto; padding: 48px 36px 60px; }
+
+.back-nav { font-size: 12px; color: #999; margin-bottom: 20px; }
+.back-nav a { color: #1a7a3a; text-decoration: none; }
+.back-nav a:hover { text-decoration: underline; }
+
+.header { margin-bottom: 28px; border-bottom: 1.5px solid #1a1a1a; padding-bottom: 20px; }
+.header-top { display: flex; justify-content: space-between; align-items: baseline; }
+.logo { font-size: 24px; font-weight: 800; color: #000; letter-spacing: -0.5px; }
+.logo span { color: #1a7a3a; }
+.header-meta { font-size: 11px; color: #999; letter-spacing: 1px; text-transform: uppercase; }
+
+.page-title { font-size: 21px; font-weight: 800; color: #000; margin-bottom: 8px; }
+.page-desc { font-size: 13.5px; color: #555; line-height: 1.65; max-width: 720px; margin-bottom: 28px; }
+
+.section-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #888; margin-bottom: 14px; }
+.section-divider { border: none; border-top: 1px solid #e8e8e8; margin: 44px 0 30px; }
+
+.stats { display: flex; border: 1px solid #ddd; margin-bottom: 32px; }
+.stat { flex: 1; padding: 14px 16px; border-right: 1px solid #ddd; }
+.stat:last-child { border-right: none; }
+.stat-val { font-size: 19px; font-weight: 800; color: #000; line-height: 1.2; }
+.stat-val.green { color: #1a7a3a; }
+.stat-val.red { color: #c0392b; }
+.stat-val.amber { color: #a07a0f; }
+.stat-label { font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 0.8px; margin-top: 4px; font-weight: 700; }
+.stat-sub { font-size: 11px; color: #888; margin-top: 2px; font-style: italic; }
+
+.table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.txn-table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 700px; }
+.txn-table thead th {
+  font-size: 10px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase;
+  color: #999; padding: 8px 12px 10px 0; border-bottom: 1.5px solid #ddd; text-align: left; white-space: nowrap;
+}
+.txn-table thead th:first-child { padding-left: 0; }
+.txn-table tbody tr { border-bottom: 1px solid #e8e8e8; }
+.txn-table tbody tr:last-child { border-bottom: none; }
+.txn-table tbody tr:hover td { background: #fafafa; }
+.txn-table tbody td { padding: 11px 12px 11px 0; vertical-align: top; }
+.txn-table tbody td:first-child { padding-left: 0; }
+.year-header td { background: #f8f8f8; font-weight: 800; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: #888; padding: 8px 0; }
+
+.col-year { font-weight: 800; color: #555; font-size: 12px; white-space: nowrap; }
+.col-club { font-weight: 800; color: #000; }
+.col-buyer { font-size: 13px; }
+.col-buyer-sub { font-size: 11px; color: #888; margin-top: 2px; }
+.col-value { font-weight: 700; white-space: nowrap; }
+.col-value-und { font-size: 12px; color: #aaa; font-style: italic; }
+.col-note { font-size: 12px; color: #555; line-height: 1.55; }
+.col-note a { color: #1a7a3a; text-decoration: none; }
+.col-note a:hover { text-decoration: underline; }
+
+.badge { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.4px; padding: 3px 8px; text-transform: uppercase; white-space: nowrap; }
+.badge-entry { background: rgba(26,122,58,0.10); color: #1a7a3a; }
+.badge-ffa { background: rgba(153,153,153,0.14); color: #666; }
+.badge-distressed { background: rgba(192,57,43,0.10); color: #c0392b; }
+.badge-expand { background: rgba(212,160,23,0.12); color: #a07a0f; }
+.badge-dissolved { background: #f5f5f5; color: #999; border: 1px solid #e0e0e0; }
+
+.dissolved-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 12px; }
+.dissolved-table th { font-size: 10px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: #999; padding: 8px 0 10px; border-bottom: 1.5px solid #ddd; text-align: left; }
+.dissolved-table td { padding: 11px 16px 11px 0; border-bottom: 1px solid #e8e8e8; font-size: 13px; color: #555; vertical-align: top; }
+.dissolved-table td:first-child { padding-left: 0; font-weight: 800; color: #c0392b; }
+.dissolved-table tr:last-child td { border-bottom: none; }
+
+.pylon-angle { background: rgba(26,122,58,0.06); border-left: 3px solid #1a7a3a; padding: 13px 16px; margin: 28px 0 0; font-size: 13px; color: #1a1a1a; line-height: 1.65; }
+.pylon-angle strong { color: #1a7a3a; display: block; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 5px; }
+
+.risk-block { background: rgba(192,57,43,0.06); border-left: 3px solid #c0392b; padding: 12px 16px; margin: 20px 0; font-size: 13px; color: #444; line-height: 1.65; }
+.risk-block strong { color: #c0392b; }
+
+.brand { text-align: right; font-size: 11px; color: #aaa; margin-top: 56px; letter-spacing: 1px; }
+
+@media (max-width: 640px) {
+  .page { padding: 24px 16px 40px; }
+  .logo { font-size: 18px; }
+  .stats { flex-wrap: wrap; }
+  .stat { flex: 1 1 48%; border-bottom: 1px solid #ddd; }
+  .stat:nth-child(even) { border-right: none; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="back-nav"><a href="index.html">← Pylon Intelligence</a></div>
+
+  <div class="header">
+    <div class="header-top">
+      <div class="logo">PYLON <span>INTELLIGENCE</span></div>
+      <div class="header-meta">Pylon Partners — Internal</div>
+    </div>
+  </div>
+
+  <div class="page-title">A-League Ownership Transaction Database</div>
+  <div class="page-desc">Sourced equity events across A-League Men clubs, 2004 to present. Covers entries, exits, distressed transfers, FFA interventions, and expansion licences. 4 clubs permanently dissolved. As of April 2026.</div>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-val">25+</div>
+      <div class="stat-label">Equity Events</div>
+      <div class="stat-sub">2004 to Apr 2026</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val green">AUD $140m</div>
+      <div class="stat-label">Silver Lake / APL</div>
+      <div class="stat-sub">33.3% stake, Dec 2021; ~AUD $425m implied</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val">~$12m</div>
+      <div class="stat-label">CFG / Melbourne City</div>
+      <div class="stat-sub">80% entry, 2014; now 100%</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val red">4</div>
+      <div class="stat-label">Clubs Dissolved</div>
+      <div class="stat-sub">NZ Knights, Fury, Gold Coast, Western United</div>
+    </div>
+  </div>
+
+  <div class="section-label">Transaction Log — 2004 to Present</div>
+  <div class="table-scroll">
+  <table class="txn-table">
+    <thead>
+      <tr>
+        <th>Year</th>
+        <th>Club</th>
+        <th>Buyer / New Owner</th>
+        <th>Value</th>
+        <th>Type</th>
+        <th>Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="col-year">2004</td>
+        <td class="col-club">Sydney FC</td>
+        <td><a href="https://en.wikipedia.org/wiki/Sydney_FC" style="color:#1a7a3a;">Frank Lowy</a></td>
+        <td><span class="col-value-und">Founding licence</span></td>
+        <td><span class="badge badge-entry">New Entry</span></td>
+        <td class="col-note">Soccer NSW held 25% at launch but withdrew weeks later over governance disputes with Lowy.</td>
+      </tr>
+      <tr>
+        <td class="col-year">2006</td>
+        <td class="col-club">Adelaide United</td>
+        <td><a href="https://tbgaustralia.com/2024/01/17/adelaide-uniteds-ownership-history/" style="color:#1a7a3a;">Nick Bianco (sole)</a></td>
+        <td><span class="col-value-und">Undisclosed</span></td>
+        <td><span class="badge badge-entry">Buy-out</span></td>
+        <td class="col-note">Bianco buys out remaining consortium shareholders to become sole owner.</td>
+      </tr>
+      <tr>
+        <td class="col-year">2007</td>
+        <td class="col-club">Wellington Phoenix</td>
+        <td><a href="https://en.wikipedia.org/wiki/Terry_Serepisos" style="color:#1a7a3a;">Terry Serepisos</a></td>
+        <td><span class="col-value">NZD $1m start-up</span></td>
+        <td><span class="badge badge-entry">New Entry</span></td>
+        <td class="col-note">NZ Knights dissolved after two seasons; Wellington Phoenix awarded replacement licence. Serepisos funds as sole owner.</td>
+      </tr>
+      <tr>
+        <td class="col-year">2008</td>
+        <td class="col-club">Perth Glory</td>
+        <td><a href="https://en.wikipedia.org/wiki/Perth_Glory_FC" style="color:#1a7a3a;">Tony Sage (sole)</a></td>
+        <td><span class="col-value-und">Undisclosed</span></td>
+        <td><span class="badge badge-entry">Buy-out</span></td>
+        <td class="col-note">Sage buys out Brett McKeon (Feb 2008), becomes sole owner. Retains club until 2023 receivership.</td>
+      </tr>
+      <tr>
+        <td class="col-year">2009</td>
+        <td class="col-club">Adelaide United</td>
+        <td><a href="https://tbgaustralia.com/2024/01/17/adelaide-uniteds-ownership-history/" style="color:#1a7a3a;">Football Australia (FFA)</a></td>
+        <td><span class="col-value-und">Licence handback</span></td>
+        <td><span class="badge badge-ffa">FFA Intervention</span></td>
+        <td class="col-note">Bianco hands back licence amid financial difficulties. FFA assumes ownership until 2010 local consortium takeover.</td>
+      </tr>
+      <tr>
+        <td class="col-year">2010</td>
+        <td class="col-club">Newcastle Jets</td>
+        <td><a href="https://en.wikipedia.org/wiki/Newcastle_Jets_FC" style="color:#1a7a3a;">Nathan Tinkler</a></td>
+        <td><span class="col-value">$4.5m fee</span></td>
+        <td><span class="badge badge-entry">FFA Transfer</span></td>
+        <td class="col-note">FFA terminates Con Constantine's licence (Sep 2010) over financial difficulties. Tinkler takes over, commits $4.5m fee to extend ownership to 2020. Subsequently enters voluntary administration 2015.</td>
+      </tr>
+      <tr>
+        <td class="col-year">2011</td>
+        <td class="col-club">Wellington Phoenix</td>
+        <td><a href="https://www.stuff.co.nz/dominion-post/5673956/Who-are-the-new-Phoenix-owners" style="color:#1a7a3a;">7-person consortium (Rob Morrison lead)</a></td>
+        <td><span class="col-value-und">Undisclosed</span></td>
+        <td><span class="badge badge-distressed">Distressed</span></td>
+        <td class="col-note">Serepisos relinquishes ownership due to personal insolvency. Consortium includes Gareth Morgan and Lloyd Morrison.</td>
+      </tr>
+      <tr>
+        <td class="col-year">2011</td>
+        <td class="col-club">Brisbane Roar</td>
+        <td><a href="https://brisbaneroar.com.au/news/bakrie-group-takes-100-roar/" style="color:#1a7a3a;">Bakrie Group (Indonesia)</a></td>
+        <td><span class="col-value-und">Undisclosed</span></td>
+        <td><span class="badge badge-entry">Acquisition</span></td>
+        <td class="col-note">Indonesian industrial conglomerate acquires 70% stake; FFA retains 30%. Bakrie acquires remaining 30% in 2012 for 100%.</td>
+      </tr>
+      <tr>
+        <td class="col-year">2014</td>
+        <td class="col-club">Melbourne City (ex-Heart)</td>
+        <td><a href="https://en.wikipedia.org/wiki/Melbourne_City_FC" style="color:#1a7a3a;">City Football Group</a></td>
+        <td><span class="col-value">~$12m</span></td>
+        <td><span class="badge badge-entry">Acquisition</span></td>
+        <td class="col-note">CFG (owned by Abu Dhabi United Group) purchases 80% stake; Melbourne Storm consortium retains 20%. Club renamed Melbourne City. CFG buys remaining 20% in August 2015 for 100% ownership.</td>
+      </tr>
+      <tr>
+        <td class="col-year">2021</td>
+        <td class="col-club">APL (league level)</td>
+        <td><a href="https://www.silverlake.com/australian-professional-leagues-announces-minority-investment-from-silver-lake-to-drive-technology-enhancements-innovation-and-growth/" style="color:#1a7a3a;">Silver Lake</a></td>
+        <td><span class="col-value green">AUD $140m</span></td>
+        <td><span class="badge badge-entry">Minority</span></td>
+        <td class="col-note">Silver Lake acquires 33.3% of Australian Professional Leagues (Dec 2021), valuing the APL at ~AUD $425m. Largest single investment in Australian sport at that time. Thesis: tech and media convergence in sports content.</td>
+      </tr>
+      <tr>
+        <td class="col-year">2022</td>
+        <td class="col-club">Melbourne Victory</td>
+        <td><a href="https://www.sportcal.com/news/melbourne-victory-shareholders-approve-777-partners-takeover-bid/" style="color:#1a7a3a;">777 Partners (Miami)</a></td>
+        <td><span class="col-value">AUD $8.7m</span><div class="col-value-und">Up to AUD $30m total</div></td>
+        <td><span class="badge badge-entry">Minority</span></td>
+        <td class="col-note">777 Partners acquires 19.9%, with option to increase to 70% for up to AUD $30m total. 777 Partners subsequently collapses; Tony Bloom (Brighton owner) acquires a 19.1% stake in March 2025 following 777's failure.</td>
+      </tr>
+      <tr>
+        <td class="col-year">2023</td>
+        <td class="col-club">Perth Glory</td>
+        <td>KordaMentha (receivers)</td>
+        <td><span class="col-value-und">Receivership</span></td>
+        <td><span class="badge badge-distressed">Distressed</span></td>
+        <td class="col-note"><a href="https://www.espn.com.au/football/story/_/id/38050718/a-league-club-perth-glory-goes-receivership">Tony Sage hands back licence</a> (July 2023) after 15 years. Two failed buyer processes (Primeland Group — preferred buyer Oct 2023, deal terminated Nov 2023). Ross Pelligra (Pelligra Group) agrees to acquire Feb 2024.</td>
+      </tr>
+      <tr>
+        <td class="col-year">2023</td>
+        <td class="col-club">Auckland FC (new)</td>
+        <td><a href="https://www.nhl.com/goldenknights/news/bill-foley-awarded-a-leagues-expansion-football-club-in-auckland-new-zealand" style="color:#1a7a3a;">Bill Foley</a></td>
+        <td><span class="col-value-und">Expansion licence</span></td>
+        <td><span class="badge badge-expand">Expansion</span></td>
+        <td class="col-note">Black Knight Football Club (also owns AFC Bournemouth, Moreirense) awarded expansion licence Nov 2023 for 2024-25 season. Foley's multi-club model is the cleanest recent A-League entry.</td>
+      </tr>
+      <tr>
+        <td class="col-year">2024</td>
+        <td class="col-club">Newcastle Jets</td>
+        <td><a href="https://www.espn.com/soccer/story/_/id/40323945/a-league-club-newcastle-jets-secures-new-owners" style="color:#1a7a3a;">Maverick Sports Partners</a></td>
+        <td><span class="col-value-und">Undisclosed</span></td>
+        <td><span class="badge badge-entry">FFA Transfer</span></td>
+        <td class="col-note">Maverick (Maurice Bisseto; Lee Hagipantelis and Justin Pascoe — 25%) confirmed as new owners (June 2024), ending three years of APL interim control. Martin Lee had been stripped of his licence in January 2021 for financial debts.</td>
+      </tr>
+      <tr>
+        <td class="col-year">2025</td>
+        <td class="col-club">Melbourne Victory</td>
+        <td><a href="https://www.espn.com/soccer/story/_/id/44225612/brighton-owner-tony-bloom-buys-stake-melbourne-victory" style="color:#1a7a3a;">Tony Bloom (Brighton owner)</a></td>
+        <td><span class="col-value-und">Undisclosed</span></td>
+        <td><span class="badge badge-entry">Minority</span></td>
+        <td class="col-note">Bloom acquires 19.1% stake (March 2025) via new share issuance following 777 Partners collapse. Shares issued by the club, not purchased from existing holder.</td>
+      </tr>
+      <tr>
+        <td class="col-year">2025</td>
+        <td class="col-club">Western United</td>
+        <td>Football Australia</td>
+        <td><span class="col-value-und">Licence revoked</span></td>
+        <td><span class="badge badge-distressed">Dissolved</span></td>
+        <td class="col-note"><a href="https://www.espn.com.au/football/story/_/id/45923754/western-united-stripped-league-licence">Football Australia strips licence</a> (August 2025): late wages, superannuation arrears, FIFA registration ban, federal court winding-up filing. KAM Sports takeover incomplete. Club in conditional hibernation; absent from 2025-26 season.</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <hr class="section-divider">
+
+  <div class="section-label">Clubs Permanently Removed</div>
+  <table class="dissolved-table">
+    <thead>
+      <tr>
+        <th>Club</th>
+        <th>Year</th>
+        <th>Reason</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>New Zealand Knights</td>
+        <td>2007</td>
+        <td>Replaced by Wellington Phoenix after two unviable seasons. No private anchor owner; FFA-backed from inception.</td>
+      </tr>
+      <tr>
+        <td>North Queensland Fury</td>
+        <td>2011</td>
+        <td>Licence revoked by FFA for financial failure. Club dissolved with no transfer.</td>
+      </tr>
+      <tr>
+        <td>Gold Coast United</td>
+        <td>2012</td>
+        <td>Licence revoked by FFA for financial failure. Club dissolved.</td>
+      </tr>
+      <tr>
+        <td>Western United</td>
+        <td>2025</td>
+        <td>Licence revoked August 2025: unpaid wages, superannuation arrears, federal court winding-up proceedings. In conditional hibernation.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="risk-block" style="margin-top:20px;">
+    <strong>Structural risk pattern:</strong> All four dissolved clubs share a common profile — weak or absent private capital at inception, over-reliance on FFA support, and no viable buyer when financial distress hit. Western United is the most recent failure and the most instructive: the FIFA registration ban and federal court filing preceded the licence revocation by months, providing observable leading indicators.
+  </div>
+
+  <div class="pylon-angle">
+    <strong>Pylon Angle</strong>
+    Silver Lake's AUD $140m entry at a ~$425m APL valuation (December 2021) is the league-level benchmark. The thesis was technology and media convergence: Silver Lake was simultaneously investing in City Football Group (Man City), and Melbourne City is a CFG club, creating an unusual dual-level exposure to the same league. Bill Foley's Auckland FC entry is the model for clean new-club origination in the A-League: existing multi-club infrastructure (Bournemouth, Moreirense), no inherited liabilities, expansion licence at lower cost than an acquisition. The Perth Glory distressed process (2023) demonstrates that receivership timelines in Australian sport are long, buyer processes are unreliable, and first-mover buyers face significant condition-precedent risk. Maverick's Newcastle takeover (2024) — following three years of APL interim control — is the other cautionary timeline: regulatory and league approval processes add 18-36 months of execution risk to any distressed acquisition.
+  </div>
+
+  <div class="brand">PYLON PARTNERS</div>
+</div>
+</body>
+</html>

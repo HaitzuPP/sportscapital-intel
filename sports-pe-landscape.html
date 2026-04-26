@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sports PE and Commercial Rights Landscape — Pylon Partners</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Arial, sans-serif; background: #fff; color: #1a1a1a; -webkit-font-smoothing: antialiased; }
+.page { max-width: 1000px; margin: 0 auto; padding: 48px 36px 60px; }
+
+.back-nav { font-size: 12px; color: #999; margin-bottom: 20px; }
+.back-nav a { color: #1a7a3a; text-decoration: none; }
+.back-nav a:hover { text-decoration: underline; }
+
+.header { margin-bottom: 28px; border-bottom: 1.5px solid #1a1a1a; padding-bottom: 20px; }
+.header-top { display: flex; justify-content: space-between; align-items: baseline; }
+.logo { font-size: 24px; font-weight: 800; color: #000; letter-spacing: -0.5px; }
+.logo span { color: #1a7a3a; }
+.header-meta { font-size: 11px; color: #999; letter-spacing: 1px; text-transform: uppercase; }
+
+.page-title { font-size: 21px; font-weight: 800; color: #000; margin-bottom: 8px; }
+.page-desc { font-size: 13.5px; color: #555; line-height: 1.65; max-width: 720px; margin-bottom: 28px; }
+
+.section-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #888; margin-bottom: 14px; }
+.section-divider { border: none; border-top: 1px solid #e8e8e8; margin: 44px 0 30px; }
+.sub-label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #ccc; margin: 24px 0 10px; }
+
+.stats { display: flex; border: 1px solid #ddd; margin-bottom: 36px; }
+.stat { flex: 1; padding: 14px 16px; border-right: 1px solid #ddd; }
+.stat:last-child { border-right: none; }
+.stat-val { font-size: 19px; font-weight: 800; color: #000; line-height: 1.2; }
+.stat-val.green { color: #1a7a3a; }
+.stat-val.red { color: #c0392b; }
+.stat-val.amber { color: #a07a0f; }
+.stat-label { font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 0.8px; margin-top: 4px; font-weight: 700; }
+.stat-sub { font-size: 11px; color: #888; margin-top: 2px; font-style: italic; }
+
+.entity-card { border: 1px solid #ddd; margin-bottom: 24px; }
+.entity-header { display: flex; justify-content: space-between; align-items: flex-start; padding: 16px 18px 14px; border-bottom: 1px solid #e8e8e8; }
+.entity-name { font-size: 15px; font-weight: 800; color: #000; }
+.entity-status { font-size: 11.5px; color: #888; margin-top: 3px; line-height: 1.45; }
+.entity-body { padding: 14px 18px; }
+
+.badge { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.4px; padding: 3px 9px; text-transform: uppercase; white-space: nowrap; }
+.badge-dominant { background: rgba(26,122,58,0.10); color: #1a7a3a; }
+.badge-expanding { background: rgba(212,160,23,0.12); color: #a07a0f; }
+.badge-conflicted { background: rgba(192,57,43,0.10); color: #c0392b; }
+.badge-niche { background: rgba(153,153,153,0.14); color: #666; }
+.badge-transition { background: rgba(26,122,58,0.06); color: #555; border: 1px solid #ddd; }
+
+.deal-list { list-style: none; padding: 0; margin-bottom: 12px; }
+.deal-list li { padding: 7px 0 7px 16px; position: relative; border-bottom: 1px solid #f0f0f0; font-size: 13px; color: #333; line-height: 1.6; }
+.deal-list li:last-child { border-bottom: none; }
+.deal-list li::before { content: ''; position: absolute; left: 0; top: 15px; width: 5px; height: 5px; border-radius: 50%; background: #ccc; }
+.deal-list li a { color: #1a7a3a; text-decoration: none; }
+.deal-list li a:hover { text-decoration: underline; }
+
+.signal-note { font-size: 12.5px; color: #555; line-height: 1.6; border-top: 1px solid #f0f0f0; padding-top: 12px; margin-top: 4px; }
+.signal-note strong { color: #1a1a1a; }
+
+.risk-block { background: rgba(192,57,43,0.06); border-left: 3px solid #c0392b; padding: 11px 16px; margin-top: 12px; font-size: 13px; color: #444; line-height: 1.6; }
+.risk-block strong { color: #c0392b; }
+.flag-block { background: rgba(212,160,23,0.07); border-left: 3px solid #d4a017; padding: 11px 16px; margin-top: 12px; font-size: 13px; color: #444; line-height: 1.6; }
+.flag-block strong { color: #9a6800; }
+
+.pylon-angle { background: rgba(26,122,58,0.06); border-left: 3px solid #1a7a3a; padding: 13px 16px; margin: 28px 0 0; font-size: 13px; color: #1a1a1a; line-height: 1.65; }
+.pylon-angle strong { color: #1a7a3a; display: block; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 5px; }
+
+.brand { text-align: right; font-size: 11px; color: #aaa; margin-top: 56px; letter-spacing: 1px; }
+
+@media (max-width: 640px) {
+  .page { padding: 24px 16px 40px; }
+  .logo { font-size: 18px; }
+  .stats { flex-wrap: wrap; }
+  .stat { flex: 1 1 48%; border-bottom: 1px solid #ddd; }
+  .stat:nth-child(even) { border-right: none; }
+  .entity-header { flex-direction: column; gap: 8px; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="back-nav"><a href="index.html">← Pylon Intelligence</a></div>
+
+  <div class="header">
+    <div class="header-top">
+      <div class="logo">PYLON <span>INTELLIGENCE</span></div>
+      <div class="header-meta">Pylon Partners — Internal</div>
+    </div>
+  </div>
+
+  <div class="page-title">Sports PE and Commercial Rights Landscape</div>
+  <div class="page-desc">Two functions dominate European sports commercial infrastructure: brokers who sell rights they do not own, and acquisition firms that take equity stakes and compound returns through commercial centralisation. The two categories are converging. This maps both. As of April 2026.</div>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-val">$3.5bn</div>
+      <div class="stat-label">UCL Rights Value</div>
+      <div class="stat-sub">2024-27 cycle; TEAM mandate</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val red">~€7-8bn</div>
+      <div class="stat-label">CVC / GSG Implied Value</div>
+      <div class="stat-sub">Down from $14bn ask; €3.5bn debt deal Mar 2026</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val green">2027</div>
+      <div class="stat-label">UCL Mandate Handover</div>
+      <div class="stat-sub">TEAM to Relevent; biggest shift in 35 years</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val amber">$1.4bn</div>
+      <div class="stat-label">Arctos Acquisition</div>
+      <div class="stat-sub">KKR deal; expected Q2 2026 close</div>
+    </div>
+  </div>
+
+  <!-- BROKERS -->
+  <div class="section-label">Section 1 — Sponsorship Brokers</div>
+
+  <div class="entity-card">
+    <div class="entity-header">
+      <div>
+        <div class="entity-name">TEAM Marketing</div>
+        <div class="entity-status">Private — wholly owned by UEFA/UC3 joint venture</div>
+      </div>
+      <span class="badge badge-transition">Mandate Ending 2027</span>
+    </div>
+    <div class="entity-body">
+      <div class="sub-label">Key Deals</div>
+      <ul class="deal-list">
+        <li><a href="https://www.sportbusiness.com/news/exclusive-new-champions-league-sponsors-set-to-come-on-board-as-seven-offers-accepted/">2024-27 UCL sponsorship cycle</a>: nine global partners including Qatar Airways, Mastercard, Heineken, PlayStation, Crypto.com, Bet365, FedEx, PepsiCo/Lay's, JustEat. Reported $3.5bn total rights value across media and sponsorship.</li>
+        <li>Managed UCL, Europa League, and Conference League commercial rights for 35 years. That mandate ends 2027-28 after <a href="https://www.sportcal.com/media/team-era-ends-as-uefa-goes-with-relevent-as-global-commercial-rights-holder/">Relevent won the open tender process</a> in early 2025.</li>
+      </ul>
+      <div class="signal-note"><strong>Signal:</strong> TEAM retains account management for current 2024-27 cycle partners during transition, but the mandate does not renew. Thirty-five years of institutional knowledge exits the market.</div>
+    </div>
+  </div>
+
+  <div class="entity-card">
+    <div class="entity-header">
+      <div>
+        <div class="entity-name">Relevent Sports Group</div>
+        <div class="entity-status">Private — owned by RSE Ventures / Stephen Ross (Miami Dolphins owner)</div>
+      </div>
+      <span class="badge badge-dominant">UCL Mandate 2027-33</span>
+    </div>
+    <div class="entity-body">
+      <div class="sub-label">Key Deals</div>
+      <ul class="deal-list">
+        <li><a href="https://www.prnewswire.com/news-releases/relevent-sports-group-awarded-to-sell-uefa-champions-league-media-rights-in-us-301477812.html">La Liga North America JV (2018)</a>: 15-year partnership; brokered La Liga's ESPN deal in 2021, the largest Spanish football media rights deal ever in North America.</li>
+        <li><a href="https://www.prnewswire.com/news-releases/relevent-sports-group-awarded-to-sell-uefa-champions-league-media-rights-in-us-301477812.html">UCL/Europa/Conference League US rights 2024-27</a>: sold to CBS Sports, building the commercial relationship with UEFA that underpinned the 2027-33 bid.</li>
+        <li><a href="https://www.uefa.com/news-media/news/0297-1d466ceeee01-25dbcb2f7111-1000--uc3-appoints-relevent-as-uefa-men-s-club-competitions-glob/">UCL global mandate 2027-33</a>: UC3 (UEFA/ECA JV) appointed Relevent as sole global commercial partner, replacing TEAM Marketing. Covers CL, Europa, Conference League, Super Cup, Youth League, and Futsal CL across all territories.</li>
+      </ul>
+      <div class="signal-note"><strong>Signal:</strong> A US-owned commercial agency now controls the most valuable club competition rights package in world football. How Relevent structures and monetises the mandate across its first cycle will define the 2033 tender.</div>
+    </div>
+  </div>
+
+  <div class="entity-card">
+    <div class="entity-header">
+      <div>
+        <div class="entity-name">SPORTFIVE</div>
+        <div class="entity-status">Private — owned by Bertelsmann via Fremantle/RTL Group; 1,200 staff, 15 countries</div>
+      </div>
+      <span class="badge badge-dominant">German Dominant</span>
+    </div>
+    <div class="entity-body">
+      <div class="sub-label">Key Deals</div>
+      <ul class="deal-list">
+        <li><a href="https://sportfive.com/sports/football">Signal Iduna Park naming rights (Borussia Dortmund)</a>: brokered original deal and managed renewals. Germany's highest-profile stadium naming rights contract.</li>
+        <li><a href="https://sportfive.com/sports/football">Commerzbank Arena naming rights (Eintracht Frankfurt)</a>: brokered and managed across multiple contract cycles.</li>
+        <li><a href="https://sportfive.com/sports/football">FC Bayern Munich international partnerships</a>: manages Bayern's regional sponsor relationships across Asia, MENA, and the Americas on a multi-year representation basis.</li>
+      </ul>
+      <div class="signal-note"><strong>Model:</strong> Long-term rights representation contracts, typically multi-year exclusives. Commission on deals closed plus retainers on representation mandates. Expanding internationally via club representation.</div>
+    </div>
+  </div>
+
+  <div class="entity-card">
+    <div class="entity-header">
+      <div>
+        <div class="entity-name">Infront Sports & Media</div>
+        <div class="entity-status">Private — within <a href="https://www.infront.sport/" style="color:#1a7a3a;">Wanda Sports Group (HKG: 1691)</a>; Zug-based</div>
+      </div>
+      <span class="badge badge-expanding">France + Germany Exposure</span>
+    </div>
+    <div class="entity-body">
+      <div class="sub-label">Key Deals</div>
+      <ul class="deal-list">
+        <li><a href="https://www.infront.sport/news/sports-media-rights/infront-announces-a-landmark-media-rights-and-innovation-partnership-with-lfp-media">Ligue 1 and Ligue 2 international media rights</a>: exclusive mandate via LFP Media across 100+ territories, including technology and betting rights.</li>
+        <li><a href="https://www.infront.sport/news/sports-media-rights/bundesliga-international-and-infront-collaborate-to-secure-media-rights-deals-in-9-eastern-european-territories">Bundesliga International (2024)</a>: distributes rights across nine Eastern European markets from 2025-26.</li>
+        <li><a href="https://www.infront.sport/news/sports-sponsorship/infront-and-360media-join-forces-to-market-the-icon-league">Icon League joint mandate with 360Media</a>: international sponsorship and media rights for the influencer football competition.</li>
+      </ul>
+      <div class="signal-note"><strong>Model note:</strong> Infront bundles media distribution with sponsorship sales in a single mandate — more control than a pure broker, without taking equity. Blurs the broker/distributor distinction.</div>
+    </div>
+  </div>
+
+  <div class="entity-card">
+    <div class="entity-header">
+      <div>
+        <div class="entity-name">IMG</div>
+        <div class="entity-status">Private — owned by <a href="https://www.img.com/" style="color:#1a7a3a;">Endeavor Group</a>, which <a href="https://www.silverlake.com/" style="color:#1a7a3a;">Silver Lake</a> took private at $25bn, March 2025</div>
+      </div>
+      <span class="badge badge-conflicted">Structural Conflict</span>
+    </div>
+    <div class="entity-body">
+      <ul class="deal-list">
+        <li><a href="https://www.img.com/">The FA</a>: long-term commercial and media rights adviser; manages international distribution and sponsorship packaging for English football's governing body.</li>
+        <li><a href="https://www.img.com/">Premier League international rights</a>: distributor and commercial adviser across multiple overseas markets.</li>
+        <li>UCL 2027-33 mandate: bid in the open tender; Relevent was selected after exclusive negotiation period from February 2025.</li>
+      </ul>
+      <div class="risk-block"><strong>Conflict:</strong> Silver Lake's Endeavor acquisition creates a structural conflict. IMG advises rights holders on deals while Silver Lake (via CFG stake) owns clubs whose revenues are directly affected by those same deals. Regulatory attention on this structure is likely.</div>
+    </div>
+  </div>
+
+  <div class="entity-card">
+    <div class="entity-header">
+      <div>
+        <div class="entity-name">Octagon</div>
+        <div class="entity-status">Private subsidiary of <a href="https://www.octagon.com/" style="color:#1a7a3a;">IPG (NYSE: IPG)</a>; $3.5bn+ in annual client sponsorship spend managed</div>
+      </div>
+      <span class="badge badge-niche">Brand-Side Primary</span>
+    </div>
+    <div class="entity-body">
+      <ul class="deal-list">
+        <li><a href="https://sponsorship.sportbusiness.com/organisation/octagon/">Standard Chartered / Liverpool FC</a>: managed the shirt sponsorship and developed the "Play On" women's football campaign.</li>
+        <li>Snickers / UEFA tournaments: multi-cycle strategy across European tournaments including the "Own Goal" campaign.</li>
+        <li><a href="https://www.marketingweek.com/octagon-acquires-european-sports-specialist-agency-movie-media/">Movie & Media Sports acquisition</a>: added European football and rugby governing body rights sales to its buy-side model.</li>
+      </ul>
+      <div class="signal-note"><strong>Model distinction:</strong> Octagon is primarily brand-side — earns fees from corporates for sponsorship strategy, not commissions from rights holders. It sits on the opposite side of the value chain from SPORTFIVE and Relevent.</div>
+    </div>
+  </div>
+
+  <!-- ACQUISITION FIRMS -->
+  <hr class="section-divider">
+  <div class="section-label">Section 2 — PE Acquisition Firms</div>
+
+  <div class="entity-card">
+    <div class="entity-header">
+      <div>
+        <div class="entity-name">CVC Capital Partners / Global Sport Group</div>
+        <div class="entity-status">Private — ~$180bn AUM; GSG formed 2025 to consolidate all sports holdings</div>
+      </div>
+      <span class="badge badge-conflicted">Valuation Haircut</span>
+    </div>
+    <div class="entity-body">
+      <div class="sub-label">Key Deals</div>
+      <ul class="deal-list">
+        <li><a href="https://www.cvc.com/media/news/2021/2021-12-13-laliga-and-cvc-fund-viii-sign-agreement-to-set-project-boost-laliga-in-motion/">La Liga</a>: $2.1bn for 10.95% of LaLiga's commercial rights vehicle over a 50-year term. 38 of 42 clubs voted in favour; Barcelona and Real Madrid opted out. Approximately half of GSG's earnings come from La Liga.</li>
+        <li><a href="https://pitchbook.com/news/articles/how-pe-firms-are-hoovering-up-sports-media-rights-in-europe">Ligue 1 / LFP Media</a>: ~$1.5bn into the French league's commercial vehicle. Underperformed post-investment relative to La Liga, contributing to the GSG stake sale failure.</li>
+        <li><a href="https://frontofficesports.com/cvc-makes-another-big-investment-in-sports/">Premiership Rugby</a>: $294m for 27%. Three of 13 clubs in the 2022-23 season subsequently went insolvent (Worcester, Wasps, London Irish).</li>
+      </ul>
+      <div class="risk-block"><strong>Risk flag:</strong> CVC failed to sell an external GSG stake at a €9bn target. Instead closed a <a href="https://www.irishtimes.com/business/2026/03/10/cvc-sports-empire-signs-35bn-debt-deal-after-stake-sale-falters/">€3.5bn debt deal in March 2026</a> (KKR/Global Atlantic ~€1.4bn preferred equity; Pimco ~€1.5bn debt). Implied equity value ~€7-8bn versus $14bn internal target. Equity investors passed at CVC's asking price.</div>
+    </div>
+  </div>
+
+  <div class="entity-card">
+    <div class="entity-header">
+      <div>
+        <div class="entity-name">Silver Lake</div>
+        <div class="entity-status">Private — ~$100bn+ AUM; technology and media focus</div>
+      </div>
+      <span class="badge badge-dominant">Most Integrated</span>
+    </div>
+    <div class="entity-body">
+      <ul class="deal-list">
+        <li><a href="https://www.silverlake.com/city-football-group-announces-us500-million-strategic-investment-by-silver-lake/">City Football Group (CFG)</a>: $500m for just over 10% in 2019, valuing CFG at $4.8bn. CFG owns Manchester City, Girona, NY City FC, and eight other clubs.</li>
+        <li><a href="https://www.silverlake.com/">Endeavor take-private</a>: $25bn deal, March 2025. Gives Silver Lake control of IMG, UFC, WWE, and On Location events business.</li>
+      </ul>
+      <div class="risk-block"><strong>Conflict:</strong> Silver Lake simultaneously owns a Premier League club (Man City via CFG) and controls IMG, which advises on Premier League and UEFA commercial rights. Vertical integration of this kind creates systemic conflicts that regulators will eventually address.</div>
+    </div>
+  </div>
+
+  <div class="entity-card">
+    <div class="entity-header">
+      <div>
+        <div class="entity-name">Arctos Partners</div>
+        <div class="entity-status"><a href="https://pitchbook.com/news/articles/kkr-joins-sports-investment-frenzy-with-1-4b-arctos-deal" style="color:#1a7a3a;">KKR agreed to acquire Arctos at $1.4bn</a>, early 2026; expected close Q2 2026. Fund II at $4.1bn AUM.</div>
+      </div>
+      <span class="badge badge-expanding">KKR Acquisition Pending</span>
+    </div>
+    <div class="entity-body">
+      <ul class="deal-list">
+        <li><a href="https://www.businesswire.com/news/home/20231207539913/en/Qatar-Sports-Investments-and-Arctos-Partners-agree-landmark-strategic-partnership-and-investment-deal-in-Paris-Saint-Germain">Paris Saint-Germain</a>: minority stake via QSI, December 2023. Capital directed at stadium development and Poissy training centre expansion.</li>
+        <li><a href="https://www.arctospartners.com/sports/">Fenway Sports Group</a>: minority stake in FSG, owner of Liverpool FC. Liverpool generates over $900m in annual revenue.</li>
+        <li><a href="https://www.arctospartners.com/sports/">Atalanta</a>: minority stake; entered during peak commercial leverage (2024 Champions League finalists).</li>
+        <li>Aston Martin Aramco F1: sub-10% minority at £1bn team valuation, 2023.</li>
+      </ul>
+      <div class="signal-note"><strong>Model:</strong> Non-controlling positions in clubs and parent holding companies. European exposure via PSG, FSG/Liverpool, Atalanta. KKR acquisition brings sports PE into one of the largest alternative asset managers globally.</div>
+    </div>
+  </div>
+
+  <div class="pylon-angle">
+    <strong>Pylon Angle</strong>
+    The Relevent/UCL mandate handover in 2027 is the structural shift to watch. A US commercial agency controlling the most valuable club competition rights in world football is a category-level change. CVC's GSG valuation haircut (from $14bn to ~€7-8bn implied) is the clearest public data point on what institutional investors think European sports rights are actually worth at scale. The gap between CVC's asking price and what buyers would pay signals that the first wave of sports rights securitisation has reached its ceiling. Silver Lake's dual position (CFG ownership + IMG control) is the conflicts question that regulators have not yet addressed but will.
+  </div>
+
+  <div class="brand">PYLON PARTNERS</div>
+</div>
+</body>
+</html>
