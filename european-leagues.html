@@ -2,73 +2,238 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>European Club Ownership Map — SportsCapital</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: Arial, sans-serif; background: #fff; color: #111; font-size: 14px; }
+body {
+  font-family: Arial, sans-serif;
+  background: #fff;
+  color: #111;
+  font-size: 14px;
+  /* Prevent 300ms tap delay on mobile */
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
 a { color: #1a7a3a; text-decoration: none; }
 a:hover { text-decoration: underline; }
 
-.page-header { border-bottom: 1px solid #ddd; padding: 18px 32px; display: flex; align-items: center; justify-content: space-between; }
+/* ── PAGE HEADER ─────────────────────────────────── */
+.page-header {
+  border-bottom: 1px solid #ddd;
+  padding: 18px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
 .page-header .back { font-size: 13px; color: #999; }
 .page-header h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.3px; }
-.page-header .meta { font-size: 12px; color: #999; }
+.page-header .meta { font-size: 12px; color: #999; flex-shrink: 0; }
 
-.toc { background: #f7f7f7; border-bottom: 1px solid #ddd; padding: 12px 32px; display: flex; gap: 24px; flex-wrap: wrap; }
-.toc a { font-size: 13px; color: #333; font-weight: 600; }
+/* ── TOC ─────────────────────────────────────────── */
+.toc {
+  background: #f7f7f7;
+  border-bottom: 1px solid #ddd;
+  padding: 12px 32px;
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  /* hide scrollbar but keep functionality */
+  scrollbar-width: none;
+}
+.toc::-webkit-scrollbar { display: none; }
+.toc a { font-size: 13px; color: #333; font-weight: 600; flex-shrink: 0; }
 .toc a:hover { color: #1a7a3a; text-decoration: none; }
 
+/* ── LEAGUE SECTIONS ─────────────────────────────── */
 .league-section { padding: 40px 32px; border-bottom: 1px solid #eee; }
 .league-section:last-of-type { border-bottom: none; }
-
 .league-title { font-size: 19px; font-weight: 700; margin-bottom: 4px; }
 .league-subtitle { font-size: 13px; color: #666; margin-bottom: 20px; }
 
+/* ── MAP + LEGEND ────────────────────────────────── */
 .map-and-legend { display: flex; gap: 32px; align-items: flex-start; flex-wrap: wrap; }
-.map-wrap { flex: 0 0 auto; overflow-x: auto; }
-.map-wrap svg { display: block; max-width: 100%; height: auto; }
+.map-wrap { flex: 0 0 auto; width: 100%; max-width: 480px; }
+.map-wrap svg { display: block; width: 100%; height: auto; }
 
-.legend { flex: 1 1 200px; }
+.legend { flex: 1 1 180px; min-width: 160px; }
 .legend h4 { font-size: 12px; font-weight: 700; color: #555; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
 .legend-item { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; font-size: 12px; color: #333; }
 .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
 
+/* ── CLUB DOTS ───────────────────────────────────── */
 .club-dot { cursor: pointer; transition: r 0.15s; }
 .club-dot:hover { r: 9; }
+/* Invisible touch-target circles (injected by JS) */
+.club-hit {
+  fill: transparent;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
 
+/* ── DESKTOP TOOLTIP ─────────────────────────────── */
 #tooltip {
-  position: fixed; background: #111; color: #fff; padding: 9px 12px;
-  border-radius: 3px; font-size: 12px; pointer-events: none;
-  opacity: 0; transition: opacity 0.15s; z-index: 9999;
-  max-width: 220px; line-height: 1.5;
+  position: fixed;
+  background: #111;
+  color: #fff;
+  padding: 9px 12px;
+  border-radius: 3px;
+  font-size: 12px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s;
+  z-index: 9999;
+  max-width: 220px;
+  line-height: 1.5;
 }
 #tooltip .tt-name { font-weight: 700; font-size: 13px; margin-bottom: 2px; }
 #tooltip .tt-city { color: #bbb; font-size: 11px; }
 #tooltip .tt-owner { margin-top: 5px; font-size: 12px; }
 #tooltip .tt-since { color: #bbb; font-size: 11px; }
 
+/* ── MOBILE INFO PANEL ───────────────────────────── */
+#mobile-panel {
+  display: none; /* shown via @media (pointer: coarse) */
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: #111;
+  color: #fff;
+  padding: 20px 20px calc(20px + env(safe-area-inset-bottom));
+  z-index: 9999;
+  border-top-left-radius: 14px;
+  border-top-right-radius: 14px;
+  transform: translateY(110%);
+  transition: transform 0.28s cubic-bezier(0.25,0.46,0.45,0.94);
+  box-shadow: 0 -4px 24px rgba(0,0,0,0.18);
+}
+#mobile-panel.active { transform: translateY(0); }
+#mobile-panel .mp-handle {
+  width: 36px; height: 4px;
+  background: #444;
+  border-radius: 2px;
+  margin: 0 auto 14px;
+}
+#mobile-panel .mp-close {
+  position: absolute;
+  top: 14px; right: 16px;
+  background: none; border: none;
+  color: #888; font-size: 20px; cursor: pointer;
+  line-height: 1; padding: 4px;
+}
+#mobile-panel .mp-name { font-weight: 700; font-size: 16px; margin-bottom: 3px; }
+#mobile-panel .mp-city { color: #bbb; font-size: 12px; margin-bottom: 10px; }
+#mobile-panel .mp-owner { font-size: 13px; line-height: 1.5; }
+#mobile-panel .mp-since { color: #bbb; font-size: 12px; margin-top: 6px; }
+/* dim overlay behind panel */
+#mp-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 9998;
+  opacity: 0;
+  transition: opacity 0.25s;
+}
+#mp-overlay.active { opacity: 1; }
+
+/* ── TRENDS ──────────────────────────────────────── */
 .trends { margin-top: 28px; }
 .trends h4 { font-size: 13px; font-weight: 700; color: #111; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.4px; }
 .trends ul { list-style: none; padding: 0; }
-.trends ul li { padding: 7px 0; border-bottom: 1px solid #f0f0f0; font-size: 13px; line-height: 1.6; color: #222; padding-left: 14px; position: relative; }
-.trends ul li:before { content: ""; position: absolute; left: 0; top: 14px; width: 5px; height: 5px; background: #1a7a3a; border-radius: 50%; }
+.trends ul li {
+  padding: 7px 0 7px 14px;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #222;
+  position: relative;
+}
+.trends ul li:before {
+  content: "";
+  position: absolute; left: 0; top: 16px;
+  width: 5px; height: 5px;
+  background: #1a7a3a; border-radius: 50%;
+}
 .trends ul li:last-child { border-bottom: none; }
 
+/* ── SVG base fills ──────────────────────────────── */
 .country-fill { fill: #f0f4f0; stroke: #bbb; stroke-width: 1.5; }
 .country-fill-water { fill: #e8f0f8; stroke: #bbb; stroke-width: 1; }
 
+/* ── FOOTER ──────────────────────────────────────── */
+footer {
+  padding: 24px 32px;
+  border-top: 1px solid #ddd;
+  font-size: 11px;
+  color: #999;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* ════════════════════════════════════════════════════
+   RESPONSIVE — 768px and below (tablets / large phones)
+   ════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  .page-header { padding: 14px 20px; }
+  .league-section { padding: 32px 20px; }
+  .toc { padding: 10px 20px; }
+  footer { padding: 20px; }
+  .map-wrap { max-width: 100%; }
+}
+
+/* ════════════════════════════════════════════════════
+   RESPONSIVE — 640px and below (phones)
+   ════════════════════════════════════════════════════ */
 @media (max-width: 640px) {
-  .page-header { padding: 14px 16px; flex-direction: column; align-items: flex-start; gap: 4px; }
-  .toc { padding: 10px 16px; gap: 14px; }
-  .league-section { padding: 28px 16px; }
-  .map-and-legend { flex-direction: column; }
-  .map-wrap svg { width: 100%; height: auto; }
+  .page-header {
+    padding: 12px 16px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  .page-header h1 { font-size: 18px; }
+  .page-header .meta { font-size: 11px; }
+  .toc { padding: 10px 16px; gap: 16px; }
+  .league-section { padding: 24px 16px; }
+  .league-title { font-size: 17px; }
+  .map-and-legend { flex-direction: column; gap: 20px; }
+  .map-wrap { max-width: 100%; }
+  .legend { width: 100%; }
+  footer { padding: 16px; flex-direction: column; gap: 6px; }
+}
+
+/* ════════════════════════════════════════════════════
+   RESPONSIVE — 380px and below (small phones)
+   ════════════════════════════════════════════════════ */
+@media (max-width: 380px) {
+  .page-header h1 { font-size: 16px; }
+  .league-title { font-size: 15px; }
+  .trends ul li { font-size: 12.5px; }
+}
+
+/* ════════════════════════════════════════════════════
+   TOUCH DEVICE: swap tooltip → mobile panel
+   ════════════════════════════════════════════════════ */
+@media (pointer: coarse) {
+  #tooltip { display: none !important; }
+  #mobile-panel { display: block; }
+  #mp-overlay { display: block; }
+  /* Slightly enlarge visible dots on touch screens for readability */
+  .club-dot { r: 8; }
+  .club-dot:hover { r: 8; } /* suppress desktop hover on touch */
+  /* hint text */
+  .legend p { font-size: 12px !important; }
 }
 </style>
 </head>
 <body>
 
+<!-- Desktop tooltip -->
 <div id="tooltip">
   <div class="tt-name" id="tt-name"></div>
   <div class="tt-city" id="tt-city"></div>
@@ -76,6 +241,20 @@ a:hover { text-decoration: underline; }
   <div class="tt-since" id="tt-since"></div>
 </div>
 
+<!-- Mobile dim overlay -->
+<div id="mp-overlay"></div>
+
+<!-- Mobile info panel (bottom sheet) -->
+<div id="mobile-panel" role="dialog" aria-modal="true" aria-labelledby="mp-name">
+  <div class="mp-handle"></div>
+  <button class="mp-close" id="mp-close" aria-label="Close">✕</button>
+  <div class="mp-name" id="mp-name"></div>
+  <div class="mp-city" id="mp-city"></div>
+  <div class="mp-owner" id="mp-owner"></div>
+  <div class="mp-since" id="mp-since"></div>
+</div>
+
+<!-- ── HEADER ─────────────────────────────────────── -->
 <div class="page-header">
   <div>
     <div class="back"><a href="index.html">← SportsCapital Intel</a></div>
@@ -84,7 +263,8 @@ a:hover { text-decoration: underline; }
   <div class="meta">2025-26 season · 5 leagues · 94 clubs</div>
 </div>
 
-<nav class="toc">
+<!-- ── TOC ───────────────────────────────────────── -->
+<nav class="toc" aria-label="Leagues">
   <a href="#premier-league">Premier League</a>
   <a href="#la-liga">La Liga</a>
   <a href="#bundesliga">Bundesliga</a>
@@ -92,16 +272,18 @@ a:hover { text-decoration: underline; }
   <a href="#eredivisie">Eredivisie</a>
 </nav>
 
-<!-- PREMIER LEAGUE -->
+<!-- ═══════════════════════════════════════════════
+     PREMIER LEAGUE
+     ═══════════════════════════════════════════════ -->
 <section class="league-section" id="premier-league">
   <div class="league-title">Premier League</div>
   <div class="league-subtitle">England · 20 clubs · 2025-26</div>
   <div class="map-and-legend">
     <div class="map-wrap">
-      <svg viewBox="0 0 400 490" width="360" xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox="0 0 400 490" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <!-- England & Wales outline -->
         <path class="country-fill" d="M 195,18 L 226,77 L 303,148 L 318,244 L 387,277 L 371,364 L 348,400 L 278,408 L 242,409 L 202,416 L 171,424 L 115,445 L 5,467 L 37,440 L 87,377 L 145,366 L 144,354 L 95,345 L 45,341 L 59,307 L 90,258 L 71,246 L 56,202 L 101,210 L 119,211 L 141,171 L 150,152 L 132,148 L 113,114 L 144,87 L 195,18 Z"/>
-        <!-- Tourist regions -->
+        <!-- Regions -->
         <ellipse cx="290" cy="355" rx="44" ry="28" fill="rgba(140,140,140,0.09)" stroke="#ccc" stroke-width="0.7"/>
         <text x="290" y="358" text-anchor="middle" font-family="Arial" font-style="italic" font-size="9" fill="#aaa">London</text>
         <ellipse cx="133" cy="120" rx="30" ry="22" fill="rgba(140,140,140,0.09)" stroke="#ccc" stroke-width="0.7"/>
@@ -109,7 +291,6 @@ a:hover { text-decoration: underline; }
         <ellipse cx="32" cy="450" rx="22" ry="16" fill="rgba(140,140,140,0.09)" stroke="#ccc" stroke-width="0.7"/>
         <text x="32" y="453" text-anchor="middle" font-family="Arial" font-style="italic" font-size="9" fill="#aaa">Cornwall</text>
         <!-- Club dots -->
-        <!-- London cluster -->
         <circle class="club-dot" cx="292" cy="340" r="6" fill="#e07020" data-club="Arsenal" data-city="London (N)" data-owner="Kroenke Sports &amp; Entertainment" data-type="US" data-since="2011"/>
         <circle class="club-dot" cx="298" cy="344" r="6" fill="#e07020" data-club="Tottenham Hotspur" data-city="London (N)" data-owner="ENIC Group (Joe Lewis)" data-type="British" data-since="2001"/>
         <circle class="club-dot" cx="306" cy="352" r="6" fill="#e07020" data-club="West Ham United" data-city="London (E)" data-owner="Daniel Kretinsky (Czech)" data-type="European" data-since="2023"/>
@@ -117,21 +298,17 @@ a:hover { text-decoration: underline; }
         <circle class="club-dot" cx="282" cy="354" r="6" fill="#e07020" data-club="Chelsea" data-city="London (W)" data-owner="BlueCo (Boehly / Clearlake)" data-type="US" data-since="2022"/>
         <circle class="club-dot" cx="276" cy="358" r="6" fill="#e07020" data-club="Fulham" data-city="London (W)" data-owner="Shahid Khan" data-type="US" data-since="2013"/>
         <circle class="club-dot" cx="270" cy="352" r="6" fill="#1a7a3a" data-club="Brentford" data-city="London (W)" data-owner="Matthew Benham" data-type="British" data-since="2012"/>
-        <!-- South coast -->
         <circle class="club-dot" cx="293" cy="404" r="6" fill="#1a7a3a" data-club="Brighton &amp; Hove Albion" data-city="Brighton" data-owner="Tony Bloom" data-type="British" data-since="2009"/>
         <circle class="club-dot" cx="203" cy="414" r="6" fill="#e07020" data-club="AFC Bournemouth" data-city="Bournemouth" data-owner="Bill Foley / Bilue Sports" data-type="US" data-since="2022"/>
-        <!-- Midlands -->
         <circle class="club-dot" cx="201" cy="274" r="6" fill="#7b3fa6" data-club="Aston Villa" data-city="Birmingham" data-owner="NSWE (Sawiris / Edens)" data-type="Foreign" data-since="2018"/>
         <circle class="club-dot" cx="188" cy="268" r="6" fill="#7b3fa6" data-club="Wolverhampton Wanderers" data-city="Wolverhampton" data-owner="Fosun International" data-type="Asian" data-since="2016"/>
         <circle class="club-dot" cx="239" cy="241" r="6" fill="#7b3fa6" data-club="Nottingham Forest" data-city="Nottingham" data-owner="Evangelos Marinakis" data-type="European" data-since="2017"/>
         <circle class="club-dot" cx="217" cy="175" r="6" fill="#e07020" data-club="Leeds United" data-city="Leeds" data-owner="49ers Enterprises" data-type="US" data-since="2023"/>
-        <!-- NW England -->
         <circle class="club-dot" cx="143" cy="205" r="6" fill="#e07020" data-club="Liverpool" data-city="Liverpool" data-owner="Fenway Sports Group" data-type="US" data-since="2010"/>
         <circle class="club-dot" cx="149" cy="199" r="6" fill="#e07020" data-club="Everton" data-city="Liverpool" data-owner="Friedkin Group" data-type="US" data-since="2024"/>
         <circle class="club-dot" cx="182" cy="197" r="6" fill="#c0392b" data-club="Manchester City" data-city="Manchester" data-owner="Abu Dhabi United Group" data-type="Middle East" data-since="2008"/>
         <circle class="club-dot" cx="188" cy="203" r="6" fill="#e07020" data-club="Manchester United" data-city="Manchester" data-owner="Glazer Family (INEOS minority)" data-type="US" data-since="2005"/>
         <circle class="club-dot" cx="183" cy="173" r="6" fill="#e07020" data-club="Burnley" data-city="Burnley" data-owner="ALK Capital (Alan Pace)" data-type="US" data-since="2020"/>
-        <!-- NE England -->
         <circle class="club-dot" cx="214" cy="81" r="6" fill="#c0392b" data-club="Newcastle United" data-city="Newcastle" data-owner="Saudi Public Investment Fund" data-type="Middle East" data-since="2021"/>
         <circle class="club-dot" cx="226" cy="87" r="6" fill="#7b3fa6" data-club="Sunderland" data-city="Sunderland" data-owner="Kyril Louis-Dreyfus" data-type="European" data-since="2021"/>
       </svg>
@@ -145,7 +322,7 @@ a:hover { text-decoration: underline; }
       <div class="legend-item"><div class="legend-dot" style="background:#6b8cbb"></div> Member / fan-owned</div>
       <div class="legend-item"><div class="legend-dot" style="background:#555"></div> Corporate</div>
       <br>
-      <p style="font-size:11px;color:#999;line-height:1.5;">Hover or click a dot for club, owner and acquisition year. London has 7 clubs in close proximity.</p>
+      <p style="font-size:11px;color:#999;line-height:1.5;">Tap a dot for club, owner and acquisition year. London has 7 clubs in close proximity.</p>
     </div>
   </div>
   <div class="trends">
@@ -161,22 +338,21 @@ a:hover { text-decoration: underline; }
   </div>
 </section>
 
-<!-- LA LIGA -->
+<!-- ═══════════════════════════════════════════════
+     LA LIGA
+     ═══════════════════════════════════════════════ -->
 <section class="league-section" id="la-liga">
   <div class="league-title">La Liga</div>
   <div class="league-subtitle">Spain · 20 clubs · 2025-26</div>
   <div class="map-and-legend">
     <div class="map-wrap">
-      <svg viewBox="0 0 500 410" width="440" xmlns="http://www.w3.org/2000/svg">
-        <!-- Spain outline (mainland) -->
+      <svg viewBox="0 0 500 410" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <!-- Spain outline -->
         <path class="country-fill" d="M 58,15 L 161,15 L 276,32 L 460,82 L 380,141 L 355,220 L 261,359 L 147,385 L 72,345 L 94,99 L 58,15 Z"/>
-        <!-- Mallorca (island) -->
         <ellipse class="country-fill" cx="437" cy="219" rx="20" ry="10"/>
-        <!-- Canary Islands (Las Palmas - placeholder) -->
         <ellipse class="country-fill" cx="62" cy="390" rx="14" ry="7"/>
         <text x="62" y="404" text-anchor="middle" font-size="8" fill="#999">Canary Is.</text>
-
-        <!-- Tourist regions -->
+        <!-- Regions -->
         <ellipse cx="170" cy="337" rx="62" ry="30" fill="rgba(140,140,140,0.09)" stroke="#ccc" stroke-width="0.7"/>
         <text x="170" y="340" text-anchor="middle" font-family="Arial" font-style="italic" font-size="9" fill="#aaa">Andalusia</text>
         <ellipse cx="418" cy="120" rx="42" ry="30" fill="rgba(140,140,140,0.09)" stroke="#ccc" stroke-width="0.7"/>
@@ -184,33 +360,25 @@ a:hover { text-decoration: underline; }
         <ellipse cx="220" cy="180" rx="42" ry="30" fill="rgba(140,140,140,0.09)" stroke="#ccc" stroke-width="0.7"/>
         <text x="220" y="183" text-anchor="middle" font-family="Arial" font-style="italic" font-size="9" fill="#aaa">Madrid</text>
         <!-- Club dots -->
-        <!-- Madrid cluster -->
         <circle class="club-dot" cx="207" cy="173" r="6" fill="#6b8cbb" data-club="Real Madrid" data-city="Madrid" data-owner="Member-owned (socios)" data-type="Member" data-since="1902"/>
         <circle class="club-dot" cx="213" cy="180" r="6" fill="#7b3fa6" data-club="Atletico Madrid" data-city="Madrid" data-owner="Idan Ofer / Miguel Angel Gil" data-type="Foreign" data-since="2003"/>
         <circle class="club-dot" cx="201" cy="180" r="6" fill="#1a7a3a" data-club="Getafe CF" data-city="Getafe (Madrid)" data-owner="Angel Torres" data-type="Spanish" data-since="2004"/>
         <circle class="club-dot" cx="207" cy="186" r="6" fill="#1a7a3a" data-club="Rayo Vallecano" data-city="Madrid" data-owner="Raul Martin Presa" data-type="Spanish" data-since="2003"/>
-        <!-- North coast -->
         <circle class="club-dot" cx="234" cy="36" r="6" fill="#6b8cbb" data-club="Athletic Club Bilbao" data-city="Bilbao" data-owner="Member-owned (socios)" data-type="Member" data-since="1901"/>
         <circle class="club-dot" cx="269" cy="34" r="6" fill="#6b8cbb" data-club="Real Sociedad" data-city="San Sebastian" data-owner="Dispersed member shareholders" data-type="Member" data-since="1909"/>
         <circle class="club-dot" cx="243" cy="57" r="6" fill="#1a7a3a" data-club="Deportivo Alaves" data-city="Vitoria-Gasteiz" data-owner="Baskonia Group (Josean Querejeta)" data-type="Spanish" data-since="2020"/>
         <circle class="club-dot" cx="281" cy="58" r="6" fill="#6b8cbb" data-club="CA Osasuna" data-city="Pamplona" data-owner="Member-owned (socios)" data-type="Member" data-since="1920"/>
         <circle class="club-dot" cx="129" cy="32" r="6" fill="#e07020" data-club="Real Oviedo" data-city="Oviedo" data-owner="Asturias Football Group (US)" data-type="US" data-since="2013"/>
-        <!-- Barcelona / NE -->
         <circle class="club-dot" cx="419" cy="129" r="6" fill="#6b8cbb" data-club="FC Barcelona" data-city="Barcelona" data-owner="Member-owned (socios)" data-type="Member" data-since="1899"/>
         <circle class="club-dot" cx="443" cy="100" r="6" fill="#c0392b" data-club="Girona FC" data-city="Girona" data-owner="City Football Group" data-type="MCO" data-since="2017"/>
-        <!-- East coast / Valencia -->
         <circle class="club-dot" cx="338" cy="200" r="6" fill="#1a7a3a" data-club="Villarreal CF" data-city="Villarreal" data-owner="Fernando Roig family" data-type="Spanish" data-since="1997"/>
         <circle class="club-dot" cx="350" cy="218" r="6" fill="#7b3fa6" data-club="Valencia CF" data-city="Valencia" data-owner="Meriton Holdings (Peter Lim)" data-type="Asian" data-since="2014"/>
         <circle class="club-dot" cx="356" cy="225" r="6" fill="#1a7a3a" data-club="Levante UD" data-city="Valencia" data-owner="Jose Danvila" data-type="Spanish" data-since="2024"/>
         <circle class="club-dot" cx="316" cy="282" r="6" fill="#7b3fa6" data-club="Elche CF" data-city="Elche" data-owner="Christian Bragarnik" data-type="Foreign" data-since="2020"/>
-        <!-- South -->
         <circle class="club-dot" cx="121" cy="325" r="6" fill="#1a7a3a" data-club="Real Betis" data-city="Seville" data-owner="Dispersed shareholders" data-type="Spanish" data-since="2010"/>
         <circle class="club-dot" cx="129" cy="331" r="6" fill="#1a7a3a" data-club="Sevilla FC" data-city="Seville" data-owner="Jose Castro / dispersed" data-type="Spanish" data-since="2013"/>
-        <!-- NW -->
         <circle class="club-dot" cx="25" cy="88" r="6" fill="#1a7a3a" data-club="RC Celta de Vigo" data-city="Vigo" data-owner="Carlos Mourino family" data-type="Spanish" data-since="2006"/>
-        <!-- Mallorca -->
         <circle class="club-dot" cx="437" cy="219" r="6" fill="#e07020" data-club="RCD Mallorca" data-city="Palma" data-owner="Andy Kohlberg (US group)" data-type="US" data-since="2016"/>
-        <!-- Las Palmas -->
         <circle class="club-dot" cx="62" cy="390" r="6" fill="#1a7a3a" data-club="UD Las Palmas" data-city="Las Palmas (Canary Is.)" data-owner="Miguel Angel Ramirez" data-type="Spanish" data-since="2008"/>
       </svg>
     </div>
@@ -222,7 +390,7 @@ a:hover { text-decoration: underline; }
       <div class="legend-item"><div class="legend-dot" style="background:#c0392b"></div> MCO / sovereign</div>
       <div class="legend-item"><div class="legend-dot" style="background:#7b3fa6"></div> Other foreign</div>
       <br>
-      <p style="font-size:11px;color:#999;line-height:1.5;">Madrid cluster: 4 clubs within a 15km radius. Hover each dot for detail.</p>
+      <p style="font-size:11px;color:#999;line-height:1.5;">Madrid cluster: 4 clubs within a 15km radius. Tap each dot for detail.</p>
     </div>
   </div>
   <div class="trends">
@@ -238,16 +406,18 @@ a:hover { text-decoration: underline; }
   </div>
 </section>
 
-<!-- BUNDESLIGA -->
+<!-- ═══════════════════════════════════════════════
+     BUNDESLIGA
+     ═══════════════════════════════════════════════ -->
 <section class="league-section" id="bundesliga">
   <div class="league-title">Bundesliga</div>
   <div class="league-subtitle">Germany · 18 clubs · 2025-26</div>
   <div class="map-and-legend">
     <div class="map-wrap">
-      <svg viewBox="0 0 400 490" width="360" xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox="0 0 400 490" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <!-- Germany outline -->
         <path class="country-fill" d="M 3,160 L 26,86 L 114,18 L 158,18 L 178,43 L 334,37 L 373,62 L 389,92 L 399,203 L 313,302 L 334,466 L 75,466 L 9,374 L 4,264 L 3,160 Z"/>
-        <!-- Tourist regions -->
+        <!-- Regions -->
         <ellipse cx="242" cy="422" rx="56" ry="34" fill="rgba(140,140,140,0.09)" stroke="#ccc" stroke-width="0.7"/>
         <text x="242" y="425" text-anchor="middle" font-family="Arial" font-style="italic" font-size="9" fill="#aaa">Bavaria</text>
         <ellipse cx="50" cy="255" rx="36" ry="28" fill="rgba(140,140,140,0.09)" stroke="#ccc" stroke-width="0.7"/>
@@ -255,39 +425,23 @@ a:hover { text-decoration: underline; }
         <ellipse cx="330" cy="163" rx="38" ry="28" fill="rgba(140,140,140,0.09)" stroke="#ccc" stroke-width="0.7"/>
         <text x="330" y="166" text-anchor="middle" font-family="Arial" font-style="italic" font-size="9" fill="#aaa">Berlin</text>
         <!-- Club dots -->
-        <!-- Munich -->
         <circle class="club-dot" cx="252" cy="423" r="6" fill="#6b8cbb" data-club="FC Bayern Munich" data-city="Munich" data-owner="Member-owned (e.V.)" data-type="Member" data-since="1900"/>
-        <!-- Leverkusen / Cologne -->
         <circle class="club-dot" cx="48" cy="250" r="6" fill="#555" data-club="Bayer 04 Leverkusen" data-city="Leverkusen" data-owner="Bayer AG (corporate exception)" data-type="Corporate" data-since="1904"/>
         <circle class="club-dot" cx="43" cy="257" r="6" fill="#6b8cbb" data-club="1. FC Koln" data-city="Cologne" data-owner="Member-owned (e.V.)" data-type="Member" data-since="1948"/>
-        <!-- Dortmund / Bochum -->
         <circle class="club-dot" cx="68" cy="222" r="6" fill="#6b8cbb" data-club="Borussia Dortmund" data-city="Dortmund" data-owner="Publicly listed (e.V. + KGaA)" data-type="Member" data-since="2000"/>
-        <!-- Leipzig -->
         <circle class="club-dot" cx="284" cy="231" r="6" fill="#555" data-club="RB Leipzig" data-city="Leipzig" data-owner="Red Bull GmbH (Austria)" data-type="Corporate" data-since="2009"/>
-        <!-- Stuttgart -->
         <circle class="club-dot" cx="146" cy="388" r="6" fill="#6b8cbb" data-club="VfB Stuttgart" data-city="Stuttgart" data-owner="Member-owned (e.V.)" data-type="Member" data-since="1893"/>
-        <!-- Frankfurt -->
         <circle class="club-dot" cx="121" cy="310" r="6" fill="#6b8cbb" data-club="Eintracht Frankfurt" data-city="Frankfurt" data-owner="Member-owned (e.V.)" data-type="Member" data-since="1899"/>
-        <!-- Freiburg -->
         <circle class="club-dot" cx="88" cy="438" r="6" fill="#6b8cbb" data-club="SC Freiburg" data-city="Freiburg" data-owner="Member-owned (e.V.)" data-type="Member" data-since="1904"/>
-        <!-- Monchengladbach -->
         <circle class="club-dot" cx="22" cy="242" r="6" fill="#6b8cbb" data-club="Borussia Monchengladbach" data-city="Monchengladbach" data-owner="Member-owned (e.V.)" data-type="Member" data-since="1900"/>
-        <!-- Wolfsburg -->
         <circle class="club-dot" cx="215" cy="164" r="6" fill="#555" data-club="VfL Wolfsburg" data-city="Wolfsburg" data-owner="Volkswagen AG (corporate exception)" data-type="Corporate" data-since="1945"/>
-        <!-- Union Berlin -->
         <circle class="club-dot" cx="337" cy="163" r="6" fill="#6b8cbb" data-club="1. FC Union Berlin" data-city="Berlin" data-owner="Member-owned (e.V.)" data-type="Member" data-since="1906"/>
-        <!-- Hoffenheim -->
         <circle class="club-dot" cx="131" cy="359" r="6" fill="#6b8cbb" data-club="TSG 1899 Hoffenheim" data-city="Sinsheim" data-owner="Member-owned (returned 50+1, Nov 2024)" data-type="Member" data-since="2024"/>
-        <!-- Mainz -->
         <circle class="club-dot" cx="105" cy="315" r="6" fill="#6b8cbb" data-club="FSV Mainz 05" data-city="Mainz" data-owner="Member-owned (e.V.)" data-type="Member" data-since="1905"/>
-        <!-- Augsburg -->
         <circle class="club-dot" cx="220" cy="417" r="6" fill="#6b8cbb" data-club="FC Augsburg" data-city="Augsburg" data-owner="Member-owned (e.V.)" data-type="Member" data-since="1907"/>
-        <!-- Bremen -->
         <circle class="club-dot" cx="129" cy="124" r="6" fill="#6b8cbb" data-club="SV Werder Bremen" data-city="Bremen" data-owner="Member-owned (e.V.)" data-type="Member" data-since="1899"/>
-        <!-- Hamburg (two clubs) -->
         <circle class="club-dot" cx="181" cy="95" r="6" fill="#6b8cbb" data-club="Hamburger SV" data-city="Hamburg" data-owner="Member-owned (e.V.)" data-type="Member" data-since="1887"/>
         <circle class="club-dot" cx="175" cy="101" r="6" fill="#6b8cbb" data-club="FC St. Pauli" data-city="Hamburg" data-owner="Member-owned (e.V.)" data-type="Member" data-since="1910"/>
-        <!-- Heidenheim -->
         <circle class="club-dot" cx="187" cy="395" r="6" fill="#6b8cbb" data-club="1. FC Heidenheim" data-city="Heidenheim" data-owner="Member-owned (e.V.)" data-type="Member" data-since="1846"/>
       </svg>
     </div>
@@ -311,19 +465,19 @@ a:hover { text-decoration: underline; }
   </div>
 </section>
 
-<!-- LIGUE 1 -->
+<!-- ═══════════════════════════════════════════════
+     LIGUE 1
+     ═══════════════════════════════════════════════ -->
 <section class="league-section" id="ligue-1">
   <div class="league-title">Ligue 1</div>
   <div class="league-subtitle">France · 18 clubs · 2025-26</div>
   <div class="map-and-legend">
     <div class="map-wrap">
-      <svg viewBox="0 0 450 510" width="400" xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox="0 0 450 510" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <!-- France outline -->
         <path class="country-fill" d="M 109,74 L 246,3 L 375,71 L 426,179 L 423,375 L 268,439 L 104,395 L 129,263 L 11,138 L 109,74 Z"/>
-        <!-- Monaco (small) -->
         <circle cx="421" cy="376" r="7" fill="#e8f0f8" stroke="#bbb" stroke-width="1"/>
-
-        <!-- Tourist regions -->
+        <!-- Regions -->
         <ellipse cx="247" cy="113" rx="36" ry="26" fill="rgba(140,140,140,0.09)" stroke="#ccc" stroke-width="0.7"/>
         <text x="247" y="116" text-anchor="middle" font-family="Arial" font-style="italic" font-size="9" fill="#aaa">Paris</text>
         <ellipse cx="372" cy="393" rx="52" ry="32" fill="rgba(140,140,140,0.09)" stroke="#ccc" stroke-width="0.7"/>
@@ -331,30 +485,23 @@ a:hover { text-decoration: underline; }
         <ellipse cx="178" cy="193" rx="48" ry="30" fill="rgba(140,140,140,0.09)" stroke="#ccc" stroke-width="0.7"/>
         <text x="178" y="196" text-anchor="middle" font-family="Arial" font-style="italic" font-size="9" fill="#aaa">Loire Valley</text>
         <!-- Club dots -->
-        <!-- Paris cluster -->
         <circle class="club-dot" cx="245" cy="112" r="6" fill="#c0392b" data-club="Paris Saint-Germain" data-city="Paris" data-owner="Qatar Sports Investments (QSI)" data-type="Middle East" data-since="2011"/>
         <circle class="club-dot" cx="251" cy="118" r="6" fill="#1a7a3a" data-club="Paris FC" data-city="Paris" data-owner="Arnault family (LVMH)" data-type="French" data-since="2024"/>
-        <!-- North -->
         <circle class="club-dot" cx="270" cy="24" r="6" fill="#7b3fa6" data-club="LOSC Lille" data-city="Lille" data-owner="Merlyn Partners (London PE)" data-type="European" data-since="2020"/>
         <circle class="club-dot" cx="262" cy="33" r="6" fill="#1a7a3a" data-club="RC Lens" data-city="Lens" data-owner="Joseph Oughourlian" data-type="French" data-since="2011"/>
-        <!-- West (Brittany) -->
         <circle class="club-dot" cx="11" cy="138" r="6" fill="#1a7a3a" data-club="Stade Brestois 29" data-city="Brest" data-owner="Denis Le Saint family" data-type="French" data-since="1998"/>
         <circle class="club-dot" cx="49" cy="171" r="6" fill="#1a7a3a" data-club="FC Lorient" data-city="Lorient" data-owner="Jean-Francois Le Bel" data-type="French" data-since="2017"/>
         <circle class="club-dot" cx="106" cy="153" r="6" fill="#1a7a3a" data-club="Stade Rennais" data-city="Rennes" data-owner="Pinault family (Artemis)" data-type="French" data-since="1998"/>
         <circle class="club-dot" cx="113" cy="197" r="6" fill="#1a7a3a" data-club="FC Nantes" data-city="Nantes" data-owner="Waldemar Kita" data-type="French" data-since="2007"/>
-        <!-- NE / East -->
         <circle class="club-dot" cx="303" cy="94" r="6" fill="#1a7a3a" data-club="Stade de Reims" data-city="Reims" data-owner="Jean-Pierre Caillot" data-type="French" data-since="2011"/>
         <circle class="club-dot" cx="377" cy="101" r="6" fill="#7b3fa6" data-club="FC Metz" data-city="Metz" data-owner="Bernard Serin" data-type="French" data-since="2018"/>
         <circle class="club-dot" cx="431" cy="129" r="6" fill="#e07020" data-club="RC Strasbourg" data-city="Strasbourg" data-owner="BlueCo (Todd Boehly)" data-type="US" data-since="2023"/>
-        <!-- Lyon / Central-East -->
         <circle class="club-dot" cx="331" cy="273" r="6" fill="#e07020" data-club="Olympique Lyonnais" data-city="Lyon" data-owner="Eagle Football (John Textor)" data-type="US" data-since="2022"/>
-        <!-- South -->
         <circle class="club-dot" cx="350" cy="398" r="6" fill="#e07020" data-club="Olympique de Marseille" data-city="Marseille" data-owner="Frank McCourt" data-type="US" data-since="2016"/>
         <circle class="club-dot" cx="421" cy="376" r="6" fill="#7b3fa6" data-club="AS Monaco" data-city="Monaco" data-owner="Dmitry Rybolovlev" data-type="European" data-since="2011"/>
         <circle class="club-dot" cx="414" cy="378" r="6" fill="#1a7a3a" data-club="OGC Nice" data-city="Nice" data-owner="INEOS (Jim Ratcliffe)" data-type="British" data-since="2019"/>
         <circle class="club-dot" cx="298" cy="382" r="6" fill="#1a7a3a" data-club="Montpellier HSC" data-city="Montpellier" data-owner="Laurent Nicollin family" data-type="French" data-since="1974"/>
         <circle class="club-dot" cx="215" cy="383" r="6" fill="#e07020" data-club="Toulouse FC" data-city="Toulouse" data-owner="RedBird Capital" data-type="US" data-since="2020"/>
-        <!-- Central -->
         <circle class="club-dot" cx="288" cy="169" r="6" fill="#1a7a3a" data-club="AJ Auxerre" data-city="Auxerre" data-owner="Guy Cotret" data-type="French" data-since="2012"/>
       </svg>
     </div>
@@ -380,16 +527,18 @@ a:hover { text-decoration: underline; }
   </div>
 </section>
 
-<!-- EREDIVISIE -->
+<!-- ═══════════════════════════════════════════════
+     EREDIVISIE
+     ═══════════════════════════════════════════════ -->
 <section class="league-section" id="eredivisie">
   <div class="league-title">Eredivisie</div>
   <div class="league-subtitle">Netherlands · 18 clubs · 2025-26</div>
   <div class="map-and-legend">
     <div class="map-wrap">
-      <svg viewBox="0 0 350 410" width="320" xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox="0 0 350 410" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <!-- Netherlands outline -->
         <path class="country-fill" d="M 126,84 L 130,39 L 322,31 L 337,50 L 337,179 L 246,321 L 14,329 L 20,301 L 69,221 L 126,84 Z"/>
-        <!-- Tourist regions -->
+        <!-- Regions -->
         <ellipse cx="143" cy="165" rx="28" ry="20" fill="rgba(140,140,140,0.09)" stroke="#ccc" stroke-width="0.7"/>
         <text x="143" y="168" text-anchor="middle" font-family="Arial" font-style="italic" font-size="9" fill="#aaa">Amsterdam</text>
         <ellipse cx="95" cy="208" rx="26" ry="18" fill="rgba(140,140,140,0.09)" stroke="#ccc" stroke-width="0.7"/>
@@ -397,40 +546,23 @@ a:hover { text-decoration: underline; }
         <ellipse cx="218" cy="352" rx="24" ry="18" fill="rgba(140,140,140,0.09)" stroke="#ccc" stroke-width="0.7"/>
         <text x="218" y="355" text-anchor="middle" font-family="Arial" font-style="italic" font-size="9" fill="#aaa">Maastricht</text>
         <!-- Club dots -->
-        <!-- Amsterdam -->
         <circle class="club-dot" cx="143" cy="173" r="6" fill="#6b8cbb" data-club="AFC Ajax" data-city="Amsterdam" data-owner="Member-owned / publicly listed" data-type="Member" data-since="1900"/>
-        <!-- Rotterdam cluster -->
         <circle class="club-dot" cx="105" cy="237" r="6" fill="#6b8cbb" data-club="Feyenoord" data-city="Rotterdam" data-owner="Member-owned" data-type="Member" data-since="1908"/>
         <circle class="club-dot" cx="101" cy="231" r="6" fill="#6b8cbb" data-club="Sparta Rotterdam" data-city="Rotterdam" data-owner="Member-owned" data-type="Member" data-since="1888"/>
-        <!-- Eindhoven -->
         <circle class="club-dot" cx="190" cy="302" r="6" fill="#6b8cbb" data-club="PSV Eindhoven" data-city="Eindhoven" data-owner="PSV Foundation (Philips legacy)" data-type="Member" data-since="1913"/>
-        <!-- Alkmaar -->
         <circle class="club-dot" cx="126" cy="131" r="6" fill="#6b8cbb" data-club="AZ Alkmaar" data-city="Alkmaar" data-owner="Foundation / trust structure" data-type="Member" data-since="2009"/>
-        <!-- Utrecht -->
         <circle class="club-dot" cx="160" cy="210" r="6" fill="#1a7a3a" data-club="FC Utrecht" data-city="Utrecht" data-owner="Frans van Seumeren family" data-type="Dutch" data-since="2003"/>
-        <!-- Enschede -->
         <circle class="club-dot" cx="318" cy="190" r="6" fill="#1a7a3a" data-club="FC Twente" data-city="Enschede" data-owner="Member-owned" data-type="Member" data-since="1965"/>
-        <!-- Nijmegen -->
         <circle class="club-dot" cx="226" cy="244" r="6" fill="#1a7a3a" data-club="NEC Nijmegen" data-city="Nijmegen" data-owner="Member-owned" data-type="Member" data-since="1900"/>
-        <!-- Heerenveen -->
         <circle class="club-dot" cx="231" cy="84" r="6" fill="#1a7a3a" data-club="SC Heerenveen" data-city="Heerenveen" data-owner="Member-owned" data-type="Member" data-since="1920"/>
-        <!-- Groningen -->
         <circle class="club-dot" cx="289" cy="47" r="6" fill="#1a7a3a" data-club="FC Groningen" data-city="Groningen" data-owner="Member-owned" data-type="Member" data-since="1971"/>
-        <!-- Deventer -->
         <circle class="club-dot" cx="252" cy="186" r="6" fill="#1a7a3a" data-club="Go Ahead Eagles" data-city="Deventer" data-owner="Member-owned" data-type="Member" data-since="1902"/>
-        <!-- Waalwijk -->
         <circle class="club-dot" cx="154" cy="267" r="6" fill="#6b8cbb" data-club="RKC Waalwijk" data-city="Waalwijk" data-owner="Foundation" data-type="Member" data-since="1940"/>
-        <!-- Almelo -->
         <circle class="club-dot" cx="296" cy="169" r="6" fill="#1a7a3a" data-club="Heracles Almelo" data-city="Almelo" data-owner="Member-owned / Erik Reijnen" data-type="Dutch" data-since="2016"/>
-        <!-- Almere -->
         <circle class="club-dot" cx="168" cy="167" r="6" fill="#7b3fa6" data-club="Almere City FC" data-city="Almere" data-owner="Yanmar (Japan)" data-type="Asian" data-since="2022"/>
-        <!-- Breda -->
         <circle class="club-dot" cx="128" cy="280" r="6" fill="#1a7a3a" data-club="NAC Breda" data-city="Breda" data-owner="Member-owned" data-type="Member" data-since="1912"/>
-        <!-- Zwolle -->
         <circle class="club-dot" cx="246" cy="149" r="6" fill="#1a7a3a" data-club="PEC Zwolle" data-city="Zwolle" data-owner="Member-owned" data-type="Member" data-since="1910"/>
-        <!-- Sittard -->
         <circle class="club-dot" cx="226" cy="364" r="6" fill="#7b3fa6" data-club="Fortuna Sittard" data-city="Sittard" data-owner="Choi Soon-Ho (South Korea)" data-type="Asian" data-since="2018"/>
-        <!-- Volendam -->
         <circle class="club-dot" cx="154" cy="150" r="6" fill="#6b8cbb" data-club="FC Volendam" data-city="Volendam" data-owner="Member-owned" data-type="Member" data-since="1920"/>
       </svg>
     </div>
@@ -455,50 +587,151 @@ a:hover { text-decoration: underline; }
   </div>
 </section>
 
-<footer style="padding:24px 32px;border-top:1px solid #ddd;font-size:11px;color:#999;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+<footer>
   <span>SportsCapital Intel · European Leagues · 2025-26</span>
   <span>Sources: Wikipedia, Transfermarkt, OneFootball, Football Benchmark, LawInSport, France24</span>
 </footer>
 
 <script>
-const tooltip = document.getElementById('tooltip');
-const ttName = document.getElementById('tt-name');
-const ttCity = document.getElementById('tt-city');
-const ttOwner = document.getElementById('tt-owner');
-const ttSince = document.getElementById('tt-since');
+(function () {
+  'use strict';
 
-function showTip(e) {
-  const d = e.currentTarget.dataset;
-  ttName.textContent = d.club;
-  ttCity.textContent = d.city;
-  ttOwner.textContent = 'Owner: ' + d.owner;
-  ttSince.textContent = 'Since: ' + d.since;
-  tooltip.style.opacity = '1';
-  moveTip(e);
-}
+  /* ── Detect touch/pointer type ────────────────────────────── */
+  const isTouch = window.matchMedia('(pointer: coarse)').matches;
 
-function moveTip(e) {
-  const x = e.clientX + 14;
-  const y = e.clientY - 10;
-  const tw = tooltip.offsetWidth;
-  const th = tooltip.offsetHeight;
-  tooltip.style.left = (x + tw > window.innerWidth ? x - tw - 28 : x) + 'px';
-  tooltip.style.top = (y + th > window.innerHeight ? y - th : y) + 'px';
-}
+  /* ── Desktop tooltip ──────────────────────────────────────── */
+  const tooltip  = document.getElementById('tooltip');
+  const ttName   = document.getElementById('tt-name');
+  const ttCity   = document.getElementById('tt-city');
+  const ttOwner  = document.getElementById('tt-owner');
+  const ttSince  = document.getElementById('tt-since');
 
-function hideTip() {
-  tooltip.style.opacity = '0';
-}
+  /* ── Mobile panel ─────────────────────────────────────────── */
+  const panel    = document.getElementById('mobile-panel');
+  const overlay  = document.getElementById('mp-overlay');
+  const mpClose  = document.getElementById('mp-close');
+  const mpName   = document.getElementById('mp-name');
+  const mpCity   = document.getElementById('mp-city');
+  const mpOwner  = document.getElementById('mp-owner');
+  const mpSince  = document.getElementById('mp-since');
 
-document.querySelectorAll('.club-dot').forEach(dot => {
-  dot.addEventListener('mouseenter', showTip);
-  dot.addEventListener('mousemove', moveTip);
-  dot.addEventListener('mouseleave', hideTip);
-  dot.addEventListener('click', function(e) {
-    tooltip.style.opacity = tooltip.style.opacity === '1' ? '0' : '1';
-    if (tooltip.style.opacity === '1') showTip(e);
+  function openMobilePanel(d) {
+    mpName.textContent  = d.club;
+    mpCity.textContent  = d.city;
+    mpOwner.textContent = 'Owner: ' + d.owner;
+    mpSince.textContent = 'Since: ' + d.since;
+    panel.classList.add('active');
+    overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeMobilePanel() {
+    panel.classList.remove('active');
+    overlay.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  mpClose.addEventListener('click', closeMobilePanel);
+  overlay.addEventListener('click', closeMobilePanel);
+
+  /* ── Desktop tooltip helpers ──────────────────────────────── */
+  function showTip(e) {
+    const d = e.currentTarget.dataset;
+    ttName.textContent  = d.club;
+    ttCity.textContent  = d.city;
+    ttOwner.textContent = 'Owner: ' + d.owner;
+    ttSince.textContent = 'Since: ' + d.since;
+    tooltip.style.opacity = '1';
+    moveTip(e);
+  }
+
+  function moveTip(e) {
+    const x  = e.clientX + 14;
+    const y  = e.clientY - 10;
+    const tw = tooltip.offsetWidth;
+    const th = tooltip.offsetHeight;
+    tooltip.style.left = (x + tw > window.innerWidth  ? x - tw - 28 : x) + 'px';
+    tooltip.style.top  = (y + th > window.innerHeight ? y - th      : y) + 'px';
+  }
+
+  function hideTip() {
+    tooltip.style.opacity = '0';
+  }
+
+  /* ── Inject larger touch targets + wire events ────────────── */
+  const HIT_R = 18; // invisible hit-circle radius in SVG user units
+
+  document.querySelectorAll('.club-dot').forEach(function (dot) {
+    const svg = dot.closest('svg');
+
+    /* --- Create invisible hit circle ---- */
+    const hit = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    hit.setAttribute('cx', dot.getAttribute('cx'));
+    hit.setAttribute('cy', dot.getAttribute('cy'));
+    hit.setAttribute('r',  HIT_R);
+    hit.setAttribute('fill', 'transparent');
+    hit.classList.add('club-hit');
+
+    /* Copy dataset */
+    Object.keys(dot.dataset).forEach(function (k) {
+      hit.dataset[k] = dot.dataset[k];
+    });
+
+    /* Insert hit circle AFTER the visible dot (higher z in SVG) */
+    dot.parentNode.insertBefore(hit, dot.nextSibling);
+
+    /* --- Wire events to BOTH visible dot and hit circle ---- */
+    [dot, hit].forEach(function (el) {
+      if (!isTouch) {
+        el.addEventListener('mouseenter', showTip);
+        el.addEventListener('mousemove',  moveTip);
+        el.addEventListener('mouseleave', hideTip);
+      }
+
+      el.addEventListener('click', function (e) {
+        e.stopPropagation();
+        if (isTouch) {
+          openMobilePanel(el.dataset);
+        } else {
+          if (tooltip.style.opacity === '1') {
+            hideTip();
+          } else {
+            showTip(e);
+          }
+        }
+      });
+
+      /* Touch: show panel immediately on touchend without waiting for click */
+      if (isTouch) {
+        el.addEventListener('touchend', function (e) {
+          e.preventDefault(); // prevent ghost click
+          openMobilePanel(el.dataset);
+        }, { passive: false });
+      }
+    });
   });
-});
+
+  /* ── Close tooltip on outside click (desktop) ────────────── */
+  if (!isTouch) {
+    document.addEventListener('click', hideTip);
+  }
+
+  /* ── Keyboard: close panel on Escape ─────────────────────── */
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeMobilePanel();
+  });
+
+  /* ── Smooth scroll for TOC links ─────────────────────────── */
+  document.querySelectorAll('.toc a').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+})();
 </script>
 </body>
 </html>
