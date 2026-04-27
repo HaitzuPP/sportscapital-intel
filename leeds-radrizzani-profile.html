@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leeds United — Radrizzani Era Profile · SportsCapital Intel</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Arial, sans-serif; background: #fff; color: #1a1a1a; -webkit-font-smoothing: antialiased; }
+a { color: #1a7a3a; text-decoration: none; }
+a:hover { text-decoration: underline; }
+.page { max-width: 860px; margin: 0 auto; padding: 48px 36px 64px; }
+
+/* ── Header ───────────────────────────────────────── */
+.site-header { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1.5px solid #1a1a1a; padding-bottom: 16px; margin-bottom: 28px; }
+.logo { font-size: 20px; font-weight: 800; color: #000; letter-spacing: -0.5px; }
+.logo span { color: #1a7a3a; }
+.back-link { font-size: 12px; color: #999; }
+.back-link a { color: #999; }
+.back-link a:hover { color: #1a7a3a; }
+
+/* ── Club masthead ────────────────────────────────── */
+.masthead { margin-bottom: 32px; }
+.masthead-top { display: flex; align-items: flex-start; gap: 20px; margin-bottom: 12px; }
+.club-badge {
+  flex-shrink: 0; width: 56px; height: 56px;
+  background: #1a3060; display: flex; align-items: center;
+  justify-content: center;
+}
+.club-badge svg { width: 48px; height: 48px; }
+.masthead-text h1 { font-size: 26px; font-weight: 800; color: #000; line-height: 1.2; letter-spacing: -0.4px; }
+.masthead-text .subtitle { font-size: 13.5px; color: #555; margin-top: 5px; line-height: 1.5; }
+.tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+.tag {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.6px;
+  text-transform: uppercase; padding: 3px 10px;
+}
+.tag-sold { background: rgba(153,153,153,0.12); color: #666; }
+.tag-league { background: rgba(26,122,58,0.09); color: #1a7a3a; }
+.tag-focus { background: rgba(192,57,43,0.09); color: #c0392b; }
+
+/* ── Stats bar ────────────────────────────────────── */
+.stats { display: flex; border: 1.5px solid #ddd; margin-bottom: 36px; }
+.stat { flex: 1; padding: 14px 16px; text-align: center; border-right: 1px solid #ddd; }
+.stat:last-child { border-right: none; }
+.stat-label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #999; margin-bottom: 6px; }
+.stat-val { font-size: 19px; font-weight: 800; color: #1a1a1a; }
+.stat-val.red { color: #c0392b; }
+.stat-val.green { color: #1a7a3a; }
+.stat-sub { font-size: 10px; color: #aaa; margin-top: 3px; }
+
+/* ── Section structure ────────────────────────────── */
+.section-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #888; margin-bottom: 14px; }
+.section-divider { border: none; border-top: 1px solid #e8e8e8; margin: 40px 0 32px; }
+
+/* ── Narrative body ───────────────────────────────── */
+.narrative p { font-size: 13.5px; line-height: 1.75; color: #1a1a1a; margin-bottom: 16px; }
+.narrative p:last-child { margin-bottom: 0; }
+
+/* ── Timeline ─────────────────────────────────────── */
+.timeline { border-left: 2px solid #e8e8e8; padding-left: 24px; margin-top: 4px; }
+.tl-item { position: relative; margin-bottom: 22px; }
+.tl-item:last-child { margin-bottom: 0; }
+.tl-dot {
+  position: absolute; left: -33px; top: 4px;
+  width: 10px; height: 10px; border-radius: 50%;
+  background: #ddd; border: 2px solid #fff;
+  box-shadow: 0 0 0 1px #ddd;
+}
+.tl-dot.green { background: #1a7a3a; box-shadow: 0 0 0 1px #1a7a3a; }
+.tl-dot.red   { background: #c0392b; box-shadow: 0 0 0 1px #c0392b; }
+.tl-dot.grey  { background: #999;    box-shadow: 0 0 0 1px #999; }
+.tl-year { font-size: 11px; font-weight: 700; color: #999; letter-spacing: 0.5px; margin-bottom: 3px; }
+.tl-title { font-size: 13.5px; font-weight: 700; color: #000; margin-bottom: 4px; }
+.tl-body { font-size: 13px; color: #444; line-height: 1.65; }
+
+/* ── Data table ───────────────────────────────────── */
+.data-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 4px; }
+.data-table thead th {
+  font-size: 10px; font-weight: 700; letter-spacing: 1.2px;
+  text-transform: uppercase; color: #999; padding: 7px 10px 9px 0;
+  border-bottom: 1.5px solid #ddd; text-align: left;
+}
+.data-table tbody td { padding: 11px 10px 11px 0; border-bottom: 1px solid #f0f0f0; vertical-align: top; }
+.data-table tbody tr:last-child td { border-bottom: none; }
+.td-yr { font-weight: 700; color: #000; white-space: nowrap; }
+.td-note { color: #555; line-height: 1.55; }
+.td-signal { font-weight: 700; }
+.td-signal.green { color: #1a7a3a; }
+.td-signal.red   { color: #c0392b; }
+
+/* ── Signal cards ─────────────────────────────────── */
+.signal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 4px; }
+.signal-card { border: 1.5px solid #ddd; padding: 16px; }
+.sc-head { font-size: 11px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 8px; }
+.sc-head.green { color: #1a7a3a; }
+.sc-head.red   { color: #c0392b; }
+.sc-body { font-size: 12.5px; color: #444; line-height: 1.6; }
+.sc-body li { margin-bottom: 5px; padding-left: 12px; position: relative; list-style: none; }
+.sc-body li:before { content: "–"; position: absolute; left: 0; color: #bbb; }
+
+/* ── Pull quote ───────────────────────────────────── */
+.pull-quote { border-left: 3px solid #1a1a1a; padding: 4px 20px; margin: 28px 0; }
+.pull-quote p { font-size: 15px; font-weight: 700; color: #000; line-height: 1.5; font-style: italic; }
+.pull-quote cite { font-size: 11px; color: #999; font-style: normal; display: block; margin-top: 8px; }
+
+/* ── Brand / footer ───────────────────────────────── */
+.brand { text-align: right; font-size: 11px; color: #aaa; margin-top: 52px; letter-spacing: 1px; }
+
+/* ── Responsive ───────────────────────────────────── */
+@media (max-width: 640px) {
+  .page { padding: 28px 18px 48px; }
+  .masthead-top { gap: 14px; }
+  .masthead-text h1 { font-size: 20px; }
+  .stats { flex-wrap: wrap; }
+  .stat { flex: 1 1 40%; border-bottom: 1px solid #ddd; }
+  .stat:nth-child(2n) { border-right: none; }
+  .stat:nth-last-child(-n+2) { border-bottom: none; }
+  .stat-val { font-size: 16px; }
+  .signal-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ── Site header ──────────────────────────────── -->
+  <div class="site-header">
+    <div class="logo">PYLON <span>INTELLIGENCE</span></div>
+    <div class="back-link"><a href="index.html">← SportsCapital Intel</a></div>
+  </div>
+
+  <!-- ── Club masthead ────────────────────────────── -->
+  <div class="masthead">
+    <div class="masthead-top">
+      <div class="club-badge">
+        <!-- Leeds United crest placeholder (LUFC white owl shape) -->
+        <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+          <rect x="1" y="1" width="46" height="46" fill="#1a3060" stroke="#fff" stroke-width="0.8"/>
+          <!-- Simplified owl / shield -->
+          <text x="24" y="20" text-anchor="middle" font-family="Arial" font-size="8" font-weight="800" fill="#fff">LEEDS</text>
+          <text x="24" y="30" text-anchor="middle" font-family="Arial" font-size="8" font-weight="800" fill="#fff">UNITED</text>
+          <text x="24" y="42" text-anchor="middle" font-family="Arial" font-size="6" font-weight="400" fill="#ffd700">MOT</text>
+        </svg>
+      </div>
+      <div class="masthead-text">
+        <h1>Leeds United: The Radrizzani Era</h1>
+        <div class="subtitle">An Italian media mogul's six-year bet on Premier League broadcast economics — the Bielsa effect, the £400m paper valuation that became £170m, and what it means for the asset class.</div>
+        <div class="tags">
+          <span class="tag tag-sold">Exited 2023</span>
+          <span class="tag tag-league">Championship</span>
+          <span class="tag tag-focus">Case Study</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Stats bar ────────────────────────────────── -->
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-label">Acquisition</div>
+      <div class="stat-val">~£45m</div>
+      <div class="stat-sub">50% stake, Jan 2017</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Peak Agreed Value</div>
+      <div class="stat-val green">£400m+</div>
+      <div class="stat-sub">Pre-relegation, 2022–23</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Exit — 56% Stake</div>
+      <div class="stat-val red">£170m</div>
+      <div class="stat-sub">Post-relegation, Jul 2023</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Transfer Debt Left</div>
+      <div class="stat-val red">£190m</div>
+      <div class="stat-sub">Deferred instalments, 2023</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Peak Wage Bill</div>
+      <div class="stat-val">£146m</div>
+      <div class="stat-sub">2022–23 PL season</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Tenure</div>
+      <div class="stat-val">6 yrs</div>
+      <div class="stat-sub">Jan 2017 – Jul 2023</div>
+    </div>
+  </div>
+
+  <!-- ── Section 1: Background ────────────────────── -->
+  <div class="section-label">Background — Who Is Radrizzani</div>
+  <div class="narrative">
+    <p>Andrea Radrizzani is a Milanese media entrepreneur whose career is built on sports broadcast rights, not football operations. He founded IMG Media's joint venture arm in Asia, then in 2015 launched Eleven Sports, a challenger streaming platform targeting niche sports rights across eight European markets. His operating model throughout was the same: identify undervalued rights, package them for the digital audience, and extract the broadcast arbitrage before incumbents could respond.</p>
+    <p>His interest in Leeds was consistent with that logic. At the time of his acquisition in early 2017, Leeds were a sleeping giant in the Championship — 36,000-seat stadium routinely filled, a global fanbase from their Champions League era (1999–2002), zero Premier League broadcast revenue. The gap between the club's name value and its current income was precisely the kind of mispricing Radrizzani's career had been built on identifying.</p>
+    <p>He also arrived knowing the asset. He had been introduced to Leeds through contacts at beIN Sports, where he held broadcast rights relationships, and understood that English football's broadcast trajectory — particularly the international rights growth story — made Championship clubs with genuine PL potential a leveraged bet on that premium.</p>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- ── Section 2: Before Radrizzani — Cellino ───── -->
+  <div class="section-label">Context — The Cellino Years (2014–2017)</div>
+  <div class="narrative">
+    <p>To understand the Radrizzani acquisition you need to understand what he was buying out of. Massimo Cellino, a Sardinian agribusiness and football owner who had previously run Cagliari Calcio for 22 years, acquired a 75% stake in Leeds from GFH Capital (the Bahraini investment bank that had taken over from Ken Bates) in April 2014 for approximately £41.5m.</p>
+    <p>The Cellino tenure is one of European football's most extensively documented ownership failures — not financial collapse, but institutional destruction. He fired seven first-team managers in three years, conducted public disagreements with staff, was found guilty of tax fraud in Italy during his time at Leeds, and was twice suspended from English football by the EFL. He was not a fraudster in the Elland Road sense but was a chaotic, absentee owner who treated the club as a personal property rather than a going concern.</p>
+    <p>By the time Radrizzani bought in, Leeds had finished 13th, 15th, and 7th in successive Championship seasons — declining performance on a trophy asset. The instability had depressed the valuation relative to what the underlying commercial infrastructure and fanbase could support under competent management. Cellino sold his 50% stake to Radrizzani in January 2017 for £45m, reportedly a modest profit on his original acquisition; Radrizzani acquired the remaining 50% later that year for full control.</p>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- ── Section 3: Timeline ───────────────────────── -->
+  <div class="section-label">Ownership Timeline</div>
+  <div class="timeline">
+
+    <div class="tl-item">
+      <div class="tl-dot green"></div>
+      <div class="tl-year">Jan 2017</div>
+      <div class="tl-title">Radrizzani acquires 50% from Cellino — £45m</div>
+      <div class="tl-body">Aser Ventures (Radrizzani's holding company) takes initial stake. Cellino exits fully later in 2017. Radrizzani becomes sole majority shareholder. The acquisition values the club at roughly £90m on a like-for-like basis.</div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot grey"></div>
+      <div class="tl-year">2017–18</div>
+      <div class="tl-title">Year one: stabilisation and search for a manager</div>
+      <div class="tl-body">Radrizzani signals long-term intent — stadium development plans mooted, new training ground investment discussed. Results remain inconsistent under Thomas Christiansen, who is sacked in February 2018 with the club 10th. Paul Heckingbottom appointed, results worsen. Radrizzani recognises the football strategy needs a step-change.</div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot green"></div>
+      <div class="tl-year">Jun 2018</div>
+      <div class="tl-title">Marcelo Bielsa appointed — the transformative bet</div>
+      <div class="tl-body">This is the single most consequential decision of the era. Bielsa, the Argentine coach with cult status in European football after his spells at Athletic Bilbao and Marseille, takes over a Championship club — an unusual move for a manager of his standing. The hire immediately reframes Leeds' global narrative. Social media engagement, shirt sales, and press attention spike across markets that wouldn't ordinarily follow second-tier English football. Radrizzani understood what this appointment was: as much a media and brand play as a football one. The 49ers Enterprises took their first 10% stake in the club this same year, signalling external validation of the direction.</div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot grey"></div>
+      <div class="tl-year">2018–19</div>
+      <div class="tl-title">Near-promotion — play-off heartbreak vs Derby</div>
+      <div class="tl-body">Leeds finish 3rd in the Championship and reach the play-off semi-finals, losing to Derby County over two legs. The season generates enormous fanbase energy and confirms Bielsa's methods are working. The global Leeds United narrative is being rebuilt in real time. Commercially, the delay is costly — every additional Championship season forgoes £100m+ in PL broadcast revenue.</div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot green"></div>
+      <div class="tl-year">Jul 2020</div>
+      <div class="tl-title">Premier League promotion — first time in 16 years</div>
+      <div class="tl-body">Leeds win the Championship title in the COVID-truncated 2019–20 season, ending a 16-year absence from the top flight. The valuation event Radrizzani's entire thesis was built on has been delivered. Premier League broadcast revenue — approximately £100m per season for a mid-table PL club — begins flowing. The 49ers increase their stake to 44% in 2021, a clear signal of confidence in the promotion's durability.</div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot green"></div>
+      <div class="tl-year">2020–22</div>
+      <div class="tl-title">Two seasons of survival — but cost base expands rapidly</div>
+      <div class="tl-body">Leeds finish 9th in their first PL season back — a remarkable result. The wage bill expands to fund PL-grade squad depth. The club begins accumulating significant deferred transfer payments. Bielsa's methods, while spectacular to watch, produce high squad injury rates and unsustainable pressing intensity. The system requires constant squad refresh, which Radrizzani funds aggressively on credit. This is the pivot point: the club is living on future PL revenue to fund current operations.</div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot red"></div>
+      <div class="tl-year">Feb 2022</div>
+      <div class="tl-title">Bielsa sacked — the brand value walks out the door</div>
+      <div class="tl-body">With Leeds 16th and in relegation trouble, Radrizzani dismisses Bielsa. Jesse Marsch is appointed. The sacking is operationally defensible — the club needed points to survive — but it destroys the narrative asset. The global interest that Bielsa had built dissipates. Radrizzani's relationship with the fanbase, which had been Bielsa-mediated, deteriorates sharply.</div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot red"></div>
+      <div class="tl-year">May 2023</div>
+      <div class="tl-title">Relegated from the Premier League</div>
+      <div class="tl-body">Leeds are relegated on the final day of the 2022–23 season after three seasons in the top flight. The wage bill at relegation is £146m — the second highest in the Championship the following season, behind only Leicester. Transfer debt stands at £190m in deferred instalments. The financial model that worked on the assumption of continued PL revenue is now broken.</div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot red"></div>
+      <div class="tl-year">Jul 2023</div>
+      <div class="tl-title">49ers buy Radrizzani's 56% for £170m — down from £400m</div>
+      <div class="tl-body">49ers Enterprises had agreed, pre-relegation, to purchase Radrizzani's 56% stake at a valuation that implied a total club value in excess of £400m, contingent on PL status. Relegation forced a full renegotiation. The final agreed price for the 56% stake is £170m — implying a total club value of approximately £304m. Radrizzani exits. The 49ers inherit a club in the Championship with the second-highest wage bill in the division and £190m in outstanding transfer commitments.</div>
+    </div>
+
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- ── Section 4: The financials ─────────────────── -->
+  <div class="section-label">Financial Footprint</div>
+  <div class="narrative">
+    <p>The Radrizzani financial strategy was directionally correct but fatally leveraged. PL broadcast revenue is a step-change income event — approximately £100–120m per season for a mid-table club versus £10–15m in the Championship. The correct play, given that income certainty, is to invest ahead of it to secure survival. The error is in the magnitude and the funding instrument.</p>
+    <p>Leeds' wage bill reached £146m in the final PL season — comparable to clubs operating on two or three times Leeds' commercial revenue base. The transfer spend was structured on deferred instalments — the standard practice in modern football, but acutely dangerous when the PL income that makes the instalments affordable disappears. At relegation, the club still owed £190m in deferred transfer fees, most of it on players who would need to be sold or released at Championship wages.</p>
+    <p>The 49ers inherited this financial position. In 2023–24, their first full Championship season, Leeds cut the wage bill by £62m (42%) — from £146m to £84m — and still recorded a £61m pre-tax loss, the worst in the division. The structural cost of Radrizzani's PL-era spending took multiple seasons to work down.</p>
+  </div>
+
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Season</th>
+        <th>Division</th>
+        <th>Approx. Wage Bill</th>
+        <th>Note</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="td-yr">2017–18</td>
+        <td>Championship</td>
+        <td>~£30m</td>
+        <td class="td-note">Pre-Bielsa, base cost level on acquisition</td>
+      </tr>
+      <tr>
+        <td class="td-yr">2019–20</td>
+        <td>Championship</td>
+        <td>~£55m</td>
+        <td class="td-note">Bielsa's promotion season; squad heavily invested</td>
+      </tr>
+      <tr>
+        <td class="td-yr">2020–21</td>
+        <td>Premier League</td>
+        <td>~£100m</td>
+        <td class="td-note">First PL season; PL broadcast income offsets cost step-up</td>
+      </tr>
+      <tr>
+        <td class="td-yr">2022–23</td>
+        <td>Premier League</td>
+        <td class="td-signal red">£146m</td>
+        <td class="td-note">Peak spend; club 2nd-worst PL wage:revenue ratio</td>
+      </tr>
+      <tr>
+        <td class="td-yr">2023–24</td>
+        <td>Championship</td>
+        <td class="td-signal red">£84m</td>
+        <td class="td-note">Post-Radrizzani; down 42%, still highest in Champ. behind Leicester</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <hr class="section-divider">
+
+  <!-- ── Section 5: What worked / what broke ───────── -->
+  <div class="section-label">Assessment</div>
+  <div class="signal-grid">
+    <div class="signal-card">
+      <div class="sc-head green">What Worked</div>
+      <ul class="sc-body">
+        <li>Identified genuine mispricing — Leeds' fanbase and name value versus Championship revenue was a real gap</li>
+        <li>Bielsa appointment was inspired: rebuilt the brand narrative globally, elevated commercial value well beyond what the football performance alone could achieve</li>
+        <li>Promotion delivered the thesis — PL broadcast revenue unlocked exactly as modelled</li>
+        <li>49ers buy-in at 44% in 2021 provided partial exit liquidity and strategic validation</li>
+        <li>Personal return on Radrizzani's equity was positive — he received £170m for his 56% stake, against an all-in acquisition cost substantially lower</li>
+      </ul>
+    </div>
+    <div class="signal-card">
+      <div class="sc-head red">What Broke</div>
+      <ul class="sc-body">
+        <li>Wage bill funded on the assumption of permanent PL status — no financial firewall for relegation</li>
+        <li>£190m in deferred transfer instalments created balance sheet risk with no PL income backstop</li>
+        <li>Sacking Bielsa destroyed the brand asset that was distinct from the football performance — the global narrative collapsed with him</li>
+        <li>Insufficient commercial revenue diversification: Leeds' commercial income never scaled to justify PL-grade wage costs independently of broadcast revenue</li>
+        <li>49ers' original agreed price of ~£400m was contingent on PL status — the structural risk of that contingency was not adequately hedged</li>
+      </ul>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- ── Section 6: Takeaways ───────────────────────── -->
+  <div class="section-label">Takeaways for the Asset Class</div>
+
+  <div class="pull-quote">
+    <p>"The Radrizzani model is not a failure — it is a template with one missing constraint. He identified the right asset, executed the right brand play, and delivered the primary valuation event. What he didn't build was a financial structure that survived relegation."</p>
+    <cite>SportsCapital Intel · Apr 2026</cite>
+  </div>
+
+  <div class="narrative">
+    <p><strong>On the acquisition thesis.</strong> Radrizzani's core read was correct. Leeds was a chronically underperforming asset with structural brand equity that the Cellino era had suppressed. The gap between the club's name recognition (top-20 in European football by historical weight) and its Championship revenue was a genuine arbitrage. Identifying that gap and executing the Bielsa hire to close it is the best-executed part of the tenure.</p>
+    <p><strong>On broadcast leverage.</strong> The strategy was explicitly built on PL broadcast economics — and that logic is sound for any club with realistic promotion probability. The Championship-to-PL revenue jump (~£100m/year) remains the most reliable value creation mechanism in English football outside of European competition. The model works as long as you plan for the scenario where you give it back.</p>
+    <p><strong>On the cost structure.</strong> The instructive failure is the wage bill. Running a £146m wage bill at a club with ~£200m in PL revenue creates no margin for the year you drop out. Brighton, Brentford, and Bournemouth — all promoted in the same era — built financial cushions against relegation. Leeds did not. This is the single structural lesson every football investor should take from the Radrizzani tenure: the wage-to-revenue ratio must be stress-tested against Championship income, not PL income.</p>
+    <p><strong>On the brand asset.</strong> Bielsa's impact on Leeds' global brand was measurable and real — shirt sales, social following, merchandise revenue, and international press coverage all peaked under him. The lesson is that a coach-dependent brand is inherently fragile. Radrizzani never institutionalised what Bielsa represented into the club's permanent identity in a way that survived his departure.</p>
+    <p><strong>On the exit.</strong> The £230m haircut from the originally agreed price (~£400m) to the final price (£170m for 56%) is the clearest quantification of relegation risk in any comparable English football transaction. It should be a standard reference data point in any acquisition underwriting that includes a PL-contingent valuation event.</p>
+    <p><strong>The Cellino contrast.</strong> The comparison with Cellino's immediately prior tenure is useful. Both were Italian businessmen who bought Leeds in distress. Cellino destroyed institutional value through operational chaos without achieving the primary valuation event. Radrizzani achieved the primary event — PL promotion — but destroyed financial value through cost overreach. Neither tenure left the club on a structurally sound footing. The 49ers are the first ownership group with both the institutional discipline and the capital base to rebuild it.</p>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- ── Section 7: Sources ─────────────────────────── -->
+  <div class="section-label">Sources</div>
+  <div class="narrative">
+    <p style="font-size:12px; color:#666; line-height:1.8;">
+      <a href="https://www.skysports.com/football/news/11715/12897360/leeds-united-49ers-enterprises-agree-deal-to-purchase-chairman-andrea-radrizzanis-remaining-56-per-cent-stake" target="_blank">Sky Sports — 49ers agree deal for Radrizzani's 56%</a> ·
+      <a href="https://www.skysports.com/football/news/11095/12922585/leeds-united-49ers-enterprises-complete-takeover-from-andrea-radrizzani" target="_blank">Sky Sports — 49ers complete takeover</a> ·
+      <a href="https://www.sportico.com/leagues/soccer/2023/49ers-acquire-leeds-united-1234725739/" target="_blank">Sportico — 49ers acquire Leeds</a> ·
+      <a href="https://frontofficesports.com/49ers-finalize-leeds-united-takeover-at-reported-400-million-discount/" target="_blank">Front Office Sports — $400m discount</a> ·
+      <a href="https://swissramble.substack.com/p/leeds-united-finances-202324" target="_blank">Swiss Ramble — Leeds finances 2023–24</a> ·
+      <a href="https://www.yorkshireeveningpost.co.uk/sport/football/leeds-united/leeds-united-still-owe-ps190-million-for-andrea-radrizzani-era-transfers-as-annual-accounts-details-revealed-4587025" target="_blank">YEP — £190m transfer debt</a> ·
+      <a href="https://tbrfootball.com/49ers-value-leeds-united-at-527-5m-as-document-reveals-takeover-timeline/" target="_blank">TBR Football — 49ers value Leeds at £527.5m</a>
+    </p>
+  </div>
+
+  <div class="brand">PYLON PARTNERS</div>
+</div>
+</body>
+</html>
