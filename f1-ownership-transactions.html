@@ -95,18 +95,14 @@ body { font-family: Arial, sans-serif; background: #fff; color: #1a1a1a; -webkit
   .stat-val { font-size: 17px; }
 }
 </style>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
-<style>
-.sc-dashboard { margin: 44px 0 0; border-top: 1.5px solid #1a1a1a; padding-top: 32px; }
-.sc-dashboard-title { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #888; margin-bottom: 20px; }
-.sc-chart-row { display: flex; gap: 24px; flex-wrap: wrap; margin-bottom: 28px; }
-.sc-chart-box { flex: 1; min-width: 260px; border: 1px solid #ddd; padding: 18px 18px 14px; background: #fff; }
-.sc-chart-box-title { font-size: 11px; font-weight: 800; color: #000; margin-bottom: 4px; letter-spacing: 0.2px; }
-.sc-chart-box-sub { font-size: 10.5px; color: #999; margin-bottom: 14px; }
-.sc-chart-canvas-wrap { position: relative; }
+<style id="sc-charts-css">
+.sc-chart-row{display:flex;gap:24px;flex-wrap:wrap;margin-bottom:28px;}
+.sc-chart-box{flex:1;min-width:260px;border:1px solid #ddd;padding:18px 18px 14px;background:#fff;box-sizing:border-box;}
+.sc-chart-box-title{font-size:11px;font-weight:800;color:#000;margin-bottom:4px;}
+.sc-chart-box-sub{font-size:10.5px;color:#999;margin-bottom:14px;}
+.sc-chart-wrap{position:relative;width:100%;}
 </style>
-
 </head>
 <body>
 <div class="page">
@@ -392,32 +388,36 @@ body { font-family: Arial, sans-serif; background: #fff; color: #1a1a1a; -webkit
     </div>
   </div>
 </div>
+
+<div style="max-width:1100px;margin:44px auto 0;padding:0 36px;border-top:1.5px solid #1a1a1a;padding-top:32px;">
+  <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#888;margin-bottom:20px;">F1 Valuation Dashboard</div>
+  <div class="sc-chart-row">
+    <div class="sc-chart-box" style="flex:2;">
+      <div class="sc-chart-box-title">Team Valuation Trajectory — Transaction-Implied ($m)</div>
+      <div class="sc-chart-box-sub">Data points anchored to disclosed transactions; lines interpolated</div>
+      <div class="sc-chart-wrap" style="height:260px;"><canvas id="f1t-traj" height="260"></canvas></div>
+    </div>
+    <div class="sc-chart-box" style="flex:1;">
+      <div class="sc-chart-box-title">Total Capital Deployed by Team ($m)</div>
+      <div class="sc-chart-box-sub">All disclosed transactions combined per team</div>
+      <div class="sc-chart-wrap" style="height:260px;"><canvas id="f1t-team" height="260"></canvas></div>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script>
-(function(){
-  const G='#1a3a2a',GOLD='#c9a84c',RED='#c0392b',GREY='#aaa',LG='rgba(26,58,42,0.12)';
-  Chart.defaults.font={family:'Arial',size:11};Chart.defaults.color='#555';
-
-  new Chart(document.getElementById('f1t-traj'),{type:'line',data:{
-    labels:['2016','2017','2018','2019','2020','2021','2022','2023','2024','2025'],
-    datasets:[
-      {label:'Williams',data:[null,null,null,null,200,250,400,600,null,2500],borderColor:G,backgroundColor:'transparent',pointBackgroundColor:G,borderWidth:2,pointRadius:4,tension:0.3,spanGaps:true},
-      {label:'McLaren',data:[null,null,null,null,1200,1400,1800,2200,null,3500],borderColor:GOLD,backgroundColor:'transparent',pointBackgroundColor:GOLD,borderWidth:2,pointRadius:4,tension:0.3,spanGaps:true},
-      {label:'Mercedes',data:[null,null,null,null,624,900,1800,3000,null,6000],borderColor:RED,backgroundColor:'transparent',pointBackgroundColor:RED,borderWidth:2,pointRadius:4,tension:0.3,spanGaps:true},
-      {label:'Aston Martin',data:[null,null,null,null,null,null,null,1200,1400,1800],borderColor:'#888',backgroundColor:'transparent',pointBackgroundColor:'#888',borderWidth:2,pointRadius:4,tension:0.3,spanGaps:true}
-    ]
-  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10},boxWidth:12}}},scales:{y:{beginAtZero:false,ticks:{callback:v=>'$'+v+'m'},grid:{color:'#f0f0f0'}},x:{grid:{display:false}}}}});
-
-  new Chart(document.getElementById('f1t-team'),{type:'bar',data:{
-    labels:['McLaren','Mercedes','Williams','Aston Martin','Alpine→Renault','RB→AlphaTauri','Haas'],
-    datasets:[{label:'Total Disclosed ($m)',data:[1685,833,318,1200,110,350,60],backgroundColor:[G,GOLD,G,RED,GOLD,GREY,'#3a6a4a'],borderWidth:0,borderRadius:3}]
-  },options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,ticks:{callback:v=>'$'+v+'m'},grid:{color:'#f0f0f0'}},y:{grid:{display:false}}}}});
-
-  new Chart(document.getElementById('f1t-yr'),{type:'bar',data:{
-    labels:['2016','2017','2018','2019','2020','2021','2022','2023','2024'],
-    datasets:[{label:'Deals',data:[1,0,1,0,3,2,4,2,3],backgroundColor:G,borderWidth:0,borderRadius:2}]
-  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{stepSize:1},grid:{color:'#f0f0f0'}},x:{grid:{display:false}}}}});
-})();
+window.addEventListener('load', function() {
+  if (typeof Chart === 'undefined') { return; }
+  var G='#1a3a2a', GOLD='#c9a84c', RED='#c0392b', GREY='#aaa', LG='#3a6a4a';
+  Chart.defaults.font = {family:'Arial', size:11};
+  Chart.defaults.color = '#555';
+  function mkChart(id, cfg) {
+    var el = document.getElementById(id);
+    if (el) { try { new Chart(el, cfg); } catch(e) {} }
+  }
+  mkChart('f1t-traj',{type:'line',data:{labels:['2016','2017','2018','2019','2020','2021','2022','2023','2024','2025'],datasets:[{label:'Williams',data:[null,null,null,null,200,250,400,600,null,2500],borderColor:G,backgroundColor:'transparent',pointBackgroundColor:G,borderWidth:2,pointRadius:4,tension:0.3,spanGaps:true},{label:'McLaren',data:[null,null,null,null,1200,1400,1800,2200,null,3500],borderColor:GOLD,backgroundColor:'transparent',pointBackgroundColor:GOLD,borderWidth:2,pointRadius:4,tension:0.3,spanGaps:true},{label:'Mercedes',data:[null,null,null,null,624,900,1800,3000,null,6000],borderColor:RED,backgroundColor:'transparent',pointBackgroundColor:RED,borderWidth:2,pointRadius:4,tension:0.3,spanGaps:true}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10},boxWidth:12}}},scales:{y:{ticks:{callback:function(v){return '$'+v+'m';}},grid:{color:'#f0f0f0'}},x:{grid:{display:false}}}}});
+  mkChart('f1t-team',{type:'bar',data:{labels:['McLaren','Mercedes','Aston Martin','Williams','RB/AlphaTauri','Haas'],datasets:[{data:[1685,833,1200,318,350,60],backgroundColor:[G,GOLD,G,RED,GOLD,GREY],borderWidth:0,borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,ticks:{callback:function(v){return '$'+v+'m';}},grid:{color:'#f0f0f0'}},y:{grid:{display:false}}}}});
+});
 </script>
-
 </body>
 </html>

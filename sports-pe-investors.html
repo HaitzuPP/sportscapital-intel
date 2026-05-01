@@ -71,18 +71,14 @@ body { font-family: Arial, sans-serif; background: #fff; color: #1a1a1a; -webkit
   .investor-top { flex-direction: column; }
 }
 </style>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
-<style>
-.sc-dashboard { margin: 44px 0 0; border-top: 1.5px solid #1a1a1a; padding-top: 32px; }
-.sc-dashboard-title { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #888; margin-bottom: 20px; }
-.sc-chart-row { display: flex; gap: 24px; flex-wrap: wrap; margin-bottom: 28px; }
-.sc-chart-box { flex: 1; min-width: 260px; border: 1px solid #ddd; padding: 18px 18px 14px; background: #fff; }
-.sc-chart-box-title { font-size: 11px; font-weight: 800; color: #000; margin-bottom: 4px; letter-spacing: 0.2px; }
-.sc-chart-box-sub { font-size: 10.5px; color: #999; margin-bottom: 14px; }
-.sc-chart-canvas-wrap { position: relative; }
+<style id="sc-charts-css">
+.sc-chart-row{display:flex;gap:24px;flex-wrap:wrap;margin-bottom:28px;}
+.sc-chart-box{flex:1;min-width:260px;border:1px solid #ddd;padding:18px 18px 14px;background:#fff;box-sizing:border-box;}
+.sc-chart-box-title{font-size:11px;font-weight:800;color:#000;margin-bottom:4px;}
+.sc-chart-box-sub{font-size:10.5px;color:#999;margin-bottom:14px;}
+.sc-chart-wrap{position:relative;width:100%;}
 </style>
-
 </head>
 <body>
 <div class="page">
@@ -283,61 +279,50 @@ body { font-family: Arial, sans-serif; background: #fff; color: #1a1a1a; -webkit
   <div class="brand">PYLON PARTNERS</div>
 </div>
 
-<div class="page" style="padding-top:0;">
-  <div class="sc-dashboard">
-    <div class="sc-dashboard-title">Investor Data Dashboard</div>
-    <div class="sc-chart-row">
-      <div class="sc-chart-box" style="flex:2;">
-        <div class="sc-chart-box-title">AUM of Profiled Firms ($bn)</div>
-        <div class="sc-chart-box-sub">Total assets under management as of last disclosed figure</div>
-        <div style="position:relative;height:220px;"><canvas id="pe-aum"></canvas></div>
-      </div>
-      <div class="sc-chart-box" style="flex:1;">
-        <div class="sc-chart-box-title">Investment Thesis Distribution</div>
-        <div class="sc-chart-box-sub">How the 10 profiled investors cluster by thesis</div>
-        <div style="position:relative;height:220px;"><canvas id="pe-thesis"></canvas></div>
-      </div>
+
+<div style="max-width:960px;margin:44px auto 0;padding:0 36px;border-top:1.5px solid #1a1a1a;padding-top:32px;">
+  <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#888;margin-bottom:20px;">Investor Data Dashboard</div>
+  <div class="sc-chart-row">
+    <div class="sc-chart-box" style="flex:2;">
+      <div class="sc-chart-box-title">AUM of Profiled Firms ($bn)</div>
+      <div class="sc-chart-box-sub">Total assets under management as of last disclosed figure</div>
+      <div class="sc-chart-wrap" style="height:220px;"><canvas id="pe-aum" height="220"></canvas></div>
     </div>
-    <div class="sc-chart-row">
-      <div class="sc-chart-box" style="flex:1;">
-        <div class="sc-chart-box-title">Sports Asset Class Entry by Year</div>
-        <div class="sc-chart-box-sub">When each profiled firm made their first major sports investment</div>
-        <div style="position:relative;height:180px;"><canvas id="pe-entry"></canvas></div>
-      </div>
-      <div class="sc-chart-box" style="flex:1;">
-        <div class="sc-chart-box-title">Estimated Sports AUM vs Total AUM</div>
-        <div class="sc-chart-box-sub">Sports portfolio as estimated % of total AUM (where disclosed)</div>
-        <div style="position:relative;height:180px;"><canvas id="pe-sports-pct"></canvas></div>
-      </div>
+    <div class="sc-chart-box" style="flex:1;">
+      <div class="sc-chart-box-title">Investment Thesis Distribution</div>
+      <div class="sc-chart-box-sub">How the 10 profiled investors cluster by thesis</div>
+      <div class="sc-chart-wrap" style="height:220px;"><canvas id="pe-thesis" height="220"></canvas></div>
+    </div>
+  </div>
+  <div class="sc-chart-row">
+    <div class="sc-chart-box" style="flex:1;">
+      <div class="sc-chart-box-title">First Major Sports Entry Year</div>
+      <div class="sc-chart-box-sub">When each profiled firm entered sports as an asset class</div>
+      <div class="sc-chart-wrap" style="height:180px;"><canvas id="pe-entry" height="180"></canvas></div>
+    </div>
+    <div class="sc-chart-box" style="flex:1;">
+      <div class="sc-chart-box-title">Sports as % of Total AUM</div>
+      <div class="sc-chart-box-sub">Sports portfolio concentration (where disclosed)</div>
+      <div class="sc-chart-wrap" style="height:180px;"><canvas id="pe-pct" height="180"></canvas></div>
     </div>
   </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script>
-(function(){
-  const G='#1a3a2a',GOLD='#c9a84c',RED='#c0392b',GREY='#aaa',LG='#3a6a4a';
-  Chart.defaults.font={family:'Arial',size:11};Chart.defaults.color='#555';
-
-  new Chart(document.getElementById('pe-aum'),{type:'bar',data:{
-    labels:['Ares Mgmt','Sixth Street','Blackstone (Blitzer)','Point72 (Cohen)','Arctos','HBSE','Fenway Sports','Wrexham (Reynolds)','Josh Harris (Assoc)','CVC Capital'],
-    datasets:[{label:'AUM ($bn)',data:[447,70,1000,30,4.1,5,8,0.15,10,30],backgroundColor:[G,G,GREY,GOLD,G,GOLD,LG,GOLD,LG,RED],borderWidth:0,borderRadius:2}]
-  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,type:'logarithmic',ticks:{callback:v=>v>=1000?'$'+v/1000+'T':'$'+v+'bn'},grid:{color:'#f0f0f0'}},x:{grid:{display:false},ticks:{font:{size:9}}}}}});
-
-  new Chart(document.getElementById('pe-thesis'),{type:'doughnut',data:{
-    labels:['Scarcity + Compounding','Media Rights Expansion','Patient Capital Match','Platform / Brand'],
-    datasets:[{data:[4,2,2,2],backgroundColor:[G,GOLD,LG,GREY],borderWidth:2,borderColor:'#fff'}]
-  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:9},boxWidth:10,padding:6}}}}});
-
-  new Chart(document.getElementById('pe-entry'),{type:'bar',data:{
-    labels:['Blitzer (HBSE)','Fenway (FSG)','Josh Harris','Steve Cohen','Arctos','Reynolds (Wrexham)','Ares','Sixth Street','Ian Charles','Arougheti'],
-    datasets:[{label:'First Major Sports Entry',data:[2011,2002,2011,2020,2021,2020,2022,2020,2019,2024],backgroundColor:G,borderWidth:0,borderRadius:2}]
-  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{min:2000,max:2026,ticks:{stepSize:4},grid:{color:'#f0f0f0'}},x:{grid:{display:false},ticks:{font:{size:8}}}}}});
-
-  new Chart(document.getElementById('pe-sports-pct'),{type:'bar',data:{
-    labels:['Arctos','HBSE / Blitzer','Fenway Sports','Josh Harris Assoc.','Sixth Street'],
-    datasets:[{label:'Sports as % of AUM',data:[100,90,100,40,8],backgroundColor:[G,G,G,GOLD,GOLD],borderWidth:0,borderRadius:3}]
-  },options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,max:100,ticks:{callback:v=>v+'%'},grid:{color:'#f0f0f0'}},y:{grid:{display:false}}}}});
-})();
+window.addEventListener('load', function() {
+  if (typeof Chart === 'undefined') { return; }
+  var G='#1a3a2a', GOLD='#c9a84c', RED='#c0392b', GREY='#aaa', LG='#3a6a4a';
+  Chart.defaults.font = {family:'Arial', size:11};
+  Chart.defaults.color = '#555';
+  function mkChart(id, cfg) {
+    var el = document.getElementById(id);
+    if (el) { try { new Chart(el, cfg); } catch(e) {} }
+  }
+  mkChart('pe-aum',{type:'bar',data:{labels:['Ares','Sixth Street','Point72','Arctos','HBSE','Fenway Sports','Josh Harris','CVC Capital'],datasets:[{data:[447,70,30,4.1,5,8,10,30],backgroundColor:[G,G,GOLD,G,GOLD,LG,LG,RED],borderWidth:0,borderRadius:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,type:'logarithmic',ticks:{callback:function(v){if(v===1||v===10||v===100||v===1000){return '$'+v+'bn';}return '';},maxTicksLimit:6},grid:{color:'#f0f0f0'}},x:{grid:{display:false},ticks:{font:{size:9}}}}}});
+  mkChart('pe-thesis',{type:'doughnut',data:{labels:['Scarcity + Compounding','Media Rights','Patient Capital','Platform / Brand'],datasets:[{data:[4,2,2,2],backgroundColor:[G,GOLD,LG,GREY],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:9},boxWidth:10,padding:5}}}}});
+  mkChart('pe-entry',{type:'bar',data:{labels:['Blitzer','Fenway','Josh Harris','Cohen','Arctos','Reynolds','Ares','Sixth Street','Ian Charles','Arougheti'],datasets:[{data:[2011,2002,2011,2020,2021,2020,2022,2020,2019,2024],backgroundColor:G,borderWidth:0,borderRadius:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{min:2000,max:2026,ticks:{stepSize:4},grid:{color:'#f0f0f0'}},x:{grid:{display:false},ticks:{font:{size:9}}}}}});
+  mkChart('pe-pct',{type:'bar',data:{labels:['Arctos','HBSE','Fenway Sports','Josh Harris','Sixth Street'],datasets:[{data:[100,90,100,40,8],backgroundColor:[G,G,G,GOLD,GOLD],borderWidth:0,borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,max:100,ticks:{callback:function(v){return v+'%';}},grid:{color:'#f0f0f0'}},y:{grid:{display:false}}}}});
+});
 </script>
-
 </body>
 </html>

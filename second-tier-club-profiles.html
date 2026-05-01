@@ -133,18 +133,14 @@
     .season-table th, .season-table td { padding: 6px 8px 6px 0; }
   }
 </style>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
-<style>
-.sc-dashboard { margin: 44px 0 0; border-top: 1.5px solid #1a1a1a; padding-top: 32px; }
-.sc-dashboard-title { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #888; margin-bottom: 20px; }
-.sc-chart-row { display: flex; gap: 24px; flex-wrap: wrap; margin-bottom: 28px; }
-.sc-chart-box { flex: 1; min-width: 260px; border: 1px solid #ddd; padding: 18px 18px 14px; background: #fff; }
-.sc-chart-box-title { font-size: 11px; font-weight: 800; color: #000; margin-bottom: 4px; letter-spacing: 0.2px; }
-.sc-chart-box-sub { font-size: 10.5px; color: #999; margin-bottom: 14px; }
-.sc-chart-canvas-wrap { position: relative; }
+<style id="sc-charts-css">
+.sc-chart-row{display:flex;gap:24px;flex-wrap:wrap;margin-bottom:28px;}
+.sc-chart-box{flex:1;min-width:260px;border:1px solid #ddd;padding:18px 18px 14px;background:#fff;box-sizing:border-box;}
+.sc-chart-box-title{font-size:11px;font-weight:800;color:#000;margin-bottom:4px;}
+.sc-chart-box-sub{font-size:10.5px;color:#999;margin-bottom:14px;}
+.sc-chart-wrap{position:relative;width:100%;}
 </style>
-
 </head>
 <body>
 
@@ -611,83 +607,42 @@
 <p style="font-size:11px; color:#bbb; text-align:center; margin-top:8px;">Research based on publicly available sources as of April 2026. Financial figures unaudited unless noted.</p>
 
 
-<div class="page" style="padding-top:0;">
-  <div class="sc-dashboard">
-    <div class="sc-dashboard-title">Club Profiles — Data Dashboard</div>
-    <div class="sc-chart-row">
-      <div class="sc-chart-box" style="flex:1;">
-        <div class="sc-chart-box-title">Deportivo La Coruña — Division History</div>
-        <div class="sc-chart-box-sub">Tier by season, 2020-21 to 2025-26 (1=top flight, 2=second, 3=third tier)</div>
-        <div style="position:relative;height:200px;"><canvas id="scp-dep-perf"></canvas></div>
-      </div>
-      <div class="sc-chart-box" style="flex:1;">
-        <div class="sc-chart-box-title">UD Almeria — Financial Snapshot</div>
-        <div class="sc-chart-box-sub">Reported revenue components, 2023-24 season (€m)</div>
-        <div style="position:relative;height:200px;"><canvas id="scp-alm-rev"></canvas></div>
-      </div>
-      <div class="sc-chart-box" style="flex:1;">
-        <div class="sc-chart-box-title">Ownership Model Comparison</div>
-        <div class="sc-chart-box-sub">Capital structure across profiled clubs</div>
-        <div style="position:relative;height:200px;"><canvas id="scp-model"></canvas></div>
-      </div>
+
+<div style="max-width:960px;margin:44px auto 0;padding:0 36px;border-top:1.5px solid #1a1a1a;padding-top:32px;">
+  <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#888;margin-bottom:20px;">Club Profiles Data Dashboard</div>
+  <div class="sc-chart-row">
+    <div class="sc-chart-box" style="flex:1;">
+      <div class="sc-chart-box-title">Deportivo — Division History</div>
+      <div class="sc-chart-box-sub">Tier by season, 2020-21 to 2025-26 (1=top, 3=third tier)</div>
+      <div class="sc-chart-wrap" style="height:200px;"><canvas id="scp-dep" height="200"></canvas></div>
     </div>
-    <div class="sc-chart-row">
-      <div class="sc-chart-box" style="flex:2;">
-        <div class="sc-chart-box-title">Attendance vs Capacity — All Profiled Clubs</div>
-        <div class="sc-chart-box-sub">Average matchday attendance as % of stadium capacity (2024-25 season)</div>
-        <div style="position:relative;height:200px;"><canvas id="scp-attend"></canvas></div>
-      </div>
-      <div class="sc-chart-box" style="flex:1;">
-        <div class="sc-chart-box-title">Investment Signal by Club</div>
-        <div class="sc-chart-box-sub">Pylon rating: 5 = strong buy thesis, 1 = avoid</div>
-        <div style="position:relative;height:200px;"><canvas id="scp-signal"></canvas></div>
-      </div>
+    <div class="sc-chart-box" style="flex:1;">
+      <div class="sc-chart-box-title">Attendance vs Capacity</div>
+      <div class="sc-chart-box-sub">Avg matchday attendance vs stadium capacity (2024-25)</div>
+      <div class="sc-chart-wrap" style="height:200px;"><canvas id="scp-attend" height="200"></canvas></div>
+    </div>
+    <div class="sc-chart-box" style="flex:1;">
+      <div class="sc-chart-box-title">Pylon Investment Signal (1-5)</div>
+      <div class="sc-chart-box-sub">5 = strong thesis, 1 = avoid</div>
+      <div class="sc-chart-wrap" style="height:200px;"><canvas id="scp-signal" height="200"></canvas></div>
     </div>
   </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script>
-(function(){
-  const G='#1a3a2a',GOLD='#c9a84c',RED='#c0392b',GREY='#aaa',LG='#3a6a4a';
-  Chart.defaults.font={family:'Arial',size:11};Chart.defaults.color='#555';
-
-  // Deportivo division history (lower tier = higher number)
-  new Chart(document.getElementById('scp-dep-perf'),{type:'line',data:{
-    labels:['20/21','21/22','22/23','23/24','24/25','25/26'],
-    datasets:[{label:'Tier',data:[3,3,3,3,2,2],borderColor:G,backgroundColor:'rgba(26,58,42,0.08)',fill:true,tension:0.2,pointRadius:5,pointBackgroundColor:[RED,RED,RED,G,GOLD,G],borderWidth:2.5,stepped:true}]
-  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{reverse:true,min:1,max:4,ticks:{callback:v=>v===1?'1st Div':v===2?'2nd Div':v===3?'3rd Tier':'',stepSize:1},grid:{color:'#f0f0f0'}},x:{grid:{display:false}}}}});
-
-  // Almeria revenue breakdown
-  new Chart(document.getElementById('scp-alm-rev'),{type:'doughnut',data:{
-    labels:['Broadcasting','Matchday','Commercial','Player Sales'],
-    datasets:[{data:[18,6,8,12],backgroundColor:[G,GOLD,LG,GREY],borderWidth:2,borderColor:'#fff'}]
-  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:9},boxWidth:10,padding:6}}}}});
-
-  // Ownership model comparison
-  new Chart(document.getElementById('scp-model'),{type:'bar',data:{
-    labels:['Deportivo','Almeria','Bari','Gijon','Leganes','Spezia'],
-    datasets:[
-      {label:'Corporate/Institutional',data:[1,0,1,0,0,1],backgroundColor:G,borderWidth:0,borderRadius:2},
-      {label:'Private Individual',data:[0,1,0,1,1,0],backgroundColor:GOLD,borderWidth:0,borderRadius:2},
-      {label:'Member-Owned',data:[0,0,0,0,1,0],backgroundColor:GREY,borderWidth:0,borderRadius:2}
-    ]
-  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:9},boxWidth:10}}},scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,grid:{color:'#f0f0f0'},ticks:{stepSize:1}}}}});
-
-  // Attendance vs capacity
-  new Chart(document.getElementById('scp-attend'),{type:'bar',data:{
-    labels:['Deportivo (Riazor 34k)','Almeria (Mediterráneo 16k)','Bari (San Nicola 58k)','Gijon (El Molinón 29k)','Leganes (Butarque 11k)','Spezia (Picco 10k)'],
-    datasets:[
-      {label:'Capacity',data:[34611,16000,58270,29029,11454,10336],backgroundColor:'rgba(200,200,200,0.4)',borderWidth:0,borderRadius:2},
-      {label:'Avg Attendance',data:[21000,9500,18000,12000,8000,7500],backgroundColor:[G,G,GOLD,GOLD,LG,LG],borderWidth:0,borderRadius:2}
-    ]
-  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10},boxWidth:12}}},scales:{y:{beginAtZero:true,ticks:{callback:v=>(v/1000)+'k'},grid:{color:'#f0f0f0'}},x:{grid:{display:false},ticks:{font:{size:8}}}}}});
-
-  // Investment signal radar-style bar
-  new Chart(document.getElementById('scp-signal'),{type:'bar',data:{
-    labels:['Deportivo','Almeria','Bari','Gijon','Leganes','Spezia'],
-    datasets:[{label:'Signal (1-5)',data:[4,3,3,2,2,3],backgroundColor:[G,GOLD,GOLD,GREY,GREY,GOLD],borderWidth:0,borderRadius:3}]
-  },options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,max:5,ticks:{stepSize:1},grid:{color:'#f0f0f0'}},y:{grid:{display:false}}}}});
-})();
+window.addEventListener('load', function() {
+  if (typeof Chart === 'undefined') { return; }
+  var G='#1a3a2a', GOLD='#c9a84c', RED='#c0392b', GREY='#aaa', LG='#3a6a4a';
+  Chart.defaults.font = {family:'Arial', size:11};
+  Chart.defaults.color = '#555';
+  function mkChart(id, cfg) {
+    var el = document.getElementById(id);
+    if (el) { try { new Chart(el, cfg); } catch(e) {} }
+  }
+  mkChart('scp-dep',{type:'line',data:{labels:['20/21','21/22','22/23','23/24','24/25','25/26'],datasets:[{data:[3,3,3,3,2,2],borderColor:G,backgroundColor:'rgba(26,58,42,0.08)',fill:true,tension:0.2,pointRadius:5,pointBackgroundColor:[RED,RED,RED,G,GOLD,G],borderWidth:2.5,stepped:true}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{reverse:true,min:1,max:4,title:{display:true,text:'Tier',font:{size:10}},ticks:{stepSize:1,callback:function(v){return v===1?'1st':v===2?'2nd':v===3?'3rd':'';} },grid:{color:'#f0f0f0'}},x:{grid:{display:false}}}}});
+  mkChart('scp-attend',{type:'bar',data:{labels:['Deportivo','Almeria','Bari','Gijon','Leganes','Spezia'],datasets:[{label:'Capacity',data:[34611,16000,58270,29029,11454,10336],backgroundColor:'rgba(200,200,200,0.4)',borderWidth:0,borderRadius:2},{label:'Avg Attendance',data:[21000,9500,18000,12000,8000,7500],backgroundColor:[G,G,GOLD,GOLD,LG,LG],borderWidth:0,borderRadius:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:9},boxWidth:10}}},scales:{y:{beginAtZero:true,ticks:{callback:function(v){return (v/1000)+'k';}},grid:{color:'#f0f0f0'}},x:{grid:{display:false},ticks:{font:{size:9}}}}}});
+  mkChart('scp-signal',{type:'bar',data:{labels:['Deportivo','Almeria','Bari','Gijon','Leganes','Spezia'],datasets:[{data:[4,3,3,2,2,3],backgroundColor:[G,GOLD,GOLD,GREY,GREY,GOLD],borderWidth:0,borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,max:5,ticks:{stepSize:1},grid:{color:'#f0f0f0'}},y:{grid:{display:false}}}}});
+});
 </script>
-
 </body>
 </html>

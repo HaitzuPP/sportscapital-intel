@@ -120,18 +120,14 @@ a:hover { text-decoration: underline; }
   .signal-grid { grid-template-columns: 1fr; }
 }
 </style>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
-<style>
-.sc-dashboard { margin: 44px 0 0; border-top: 1.5px solid #1a1a1a; padding-top: 32px; }
-.sc-dashboard-title { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #888; margin-bottom: 20px; }
-.sc-chart-row { display: flex; gap: 24px; flex-wrap: wrap; margin-bottom: 28px; }
-.sc-chart-box { flex: 1; min-width: 260px; border: 1px solid #ddd; padding: 18px 18px 14px; background: #fff; }
-.sc-chart-box-title { font-size: 11px; font-weight: 800; color: #000; margin-bottom: 4px; letter-spacing: 0.2px; }
-.sc-chart-box-sub { font-size: 10.5px; color: #999; margin-bottom: 14px; }
-.sc-chart-canvas-wrap { position: relative; }
+<style id="sc-charts-css">
+.sc-chart-row{display:flex;gap:24px;flex-wrap:wrap;margin-bottom:28px;}
+.sc-chart-box{flex:1;min-width:260px;border:1px solid #ddd;padding:18px 18px 14px;background:#fff;box-sizing:border-box;}
+.sc-chart-box-title{font-size:11px;font-weight:800;color:#000;margin-bottom:4px;}
+.sc-chart-box-sub{font-size:10.5px;color:#999;margin-bottom:14px;}
+.sc-chart-wrap{position:relative;width:100%;}
 </style>
-
 </head>
 <body>
 <div class="page">
@@ -432,30 +428,36 @@ a:hover { text-decoration: underline; }
     </div>
   </div>
 </div>
+
+<div style="max-width:960px;margin:44px auto 0;padding:0 36px;border-top:1.5px solid #1a1a1a;padding-top:32px;">
+  <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#888;margin-bottom:20px;">Financial Analysis Dashboard</div>
+  <div class="sc-chart-row">
+    <div class="sc-chart-box" style="flex:2;">
+      <div class="sc-chart-box-title">Wage Bill vs Revenue — Radrizzani Era (GBP m)</div>
+      <div class="sc-chart-box-sub">Peak GBP146m wage bill in final PL season — 2nd worst wage-to-revenue ratio in the division</div>
+      <div class="sc-chart-wrap" style="height:260px;"><canvas id="lr-wages" height="260"></canvas></div>
+    </div>
+    <div class="sc-chart-box" style="flex:1;">
+      <div class="sc-chart-box-title">PL vs Championship Revenue Cliff (GBP m/yr)</div>
+      <div class="sc-chart-box-sub">The income gap that made the wage structure fatal on relegation</div>
+      <div class="sc-chart-wrap" style="height:260px;"><canvas id="lr-cliff" height="260"></canvas></div>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script>
-(function(){
-  const G='#1a3a2a',GOLD='#c9a84c',RED='#c0392b',GREY='#aaa';
-  Chart.defaults.font={family:'Arial',size:11};Chart.defaults.color='#555';
-
-  new Chart(document.getElementById('lr-wages'),{type:'bar',data:{
-    labels:['17/18 (Champ)','18/19 (Champ)','19/20 (Champ)','20/21 (PL)','21/22 (PL)','22/23 (PL)','23/24 (Champ)'],
-    datasets:[
-      {label:'Wage Bill (£m)',data:[30,38,55,100,118,146,84],backgroundColor:[G,G,G,GOLD,GOLD,RED,GOLD],borderWidth:0,borderRadius:2},
-      {label:'Estimated Revenue (£m)',data:[50,55,65,195,210,200,100],type:'line',borderColor:G,backgroundColor:'transparent',pointBackgroundColor:G,borderWidth:2,pointRadius:4,tension:0.3}
-    ]
-  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10},boxWidth:12}}},scales:{y:{beginAtZero:true,ticks:{callback:v=>'£'+v+'m'},grid:{color:'#f0f0f0'}},x:{grid:{display:false},ticks:{font:{size:9}}}}}});
-
-  new Chart(document.getElementById('lr-val'),{type:'bar',data:{
-    labels:['Cellino → Radrizzani (2017)','Radrizzani stake 2nd tranche (2017)','49ers minority (2018)','49ers majority (2023 implied)'],
-    datasets:[{label:'Transaction Value (£m)',data:[45,30,10,180],backgroundColor:[G,G,GOLD,RED],borderWidth:0,borderRadius:3}]
-  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{callback:v=>'£'+v+'m'},grid:{color:'#f0f0f0'}},x:{grid:{display:false},ticks:{font:{size:8}}}}}});
-
-  new Chart(document.getElementById('lr-cliff'),{type:'bar',data:{
-    labels:['Mid-table Championship (no parachute)','Championship with parachute payment','PL (bottom 3)','PL (mid-table)','PL (top 6)'],
-    datasets:[{label:'Broadcast + Central Revenue (£m)',data:[15,40,130,160,210],backgroundColor:[GREY,GOLD,G,G,G],borderWidth:0,borderRadius:3}]
-  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{callback:v=>'£'+v+'m'},grid:{color:'#f0f0f0'}},x:{grid:{display:false},ticks:{font:{size:9}}}}}});
-})();
+window.addEventListener('load', function() {
+  if (typeof Chart === 'undefined') { return; }
+  var G='#1a3a2a', GOLD='#c9a84c', RED='#c0392b', GREY='#aaa', LG='#3a6a4a';
+  Chart.defaults.font = {family:'Arial', size:11};
+  Chart.defaults.color = '#555';
+  function mkChart(id, cfg) {
+    var el = document.getElementById(id);
+    if (el) { try { new Chart(el, cfg); } catch(e) {} }
+  }
+  mkChart('lr-wages',{type:'bar',data:{labels:['17/18','18/19','19/20','20/21','21/22','22/23','23/24'],datasets:[{label:'Wage Bill (GBP m)',data:[30,38,55,100,118,146,84],backgroundColor:[G,G,G,GOLD,GOLD,RED,GOLD],borderWidth:0,borderRadius:2},{type:'line',label:'Est. Revenue (GBP m)',data:[50,55,65,195,210,200,100],borderColor:LG,backgroundColor:'transparent',pointBackgroundColor:LG,borderWidth:2,pointRadius:4,tension:0.3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10},boxWidth:12}}},scales:{y:{beginAtZero:true,ticks:{callback:function(v){return v+'m';}},grid:{color:'#f0f0f0'}},x:{grid:{display:false}}}}});
+  mkChart('lr-cliff',{type:'bar',data:{labels:['Championship','Champ+Parachute','PL Bottom','PL Mid-Table','PL Top 6'],datasets:[{data:[15,40,130,160,210],backgroundColor:[GREY,GOLD,G,G,G],borderWidth:0,borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,ticks:{callback:function(v){return v+'m';}},grid:{color:'#f0f0f0'}},y:{grid:{display:false},ticks:{font:{size:10}}}}}}); 
+});
 </script>
-
 </body>
 </html>

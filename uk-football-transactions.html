@@ -154,18 +154,14 @@
     .brand { margin-top: 32px; }
   }
 </style>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
-<style>
-.sc-dashboard { margin: 44px 0 0; border-top: 1.5px solid #1a1a1a; padding-top: 32px; }
-.sc-dashboard-title { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #888; margin-bottom: 20px; }
-.sc-chart-row { display: flex; gap: 24px; flex-wrap: wrap; margin-bottom: 28px; }
-.sc-chart-box { flex: 1; min-width: 260px; border: 1px solid #ddd; padding: 18px 18px 14px; background: #fff; }
-.sc-chart-box-title { font-size: 11px; font-weight: 800; color: #000; margin-bottom: 4px; letter-spacing: 0.2px; }
-.sc-chart-box-sub { font-size: 10.5px; color: #999; margin-bottom: 14px; }
-.sc-chart-canvas-wrap { position: relative; }
+<style id="sc-charts-css">
+.sc-chart-row{display:flex;gap:24px;flex-wrap:wrap;margin-bottom:28px;}
+.sc-chart-box{flex:1;min-width:260px;border:1px solid #ddd;padding:18px 18px 14px;background:#fff;box-sizing:border-box;}
+.sc-chart-box-title{font-size:11px;font-weight:800;color:#000;margin-bottom:4px;}
+.sc-chart-box-sub{font-size:10.5px;color:#999;margin-bottom:14px;}
+.sc-chart-wrap{position:relative;width:100%;}
 </style>
-
 </head>
 <body>
 <div class="page">
@@ -508,40 +504,56 @@ renderTable();
     </div>
   </div>
 </div>
+
+<div style="max-width:1100px;margin:44px auto 0;padding:0 36px;border-top:1.5px solid #1a1a1a;padding-top:32px;">
+  <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#888;margin-bottom:20px;">Transaction Data Dashboard</div>
+  <div class="sc-chart-row">
+    <div class="sc-chart-box" style="flex:2;">
+      <div class="sc-chart-box-title">English Football Transactions 2015-2025</div>
+      <div class="sc-chart-box-sub">US buyers led 22 of 50 deals. 2021-2023 was the peak window.</div>
+      <div class="sc-chart-wrap" style="height:240px;"><canvas id="uk-vol" height="240"></canvas></div>
+    </div>
+    <div class="sc-chart-box" style="flex:1;">
+      <div class="sc-chart-box-title">Acquirer Nationality</div>
+      <div class="sc-chart-box-sub">All 50 transactions by buyer origin</div>
+      <div class="sc-chart-wrap" style="height:240px;"><canvas id="uk-nat" height="240"></canvas></div>
+    </div>
+  </div>
+  <div class="sc-chart-row">
+    <div class="sc-chart-box" style="flex:1;">
+      <div class="sc-chart-box-title">Deal Type Mix</div>
+      <div class="sc-chart-box-sub">Control, minority, distressed, full sale</div>
+      <div class="sc-chart-wrap" style="height:200px;"><canvas id="uk-type" height="200"></canvas></div>
+    </div>
+    <div class="sc-chart-box" style="flex:1;">
+      <div class="sc-chart-box-title">Disclosed Capital by League (GBP m)</div>
+      <div class="sc-chart-box-sub">Where capital is going across the pyramid</div>
+      <div class="sc-chart-wrap" style="height:200px;"><canvas id="uk-league" height="200"></canvas></div>
+    </div>
+    <div class="sc-chart-box" style="flex:1;">
+      <div class="sc-chart-box-title">Cumulative US Capital (GBP bn est.)</div>
+      <div class="sc-chart-box-sub">Running total of US-origin investment, 2015-2025</div>
+      <div class="sc-chart-wrap" style="height:200px;"><canvas id="uk-us" height="200"></canvas></div>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script>
-(function(){
-  const G='#1a3a2a',GOLD='#c9a84c',RED='#c0392b',GREY='#aaa',LG='#3a6a4a';
-  Chart.defaults.font={family:'Arial',size:11};Chart.defaults.color='#555';
-
-  new Chart(document.getElementById('uk-vol'),{type:'bar',data:{
-    labels:['2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025'],
-    datasets:[
-      {label:'US Buyers',data:[1,2,2,2,2,3,4,3,2,2,1],backgroundColor:G,borderWidth:0,borderRadius:2},
-      {label:'Other Buyers',data:[1,1,2,2,2,3,4,4,3,3,2],backgroundColor:GOLD,borderWidth:0,borderRadius:2}
-    ]
-  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10},boxWidth:12}}},scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,ticks:{stepSize:2},grid:{color:'#f0f0f0'}}}}});
-
-  new Chart(document.getElementById('uk-nat'),{type:'doughnut',data:{
-    labels:['USA','Middle East / Gulf','UK (domestic)','Europe','Asia / Pacific','Other'],
-    datasets:[{data:[22,8,10,5,3,2],backgroundColor:[G,GOLD,LG,RED,GREY,'#2d5a3a'],borderWidth:2,borderColor:'#fff'}]
-  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:9},boxWidth:10,padding:6}}}}});
-
-  new Chart(document.getElementById('uk-type'),{type:'doughnut',data:{
-    labels:['Full Control','Majority (>50%)','Significant Minority','Distressed / Admin','Minority Stake'],
-    datasets:[{data:[18,12,10,6,4],backgroundColor:[G,LG,GOLD,RED,GREY],borderWidth:2,borderColor:'#fff'}]
-  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:9},boxWidth:10,padding:6}}}}});
-
-  new Chart(document.getElementById('uk-league'),{type:'bar',data:{
-    labels:['Premier League','Championship','League One','League Two'],
-    datasets:[{label:'Disclosed Capital (£m)',data:[4200,1800,180,45],backgroundColor:[G,GOLD,LG,GREY],borderWidth:0,borderRadius:3}]
-  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{callback:v=>'£'+v+'m'},grid:{color:'#f0f0f0'}},x:{grid:{display:false}}}}});
-
-  new Chart(document.getElementById('uk-us-cum'),{type:'line',data:{
-    labels:['2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025'],
-    datasets:[{label:'Cumulative US Capital (£bn)',data:[0.3,0.8,1.4,2.0,2.8,3.6,4.8,5.9,6.7,7.4,7.9],borderColor:G,backgroundColor:'rgba(26,58,42,0.08)',fill:true,tension:0.4,pointRadius:4,pointBackgroundColor:G,borderWidth:2.5}]
-  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{callback:v=>'£'+v+'bn'},grid:{color:'#f0f0f0'}},x:{grid:{display:false}}}}});
-})();
+window.addEventListener('load', function() {
+  if (typeof Chart === 'undefined') { return; }
+  var G='#1a3a2a', GOLD='#c9a84c', RED='#c0392b', GREY='#aaa', LG='#3a6a4a';
+  Chart.defaults.font = {family:'Arial', size:11};
+  Chart.defaults.color = '#555';
+  function mkChart(id, cfg) {
+    var el = document.getElementById(id);
+    if (el) { try { new Chart(el, cfg); } catch(e) {} }
+  }
+  mkChart('uk-vol',{type:'bar',data:{labels:['2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025'],datasets:[{label:'US Buyers',data:[1,2,2,2,2,3,4,3,2,2,1],backgroundColor:G,borderWidth:0,borderRadius:2},{label:'Other Buyers',data:[1,1,2,2,2,3,4,4,3,3,2],backgroundColor:GOLD,borderWidth:0,borderRadius:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10},boxWidth:12}}},scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,ticks:{stepSize:2},grid:{color:'#f0f0f0'}}}}});
+  mkChart('uk-nat',{type:'doughnut',data:{labels:['USA','Middle East','UK Domestic','Europe','Asia Pacific','Other'],datasets:[{data:[22,8,10,5,3,2],backgroundColor:[G,GOLD,LG,RED,GREY,'#2d5a3a'],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:9},boxWidth:10,padding:5}}}}});
+  mkChart('uk-type',{type:'doughnut',data:{labels:['Full Control','Majority >50%','Sig. Minority','Distressed','Minority'],datasets:[{data:[18,12,10,6,4],backgroundColor:[G,LG,GOLD,RED,GREY],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:9},boxWidth:10,padding:5}}}}});
+  mkChart('uk-league',{type:'bar',data:{labels:['Premier League','Championship','League One','League Two'],datasets:[{data:[4200,1800,180,45],backgroundColor:[G,GOLD,LG,GREY],borderWidth:0,borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{callback:function(v){return v+'m';}},grid:{color:'#f0f0f0'}},x:{grid:{display:false}}}}});
+  mkChart('uk-us',{type:'line',data:{labels:['2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025'],datasets:[{data:[0.3,0.8,1.4,2.0,2.8,3.6,4.8,5.9,6.7,7.4,7.9],borderColor:G,backgroundColor:'rgba(26,58,42,0.08)',fill:true,tension:0.4,pointRadius:4,pointBackgroundColor:G,borderWidth:2.5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{callback:function(v){return v+'bn';}},grid:{color:'#f0f0f0'}},x:{grid:{display:false}}}}});
+});
 </script>
-
 </body>
 </html>
