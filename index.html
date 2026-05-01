@@ -152,6 +152,18 @@
     .filter-bar { gap: 6px; }
   }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+<style>
+.sc-dashboard { margin: 44px 0 0; border-top: 1.5px solid #1a1a1a; padding-top: 32px; }
+.sc-dashboard-title { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #888; margin-bottom: 20px; }
+.sc-chart-row { display: flex; gap: 24px; flex-wrap: wrap; margin-bottom: 28px; }
+.sc-chart-box { flex: 1; min-width: 260px; border: 1px solid #ddd; padding: 18px 18px 14px; background: #fff; }
+.sc-chart-box-title { font-size: 11px; font-weight: 800; color: #000; margin-bottom: 4px; letter-spacing: 0.2px; }
+.sc-chart-box-sub { font-size: 10.5px; color: #999; margin-bottom: 14px; }
+.sc-chart-canvas-wrap { position: relative; }
+</style>
+
 </head>
 <body>
 <div class="page">
@@ -596,5 +608,55 @@
     });
   })();
 </script>
+
+<div class="page" style="padding-top:0;">
+  <div class="sc-dashboard">
+    <div class="sc-dashboard-title">Portfolio Dashboard</div>
+    <div class="sc-chart-row">
+      <div class="sc-chart-box" style="flex:1.2;">
+        <div class="sc-chart-box-title">Ownership Model Distribution</div>
+        <div class="sc-chart-box-sub">All tracked clubs by investor thesis</div>
+        <div class="sc-chart-canvas-wrap" style="height:200px;"><canvas id="idx-model"></canvas></div>
+      </div>
+      <div class="sc-chart-box" style="flex:1.2;">
+        <div class="sc-chart-box-title">Portfolio Status Breakdown</div>
+        <div class="sc-chart-box-sub">Active, Exited, Sold across tracked investments</div>
+        <div class="sc-chart-canvas-wrap" style="height:200px;"><canvas id="idx-status"></canvas></div>
+      </div>
+      <div class="sc-chart-box" style="flex:2;">
+        <div class="sc-chart-box-title">Ownership Entry Valuations by Division</div>
+        <div class="sc-chart-box-sub">Reported acquisition values (€m) across tracked clubs</div>
+        <div class="sc-chart-canvas-wrap" style="height:200px;"><canvas id="idx-valuation"></canvas></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  const G='#1a3a2a', GOLD='#c9a84c', RED='#c0392b', GREY='#aaa', LG='rgba(26,58,42,0.7)', LG2='rgba(201,168,76,0.8)';
+  const font={family:'Arial',size:11};
+  Chart.defaults.font=font;
+  Chart.defaults.color='#555';
+
+  new Chart(document.getElementById('idx-model'),{type:'doughnut',data:{
+    labels:['Media Rights Leverage','Brand-led / Lifestyle','Multi-Club Network','Celebrity / Operator','Personal Capital','PE Platform'],
+    datasets:[{data:[1,2,3,2,1,3],backgroundColor:[G,GOLD,'#3a6a4a','#a07a0f',GREY,'#2d5a3a'],borderWidth:2,borderColor:'#fff'}]
+  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:10},boxWidth:12,padding:8}}}}});
+
+  new Chart(document.getElementById('idx-status'),{type:'doughnut',data:{
+    labels:['Active','Exited','Sold'],
+    datasets:[{data:[6,2,3],backgroundColor:[G,GREY,GOLD],borderWidth:2,borderColor:'#fff'}]
+  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:10},boxWidth:12,padding:8}}}}});
+
+  new Chart(document.getElementById('idx-valuation'),{type:'bar',data:{
+    labels:['Wrexham','Malaga
+(2010)','Peterborough','Venezia','Palermo','Valladolid','Leeds
+(2017)','Leeds
+(2024)'],
+    datasets:[{label:'Entry Valuation (€m)',data:[2,34,3,10,10,30,50,180],backgroundColor:[G,G,G,GOLD,GOLD,GOLD,LG,LG],borderWidth:0}]
+  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{callback:v=>'€'+v+'m'},grid:{color:'#f0f0f0'}},x:{grid:{display:false},ticks:{font:{size:9}}}}}});
+})();
+</script>
+
 </body>
 </html>

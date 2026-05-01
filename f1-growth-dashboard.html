@@ -66,6 +66,18 @@ h1 { font-size: 26px; font-weight: 800; color: #000; letter-spacing: -0.4px; mar
   .stat-val { font-size: 17px; }
 }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+<style>
+.sc-dashboard { margin: 44px 0 0; border-top: 1.5px solid #1a1a1a; padding-top: 32px; }
+.sc-dashboard-title { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #888; margin-bottom: 20px; }
+.sc-chart-row { display: flex; gap: 24px; flex-wrap: wrap; margin-bottom: 28px; }
+.sc-chart-box { flex: 1; min-width: 260px; border: 1px solid #ddd; padding: 18px 18px 14px; background: #fff; }
+.sc-chart-box-title { font-size: 11px; font-weight: 800; color: #000; margin-bottom: 4px; letter-spacing: 0.2px; }
+.sc-chart-box-sub { font-size: 10.5px; color: #999; margin-bottom: 14px; }
+.sc-chart-canvas-wrap { position: relative; }
+</style>
+
 </head>
 <body>
 <div class="page">
@@ -467,5 +479,63 @@ h1 { font-size: 26px; font-weight: 800; color: #000; letter-spacing: -0.4px; mar
 
   <div class="brand">PYLON PARTNERS</div>
 </div>
+
+<div style="max-width:1100px;margin:0 auto;padding:0 36px;">
+  <div class="sc-dashboard">
+    <div class="sc-dashboard-title">Interactive Charts</div>
+    <div class="sc-chart-row">
+      <div class="sc-chart-box" style="flex:2;">
+        <div class="sc-chart-box-title">F1 Ownership Deals & Disclosed Capital — 2016 to 2024</div>
+        <div class="sc-chart-box-sub">Bar = deals count (left axis); Line = disclosed capital $m (right axis)</div>
+        <div style="position:relative;height:260px;"><canvas id="f1g-combo"></canvas></div>
+      </div>
+      <div class="sc-chart-box" style="flex:1;">
+        <div class="sc-chart-box-title">Deal Type Distribution</div>
+        <div class="sc-chart-box-sub">All F1 ownership transactions by structure</div>
+        <div style="position:relative;height:260px;"><canvas id="f1g-type"></canvas></div>
+      </div>
+    </div>
+    <div class="sc-chart-row">
+      <div class="sc-chart-box">
+        <div class="sc-chart-box-title">Implied Team Valuations — Key Reference Points ($bn)</div>
+        <div class="sc-chart-box-sub">Transaction-implied enterprise value at time of deal</div>
+        <div style="position:relative;height:200px;"><canvas id="f1g-vals"></canvas></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  const G='#1a3a2a',GOLD='#c9a84c',RED='#c0392b',GREY='#aaa';
+  Chart.defaults.font={family:'Arial',size:11};Chart.defaults.color='#555';
+
+  new Chart(document.getElementById('f1g-combo'),{type:'bar',data:{
+    labels:['2016','2017','2018','2019','2020','2021','2022','2023','2024'],
+    datasets:[
+      {type:'bar',label:'Deals',data:[1,0,1,0,3,2,4,2,3],backgroundColor:G,borderRadius:2,borderWidth:0,yAxisID:'y'},
+      {type:'line',label:'Disclosed Capital ($m)',data:[100,0,118,0,618,485,1100,850,1200],borderColor:GOLD,backgroundColor:'transparent',pointBackgroundColor:GOLD,borderWidth:2.5,pointRadius:5,yAxisID:'y1',tension:0.3}
+    ]
+  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10},boxWidth:12}}},scales:{y:{beginAtZero:true,position:'left',title:{display:true,text:'Deals',font:{size:10}},grid:{color:'#f0f0f0'},ticks:{stepSize:1}},y1:{beginAtZero:true,position:'right',title:{display:true,text:'$m Disclosed',font:{size:10}},grid:{drawOnChartArea:false},ticks:{callback:v=>'$'+v+'m'}},x:{grid:{display:false}}}}});
+
+  new Chart(document.getElementById('f1g-type'),{type:'doughnut',data:{
+    labels:['Minority Stake','Control / Majority','Distressed / Admin','Full Exit / Rebrand'],
+    datasets:[{data:[8,4,3,2],backgroundColor:[G,GOLD,RED,GREY],borderWidth:2,borderColor:'#fff'}]
+  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:9},boxWidth:10,padding:6}}}}});
+
+  new Chart(document.getElementById('f1g-vals'),{type:'bar',data:{
+    labels:['Williams
+(2020)','McLaren
+(2020)','Mercedes
+(2020)','AlphaTauri→RB
+(2023)','Aston Martin
+(2023)','Williams
+(2024 implied)','Mercedes
+(2024 implied)','Ferrari
+(2024 mkt cap)'],
+    datasets:[{label:'Implied Value ($bn)',data:[0.2,1.2,0.6,0.35,1.2,2.5,6,5.8],backgroundColor:[G,G,G,GOLD,GOLD,'#3a6a4a','#3a6a4a',RED],borderWidth:0,borderRadius:3}]
+  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{callback:v=>'$'+v+'bn'},grid:{color:'#f0f0f0'}},x:{grid:{display:false},ticks:{font:{size:8}}}}}});
+})();
+</script>
+
 </body>
 </html>

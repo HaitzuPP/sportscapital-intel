@@ -215,6 +215,18 @@
     .flag-block, .risk-block { font-size: 12.5px; }
   }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+<style>
+.sc-dashboard { margin: 44px 0 0; border-top: 1.5px solid #1a1a1a; padding-top: 32px; }
+.sc-dashboard-title { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #888; margin-bottom: 20px; }
+.sc-chart-row { display: flex; gap: 24px; flex-wrap: wrap; margin-bottom: 28px; }
+.sc-chart-box { flex: 1; min-width: 260px; border: 1px solid #ddd; padding: 18px 18px 14px; background: #fff; }
+.sc-chart-box-title { font-size: 11px; font-weight: 800; color: #000; margin-bottom: 4px; letter-spacing: 0.2px; }
+.sc-chart-box-sub { font-size: 10.5px; color: #999; margin-bottom: 14px; }
+.sc-chart-canvas-wrap { position: relative; }
+</style>
+
 </head>
 <body>
 <div class="page">
@@ -777,5 +789,74 @@
 
   <div class="brand">PYLON PARTNERS</div>
 </div>
+
+<div style="max-width:960px;margin:0 auto;padding:0 36px;">
+  <div class="sc-dashboard">
+    <div class="sc-dashboard-title">League Comparison Dashboard</div>
+    <div class="sc-chart-row">
+      <div class="sc-chart-box" style="flex:1;">
+        <div class="sc-chart-box-title">Broadcast Revenue per Club (€m/yr)</div>
+        <div class="sc-chart-box-sub">Annual TV distribution to each club in the division</div>
+        <div style="position:relative;height:220px;"><canvas id="lb-bc"></canvas></div>
+      </div>
+      <div class="sc-chart-box" style="flex:1;">
+        <div class="sc-chart-box-title">Investment Signal vs Broadcast Revenue</div>
+        <div class="sc-chart-box-sub">Active = green; Watch Only = amber; Avoid = red</div>
+        <div style="position:relative;height:220px;"><canvas id="lb-signal"></canvas></div>
+      </div>
+    </div>
+    <div class="sc-chart-row">
+      <div class="sc-chart-box" style="flex:2;">
+        <div class="sc-chart-box-title">Entry Valuation Range by League (€m / top-6 club)</div>
+        <div class="sc-chart-box-sub">Min–Max range for a top-6 club acquisition at current market prices</div>
+        <div style="position:relative;height:180px;"><canvas id="lb-val"></canvas></div>
+      </div>
+      <div class="sc-chart-box" style="flex:1;">
+        <div class="sc-chart-box-title">Promotion Revenue Uplift (× current broadcast)</div>
+        <div class="sc-chart-box-sub">Broadcast revenue multiple on promotion to top division</div>
+        <div style="position:relative;height:180px;"><canvas id="lb-uplift"></canvas></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  const G='#1a3a2a',GOLD='#c9a84c',RED='#c0392b',GREY='#aaa';
+  Chart.defaults.font={family:'Arial',size:11};Chart.defaults.color='#555';
+
+  new Chart(document.getElementById('lb-bc'),{type:'bar',data:{
+    labels:['2.Bundesliga','Championship','La Liga 2','Ligue 2','Serie B','Superettan'],
+    datasets:[{label:'€m/club',data:[12.5,9.2,4.8,3.1,0.7,0.4],backgroundColor:[GREY,G,G,GREY,RED,GREY],borderWidth:0,borderRadius:3}]
+  },options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,ticks:{callback:v=>'€'+v+'m'},grid:{color:'#f0f0f0'}},y:{grid:{display:false}}}}});
+
+  new Chart(document.getElementById('lb-signal'),{type:'scatter',data:{
+    datasets:[
+      {label:'Active',data:[{x:9.2,y:3},{x:4.8,y:2.8}],backgroundColor:G,pointRadius:10,pointStyle:'circle'},
+      {label:'Selective',data:[{x:0.7,y:1.8}],backgroundColor:GOLD,pointRadius:10},
+      {label:'Watch Only',data:[{x:12.5,y:1}],backgroundColor:GREY,pointRadius:10},
+      {label:'Avoid',data:[{x:3.1,y:0.5}],backgroundColor:RED,pointRadius:10}
+    ]
+  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:9},boxWidth:10,padding:6}},tooltip:{callbacks:{label:ctx=>{
+    const names=['Championship','La Liga 2','Serie B','2.Bundesliga','Ligue 2'];
+    const xs=[9.2,4.8,0.7,12.5,3.1];
+    const idx=xs.indexOf(ctx.parsed.x);
+    return (idx>=0?names[idx]:'League')+': €'+ctx.parsed.x+'m broadcast';
+  }}}},scales:{x:{title:{display:true,text:'Broadcast/Club (€m)',font:{size:10}},grid:{color:'#f0f0f0'}},y:{title:{display:true,text:'Investment Appeal',font:{size:10}},grid:{color:'#f0f0f0'},min:0,max:4}}}});
+
+  new Chart(document.getElementById('lb-val'),{type:'bar',data:{
+    labels:['Championship','La Liga 2','Serie B','Ligue 2','2.Bundesliga'],
+    datasets:[
+      {label:'Min (€m)',data:[50,40,10,0,0],backgroundColor:'rgba(26,58,42,0.3)',borderWidth:0,borderRadius:2},
+      {label:'Max (€m)',data:[150,60,40,0,0],backgroundColor:G,borderWidth:0,borderRadius:2}
+    ]
+  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10},boxWidth:12}}},scales:{y:{beginAtZero:true,ticks:{callback:v=>'€'+v+'m'},grid:{color:'#f0f0f0'}},x:{grid:{display:false}}}}});
+
+  new Chart(document.getElementById('lb-uplift'),{type:'bar',data:{
+    labels:['La Liga 2','Serie B','Championship','Ligue 2','2.Bundesliga'],
+    datasets:[{label:'Revenue Multiple on Promotion',data:[18,22,8,6,4],backgroundColor:[G,G,GOLD,RED,GREY],borderWidth:0,borderRadius:3}]
+  },options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,ticks:{callback:v=>v+'×'},grid:{color:'#f0f0f0'}},y:{grid:{display:false}}}}});
+})();
+</script>
+
 </body>
 </html>

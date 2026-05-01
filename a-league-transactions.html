@@ -88,6 +88,18 @@ body { font-family: Arial, sans-serif; background: #fff; color: #1a1a1a; -webkit
   .stat:nth-child(even) { border-right: none; }
 }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+<style>
+.sc-dashboard { margin: 44px 0 0; border-top: 1.5px solid #1a1a1a; padding-top: 32px; }
+.sc-dashboard-title { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #888; margin-bottom: 20px; }
+.sc-chart-row { display: flex; gap: 24px; flex-wrap: wrap; margin-bottom: 28px; }
+.sc-chart-box { flex: 1; min-width: 260px; border: 1px solid #ddd; padding: 18px 18px 14px; background: #fff; }
+.sc-chart-box-title { font-size: 11px; font-weight: 800; color: #000; margin-bottom: 4px; letter-spacing: 0.2px; }
+.sc-chart-box-sub { font-size: 10.5px; color: #999; margin-bottom: 14px; }
+.sc-chart-canvas-wrap { position: relative; }
+</style>
+
 </head>
 <body>
 <div class="page">
@@ -319,5 +331,66 @@ body { font-family: Arial, sans-serif; background: #fff; color: #1a1a1a; -webkit
 
   <div class="brand">PYLON PARTNERS</div>
 </div>
+
+<div class="page" style="padding-top:0;">
+  <div class="sc-dashboard">
+    <div class="sc-dashboard-title">A-League Transaction Analysis</div>
+    <div class="sc-chart-row">
+      <div class="sc-chart-box" style="flex:2;">
+        <div class="sc-chart-box-title">Transaction Volume by Year</div>
+        <div class="sc-chart-box-sub">Number of recorded ownership events per year, 2004–2024</div>
+        <div class="sc-chart-canvas-wrap" style="height:220px;"><canvas id="al-vol"></canvas></div>
+      </div>
+      <div class="sc-chart-box" style="flex:1;">
+        <div class="sc-chart-box-title">Deal Type Mix</div>
+        <div class="sc-chart-box-sub">All transactions by category</div>
+        <div class="sc-chart-canvas-wrap" style="height:220px;"><canvas id="al-type"></canvas></div>
+      </div>
+    </div>
+    <div class="sc-chart-row">
+      <div class="sc-chart-box" style="flex:1;">
+        <div class="sc-chart-box-title">FFA Interventions vs Private Transactions</div>
+        <div class="sc-chart-box-sub">Governance events vs market-driven deals</div>
+        <div class="sc-chart-canvas-wrap" style="height:180px;"><canvas id="al-gov"></canvas></div>
+      </div>
+      <div class="sc-chart-box" style="flex:2;">
+        <div class="sc-chart-box-title">Ownership Consolidation Timeline</div>
+        <div class="sc-chart-box-sub">Cumulative unique ownership events per club (top 5 most active)</div>
+        <div class="sc-chart-canvas-wrap" style="height:180px;"><canvas id="al-club"></canvas></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  const G='#1a3a2a',GOLD='#c9a84c',RED='#c0392b',GREY='#ccc';
+  Chart.defaults.font={family:'Arial',size:11};Chart.defaults.color='#555';
+
+  // Transaction volume by year
+  new Chart(document.getElementById('al-vol'),{type:'bar',data:{
+    labels:['04','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24'],
+    datasets:[{label:'Transactions',data:[2,1,1,1,1,2,1,2,1,1,2,1,2,3,1,2,2,3,4,3],backgroundColor:G,borderWidth:0,borderRadius:2}]
+  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{stepSize:1},grid:{color:'#f0f0f0'}},x:{grid:{display:false}}}}});
+
+  // Deal type mix
+  new Chart(document.getElementById('al-type'),{type:'doughnut',data:{
+    labels:['New Entry / Founding','Buy-out','FFA Intervention','Receivership / Admin','Consortium','Sale'],
+    datasets:[{data:[6,8,4,3,5,10],backgroundColor:[G,GOLD,'#3a6a4a',RED,GREY,'#2d5a3a'],borderWidth:2,borderColor:'#fff'}]
+  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:9},boxWidth:10,padding:6}}}}});
+
+  // FFA vs private
+  new Chart(document.getElementById('al-gov'),{type:'doughnut',data:{
+    labels:['Market-Driven','FFA Intervention','Receivership/Admin'],
+    datasets:[{data:[28,4,4],backgroundColor:[G,GOLD,RED],borderWidth:2,borderColor:'#fff'}]
+  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:9},boxWidth:10,padding:6}}}}});
+
+  // Most active clubs
+  new Chart(document.getElementById('al-club'),{type:'bar',data:{
+    labels:['Adelaide Utd','Perth Glory','Newcastle Jets','Wellington Phoenix','Central Coast'],
+    datasets:[{label:'Ownership Events',data:[5,4,4,3,3],backgroundColor:[G,G,GOLD,GOLD,GREY],borderWidth:0,borderRadius:3}]
+  },options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,ticks:{stepSize:1},grid:{color:'#f0f0f0'}},y:{grid:{display:false}}}}});
+})();
+</script>
+
 </body>
 </html>

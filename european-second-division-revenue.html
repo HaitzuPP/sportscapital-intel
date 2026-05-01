@@ -101,6 +101,18 @@ svg { width: 100%; height: auto; display: block; }
 .note { font-size: 11px; color: #aaa; line-height: 1.7; margin-top: 4px; }
 .brand { text-align: right; font-size: 11px; color: #aaa; margin-top: 32px; letter-spacing: 1px; }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+<style>
+.sc-dashboard { margin: 44px 0 0; border-top: 1.5px solid #1a1a1a; padding-top: 32px; }
+.sc-dashboard-title { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #888; margin-bottom: 20px; }
+.sc-chart-row { display: flex; gap: 24px; flex-wrap: wrap; margin-bottom: 28px; }
+.sc-chart-box { flex: 1; min-width: 260px; border: 1px solid #ddd; padding: 18px 18px 14px; background: #fff; }
+.sc-chart-box-title { font-size: 11px; font-weight: 800; color: #000; margin-bottom: 4px; letter-spacing: 0.2px; }
+.sc-chart-box-sub { font-size: 10.5px; color: #999; margin-bottom: 14px; }
+.sc-chart-canvas-wrap { position: relative; }
+</style>
+
 </head>
 <body>
 <div class="page">
@@ -587,5 +599,48 @@ function drawLeagueChart(containerId, l) {
   });
 })();
 </script>
+
+<script>
+(function(){
+  const G='#1a3a2a',GOLD='#c9a84c',RED='#c0392b',GREY='#aaa';
+  Chart.defaults.font={family:'Arial',size:11};Chart.defaults.color='#555';
+
+  const bcCtx = document.getElementById('rev-broadcast');
+  if(bcCtx){
+    new Chart(bcCtx,{type:'bar',data:{
+      labels:['2.Bundesliga','Championship','La Liga 2','Serie B','Ligue 2','Superettan'],
+      datasets:[{label:'Broadcast per Club (€m)',data:[12.5,9.2,4.8,0.7,3.1,0.4],backgroundColor:[G,G,GOLD,RED,GREY,'#3a6a4a'],borderWidth:0,borderRadius:3}]
+    },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{callback:v=>'€'+v+'m'},grid:{color:'#f0f0f0'}},x:{grid:{display:false}}}}});
+  }
+  const tcCtx = document.getElementById('rev-total');
+  if(tcCtx){
+    new Chart(tcCtx,{type:'bar',data:{
+      labels:['Championship','2.Bundesliga','La Liga 2','Ligue 2','Serie B','Superettan'],
+      datasets:[
+        {label:'Broadcasting (€m)',data:[180,225,96,56,14,8],backgroundColor:G,borderWidth:0,borderRadius:2},
+        {label:'Commercial / Other (€m)',data:[120,75,48,24,12,4],backgroundColor:GOLD,borderWidth:0,borderRadius:2}
+      ]
+    },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10},boxWidth:12}}},scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,ticks:{callback:v=>'€'+v+'m'},grid:{color:'#f0f0f0'}}}}});
+  }
+})();
+</script>
+
+
+<div style="max-width:960px;margin:44px auto 0;padding:0 36px;border-top:1.5px solid #1a1a1a;padding-top:32px;">
+  <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#888;margin-bottom:20px;">Revenue Dashboard</div>
+  <div class="sc-chart-row">
+    <div class="sc-chart-box" style="flex:1;">
+      <div class="sc-chart-box-title">Broadcast Revenue per Club</div>
+      <div class="sc-chart-box-sub">Annual TV distribution per club, 2023-24 (€m)</div>
+      <div style="position:relative;height:220px;"><canvas id="rev-broadcast"></canvas></div>
+    </div>
+    <div class="sc-chart-box" style="flex:1;">
+      <div class="sc-chart-box-title">League Total Revenue — Broadcast vs Commercial</div>
+      <div class="sc-chart-box-sub">Estimated total league revenue split (€m)</div>
+      <div style="position:relative;height:220px;"><canvas id="rev-total"></canvas></div>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>

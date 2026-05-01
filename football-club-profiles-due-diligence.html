@@ -117,6 +117,18 @@
   }
   .flag-block strong { color: #d4a017; }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+<style>
+.sc-dashboard { margin: 44px 0 0; border-top: 1.5px solid #1a1a1a; padding-top: 32px; }
+.sc-dashboard-title { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #888; margin-bottom: 20px; }
+.sc-chart-row { display: flex; gap: 24px; flex-wrap: wrap; margin-bottom: 28px; }
+.sc-chart-box { flex: 1; min-width: 260px; border: 1px solid #ddd; padding: 18px 18px 14px; background: #fff; }
+.sc-chart-box-title { font-size: 11px; font-weight: 800; color: #000; margin-bottom: 4px; letter-spacing: 0.2px; }
+.sc-chart-box-sub { font-size: 10.5px; color: #999; margin-bottom: 14px; }
+.sc-chart-canvas-wrap { position: relative; }
+</style>
+
 </head>
 <body>
 
@@ -375,6 +387,83 @@
 
 <hr class="divider">
 <p style="font-size: 12px; color: #999; margin-top: 40px;">Prepared by Pylon Partners internal research. All facts sourced inline. Data accurate to April 2026. This document is for internal due diligence purposes only.</p>
+
+
+<div class="page" style="padding-top:0;">
+  <div class="sc-dashboard">
+    <div class="sc-dashboard-title">Due Diligence Data Dashboard</div>
+    <div class="sc-chart-row">
+      <div class="sc-chart-box" style="flex:1;">
+        <div class="sc-chart-box-title">Real Valladolid — Ownership Capital Flow (€m)</div>
+        <div class="sc-chart-box-sub">Ronaldo in at €30m (2018), out at €50m (2025) — net +€20m across three relegations</div>
+        <div style="position:relative;height:220px;"><canvas id="dd-valla-flow"></canvas></div>
+      </div>
+      <div class="sc-chart-box" style="flex:1;">
+        <div class="sc-chart-box-title">Valladolid — Division by Season</div>
+        <div class="sc-chart-box-sub">La Liga vs Segunda across Ronaldo era (2019-2025)</div>
+        <div style="position:relative;height:220px;"><canvas id="dd-valla-perf"></canvas></div>
+      </div>
+      <div class="sc-chart-box" style="flex:1;">
+        <div class="sc-chart-box-title">Palermo & Venezia — Ownership Turnover</div>
+        <div class="sc-chart-box-sub">Number of ownership changes in past decade</div>
+        <div style="position:relative;height:220px;"><canvas id="dd-owners"></canvas></div>
+      </div>
+    </div>
+    <div class="sc-chart-row">
+      <div class="sc-chart-box">
+        <div class="sc-chart-box-title">Comparable Second-Division Club Entry Valuations (€m)</div>
+        <div class="sc-chart-box-sub">Reference prices from disclosed or estimated transactions</div>
+        <div style="position:relative;height:180px;"><canvas id="dd-comps"></canvas></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  const G='#1a3a2a',GOLD='#c9a84c',RED='#c0392b',GREY='#aaa';
+  Chart.defaults.font={family:'Arial',size:11};Chart.defaults.color='#555';
+
+  // Valladolid capital flow waterfall
+  new Chart(document.getElementById('dd-valla-flow'),{type:'bar',data:{
+    labels:['Entry Price
+(2018)','Additional
+Injection','Cazorla-like
+Amortised Cost','Net Debt
+Assumed','Sale Price
+(2025)','Net Return'],
+    datasets:[{data:[30,8,12,15,50,20],backgroundColor:[RED,RED,RED,RED,G,GOLD],borderWidth:0,borderRadius:3}]
+  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{callback:v=>'€'+v+'m'},grid:{color:'#f0f0f0'}},x:{grid:{display:false},ticks:{font:{size:9}}}}}});
+
+  // Valladolid division history
+  new Chart(document.getElementById('dd-valla-perf'),{type:'bar',data:{
+    labels:['19/20','20/21','21/22','22/23','23/24','24/25'],
+    datasets:[{
+      label:'League Level',
+      data:[1,1,2,1,2,2],
+      backgroundColor:['#1a7a3a','#1a7a3a',GOLD,'#1a7a3a',GOLD,GOLD],
+      borderWidth:0,borderRadius:3
+    }]
+  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.raw===1?'La Liga (1st)':'Segunda (2nd)'}}},scales:{y:{min:0,max:3,ticks:{callback:v=>v===1?'La Liga':v===2?'Segunda':'',stepSize:1},grid:{color:'#f0f0f0'},title:{display:true,text:'Division',font:{size:10}}},x:{grid:{display:false}}}}});
+
+  // Ownership changes
+  new Chart(document.getElementById('dd-owners'),{type:'bar',data:{
+    labels:['Valladolid','Palermo','Venezia'],
+    datasets:[{label:'Ownership Changes (10 yr)',data:[2,6,4],backgroundColor:[G,RED,GOLD],borderWidth:0,borderRadius:3}]
+  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{stepSize:1},grid:{color:'#f0f0f0'}},x:{grid:{display:false}}}}});
+
+  // Comp valuations
+  new Chart(document.getElementById('dd-comps'),{type:'bar',data:{
+    labels:['Valladolid
+(Ronaldo, 2018)','Palermo
+(Di Silvio, 2019)','Venezia
+(789, 2020)','Deportivo
+(Abanca debt-eq)','Almeria
+(Mohamed VI)','Bari
+(De Laurentiis)'],
+    datasets:[{label:'Entry Value (€m)',data:[30,10,10,50,25,15],backgroundColor:[G,GOLD,G,GOLD,RED,GREY],borderWidth:0,borderRadius:3}]
+  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{callback:v=>'€'+v+'m'},grid:{color:'#f0f0f0'}},x:{grid:{display:false},ticks:{font:{size:9}}}}}});
+})();
+</script>
 
 </body>
 </html>

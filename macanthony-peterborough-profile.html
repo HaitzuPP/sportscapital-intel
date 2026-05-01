@@ -84,6 +84,18 @@
 
   .brand { text-align: right; font-size: 11px; color: #aaa; margin-top: 40px; letter-spacing: 1px; }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+<style>
+.sc-dashboard { margin: 44px 0 0; border-top: 1.5px solid #1a1a1a; padding-top: 32px; }
+.sc-dashboard-title { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #888; margin-bottom: 20px; }
+.sc-chart-row { display: flex; gap: 24px; flex-wrap: wrap; margin-bottom: 28px; }
+.sc-chart-box { flex: 1; min-width: 260px; border: 1px solid #ddd; padding: 18px 18px 14px; background: #fff; }
+.sc-chart-box-title { font-size: 11px; font-weight: 800; color: #000; margin-bottom: 4px; letter-spacing: 0.2px; }
+.sc-chart-box-sub { font-size: 10.5px; color: #999; margin-bottom: 14px; }
+.sc-chart-canvas-wrap { position: relative; }
+</style>
+
 </head>
 <body>
 <div class="page">
@@ -491,5 +503,78 @@
 
   <div class="brand">PYLON PARTNERS</div>
 </div>
+
+<div style="max-width:960px;margin:0 auto;padding:0 36px;">
+  <div class="sc-dashboard">
+    <div class="sc-dashboard-title">Transfer Economics Dashboard</div>
+    <div class="sc-chart-row">
+      <div class="sc-chart-box" style="flex:2;">
+        <div class="sc-chart-box-title">MacAnthony Marquee Sales — Fee In vs Fee Out (£m)</div>
+        <div class="sc-chart-box-sub">Every major transfer: buy price vs sell price. The model in one chart.</div>
+        <div style="position:relative;height:260px;"><canvas id="ma-waterfall"></canvas></div>
+      </div>
+      <div class="sc-chart-box" style="flex:1;">
+        <div class="sc-chart-box-title">Transfer Profit Margin by Player</div>
+        <div class="sc-chart-box-sub">Gross profit on selected disposals (£m)</div>
+        <div style="position:relative;height:260px;"><canvas id="ma-profit"></canvas></div>
+      </div>
+    </div>
+    <div class="sc-chart-row">
+      <div class="sc-chart-box" style="flex:1;">
+        <div class="sc-chart-box-title">Cumulative Net Transfer Receipts — MacAnthony Era</div>
+        <div class="sc-chart-box-sub">Running total of net transfer income generated since 2006 (£m, estimated)</div>
+        <div style="position:relative;height:180px;"><canvas id="ma-cumul"></canvas></div>
+      </div>
+      <div class="sc-chart-box" style="flex:1;">
+        <div class="sc-chart-box-title">Sale Destination by League</div>
+        <div class="sc-chart-box-sub">Where MacAnthony sold players — club level league breakdown</div>
+        <div style="position:relative;height:180px;"><canvas id="ma-dest"></canvas></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  const G='#1a3a2a',GOLD='#c9a84c',RED='#c0392b',GREY='#aaa';
+  Chart.defaults.font={family:'Arial',size:11};Chart.defaults.color='#555';
+
+  new Chart(document.getElementById('ma-waterfall'),{type:'bar',data:{
+    labels:['D.Gayle
+bought','D.Gayle
+sold','Assombalonga
+bought','Assombalonga
+sold','I.Toney
+bought','I.Toney
+sold','Marriott
+bought','Marriott
+sold','L.Coulson
+bought','L.Coulson
+sold'],
+    datasets:[{
+      label:'Transfer Fee (£m)',
+      data:[0.01,6,0.1,6,0.35,28,0.05,3,0.05,2.5],
+      backgroundColor:[RED,G,RED,G,RED,G,RED,G,RED,G],
+      borderWidth:0,borderRadius:3
+    }]
+  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{callback:v=>'£'+v+'m'},grid:{color:'#f0f0f0'}},x:{grid:{display:false},ticks:{font:{size:8}}}}}});
+
+  new Chart(document.getElementById('ma-profit'),{type:'bar',data:{
+    labels:['I.Toney','D.Gayle','Assombalonga','Marriott','Coulson','Kanu
++add-ons'],
+    datasets:[{label:'Gross Profit (£m)',data:[27.65,5.99,5.9,2.95,2.45,1.5],backgroundColor:[G,G,G,GOLD,GOLD,GOLD],borderWidth:0,borderRadius:3}]
+  },options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,ticks:{callback:v=>'£'+v+'m'},grid:{color:'#f0f0f0'}},y:{grid:{display:false}}}}});
+
+  new Chart(document.getElementById('ma-cumul'),{type:'line',data:{
+    labels:['2008','2010','2012','2014','2016','2018','2020','2022','2024'],
+    datasets:[{label:'Cumulative Net Transfer Income (£m)',data:[0.5,2,5,14,22,35,44,72,85],borderColor:G,backgroundColor:'rgba(26,58,42,0.08)',fill:true,tension:0.4,pointRadius:4,pointBackgroundColor:G,borderWidth:2.5}]
+  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{callback:v=>'£'+v+'m'},grid:{color:'#f0f0f0'}},x:{grid:{display:false}}}}});
+
+  new Chart(document.getElementById('ma-dest'),{type:'doughnut',data:{
+    labels:['Premier League','Championship','League One','Serie A / Foreign'],
+    datasets:[{data:[8,5,2,2],backgroundColor:[G,GOLD,GREY,RED],borderWidth:2,borderColor:'#fff'}]
+  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:9},boxWidth:10,padding:6}}}}});
+})();
+</script>
+
 </body>
 </html>

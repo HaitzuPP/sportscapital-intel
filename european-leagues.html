@@ -230,6 +230,18 @@ footer {
   .legend p { font-size: 12px !important; }
 }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+<style>
+.sc-dashboard { margin: 44px 0 0; border-top: 1.5px solid #1a1a1a; padding-top: 32px; }
+.sc-dashboard-title { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #888; margin-bottom: 20px; }
+.sc-chart-row { display: flex; gap: 24px; flex-wrap: wrap; margin-bottom: 28px; }
+.sc-chart-box { flex: 1; min-width: 260px; border: 1px solid #ddd; padding: 18px 18px 14px; background: #fff; }
+.sc-chart-box-title { font-size: 11px; font-weight: 800; color: #000; margin-bottom: 4px; letter-spacing: 0.2px; }
+.sc-chart-box-sub { font-size: 10.5px; color: #999; margin-bottom: 14px; }
+.sc-chart-canvas-wrap { position: relative; }
+</style>
+
 </head>
 <body>
 
@@ -775,5 +787,67 @@ footer {
   });
 })();
 </script>
+
+<div style="max-width:960px;margin:0 auto;padding:0 36px;">
+  <div class="sc-dashboard">
+    <div class="sc-dashboard-title">European Ownership Data Dashboard</div>
+    <div class="sc-chart-row">
+      <div class="sc-chart-box" style="flex:2;">
+        <div class="sc-chart-box-title">Ownership Structure by League — % of Clubs</div>
+        <div class="sc-chart-box-sub">Member-owned vs corporate vs foreign PE / private capital</div>
+        <div class="sc-chart-canvas-wrap" style="height:240px;"><canvas id="eu-struct"></canvas></div>
+      </div>
+      <div class="sc-chart-box" style="flex:1;">
+        <div class="sc-chart-box-title">Multi-Club Ownership (MCO) Penetration</div>
+        <div class="sc-chart-box-sub">% of clubs sharing an owner with another club</div>
+        <div class="sc-chart-canvas-wrap" style="height:240px;"><canvas id="eu-mco"></canvas></div>
+      </div>
+    </div>
+    <div class="sc-chart-row">
+      <div class="sc-chart-box" style="flex:1;">
+        <div class="sc-chart-box-title">Foreign Capital Origin — Top European Leagues</div>
+        <div class="sc-chart-box-sub">Number of foreign-owned clubs by acquirer nationality</div>
+        <div class="sc-chart-canvas-wrap" style="height:200px;"><canvas id="eu-origin"></canvas></div>
+      </div>
+      <div class="sc-chart-box" style="flex:1;">
+        <div class="sc-chart-box-title">Foreign Ownership Deals by Year</div>
+        <div class="sc-chart-box-sub">Cross-border acquisitions of European football clubs, 2015–2025</div>
+        <div class="sc-chart-canvas-wrap" style="height:200px;"><canvas id="eu-yr"></canvas></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  const G='#1a3a2a',GOLD='#c9a84c',RED='#c0392b',GREY='#aaa',MG='#3a6a4a';
+  Chart.defaults.font={family:'Arial',size:11};Chart.defaults.color='#555';
+
+  new Chart(document.getElementById('eu-struct'),{type:'bar',data:{
+    labels:['Premier League','La Liga','Bundesliga','Serie A','Ligue 1','Eredivisie'],
+    datasets:[
+      {label:'Member / Foundation Owned',data:[0,15,83,5,10,60],backgroundColor:GREY,borderWidth:0,borderRadius:2},
+      {label:'Domestic Private / Corporate',data:[40,55,14,45,30,25],backgroundColor:G,borderWidth:0,borderRadius:2},
+      {label:'Foreign Private / PE',data:[60,30,3,50,60,15],backgroundColor:GOLD,borderWidth:0,borderRadius:2}
+    ]
+  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10},boxWidth:12}}},scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,max:100,ticks:{callback:v=>v+'%'},grid:{color:'#f0f0f0'}}}}});
+
+  new Chart(document.getElementById('eu-mco'),{type:'bar',data:{
+    labels:['Ligue 1','Serie A','Premier League','La Liga','Eredivisie','Bundesliga'],
+    datasets:[{label:'MCO %',data:[50,30,25,20,15,2],backgroundColor:[G,G,G,GOLD,GOLD,RED],borderWidth:0,borderRadius:3}]
+  },options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,max:60,ticks:{callback:v=>v+'%'},grid:{color:'#f0f0f0'}},y:{grid:{display:false}}}}});
+
+  new Chart(document.getElementById('eu-origin'),{type:'bar',data:{
+    labels:['USA','Middle East
+/ Gulf','UK (cross-border)','China','Australia','Rest of World'],
+    datasets:[{label:'Clubs',data:[28,14,9,6,4,12],backgroundColor:[G,GOLD,MG,RED,GREY,'#2d5a3a'],borderWidth:0,borderRadius:2}]
+  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,grid:{color:'#f0f0f0'},ticks:{stepSize:5}},x:{grid:{display:false},ticks:{font:{size:9}}}}}});
+
+  new Chart(document.getElementById('eu-yr'),{type:'line',data:{
+    labels:['2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025'],
+    datasets:[{label:'Foreign Acquisitions',data:[4,5,6,7,5,8,14,16,18,21,19],borderColor:G,backgroundColor:'rgba(26,58,42,0.08)',fill:true,tension:0.3,pointRadius:4,pointBackgroundColor:G,borderWidth:2.5}]
+  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,grid:{color:'#f0f0f0'}},x:{grid:{display:false}}}}});
+})();
+</script>
+
 </body>
 </html>

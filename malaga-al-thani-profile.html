@@ -95,6 +95,18 @@
   .note { font-size: 11px; color: #999; margin-top: 8px; }
   .brand { text-align: right; font-size: 11px; color: #aaa; margin-top: 40px; letter-spacing: 1px; }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+<style>
+.sc-dashboard { margin: 44px 0 0; border-top: 1.5px solid #1a1a1a; padding-top: 32px; }
+.sc-dashboard-title { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #888; margin-bottom: 20px; }
+.sc-chart-row { display: flex; gap: 24px; flex-wrap: wrap; margin-bottom: 28px; }
+.sc-chart-box { flex: 1; min-width: 260px; border: 1px solid #ddd; padding: 18px 18px 14px; background: #fff; }
+.sc-chart-box-title { font-size: 11px; font-weight: 800; color: #000; margin-bottom: 4px; letter-spacing: 0.2px; }
+.sc-chart-box-sub { font-size: 10.5px; color: #999; margin-bottom: 14px; }
+.sc-chart-canvas-wrap { position: relative; }
+</style>
+
 </head>
 <body>
 <div class="page">
@@ -470,5 +482,85 @@
 
   <div class="brand">PYLON PARTNERS — April 2026</div>
 </div>
+
+<div style="max-width:960px;margin:0 auto;padding:0 36px;">
+  <div class="sc-dashboard">
+    <div class="sc-dashboard-title">Capital Flow Analysis</div>
+    <div class="sc-chart-row">
+      <div class="sc-chart-box" style="flex:2;">
+        <div class="sc-chart-box-title">Al-Thani Era — Cash Flows In vs Out (€m)</div>
+        <div class="sc-chart-box-sub">What went in: acquisition + transfers. What came back: player sales. Structural deficit visible throughout.</div>
+        <div style="position:relative;height:260px;"><canvas id="ml-flows"></canvas></div>
+      </div>
+      <div class="sc-chart-box" style="flex:1;">
+        <div class="sc-chart-box-title">Debt Accumulation Timeline (€m)</div>
+        <div class="sc-chart-box-sub">Club debt peak by year under Al-Thani ownership</div>
+        <div style="position:relative;height:260px;"><canvas id="ml-debt"></canvas></div>
+      </div>
+    </div>
+    <div class="sc-chart-row">
+      <div class="sc-chart-box" style="flex:1;">
+        <div class="sc-chart-box-title">Transfer Investment vs Player Sale Returns</div>
+        <div class="sc-chart-box-sub">Key transfer decisions: spend vs recovery (€m)</div>
+        <div style="position:relative;height:200px;"><canvas id="ml-xfer"></canvas></div>
+      </div>
+      <div class="sc-chart-box" style="flex:1;">
+        <div class="sc-chart-box-title">League Position During Al-Thani Era</div>
+        <div class="sc-chart-box-sub">La Liga finish, then rapid decline through divisions</div>
+        <div style="position:relative;height:200px;"><canvas id="ml-pos"></canvas></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  const G='#1a3a2a',GOLD='#c9a84c',RED='#c0392b',GREY='#aaa';
+  Chart.defaults.font={family:'Arial',size:11};Chart.defaults.color='#555';
+
+  new Chart(document.getElementById('ml-flows'),{type:'bar',data:{
+    labels:['Acquisition
+(2010)','Summer
+2011 spend','Summer
+2012 sales','2013
+sales','2017
+sales','Total loans
+from club'],
+    datasets:[
+      {label:'Capital In / Expenditure (€m)',data:[34,60,0,0,0,27],backgroundColor:RED,borderWidth:0,borderRadius:2},
+      {label:'Capital Out / Receipts (€m)',data:[0,0,17,30,33,0],backgroundColor:G,borderWidth:0,borderRadius:2}
+    ]
+  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10},boxWidth:12}}},scales:{y:{beginAtZero:true,ticks:{callback:v=>'€'+v+'m'},grid:{color:'#f0f0f0'}},x:{grid:{display:false},ticks:{font:{size:9}}}}}});
+
+  new Chart(document.getElementById('ml-debt'),{type:'line',data:{
+    labels:['2010','2011','2012','2013','2014','2015','2016','2017','2018'],
+    datasets:[{label:'Club Debt (€m)',data:[20,80,130,140,150,155,160,165,170],borderColor:RED,backgroundColor:'rgba(192,57,43,0.08)',fill:true,tension:0.3,pointRadius:4,pointBackgroundColor:RED,borderWidth:2.5}]
+  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{callback:v=>'€'+v+'m'},grid:{color:'#f0f0f0'}},x:{grid:{display:false}}}}});
+
+  new Chart(document.getElementById('ml-xfer'),{type:'bar',data:{
+    labels:['Cazorla
+bought','Cazorla
+sold','Isco
+bought','Isco
+sold','Toulalan
+bought','Monreal
+bought'],
+    datasets:[{label:'€m',data:[21,17,6,30,11,6],backgroundColor:[RED,G,RED,G,RED,RED],borderWidth:0,borderRadius:3}]
+  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{callback:v=>'€'+v+'m'},grid:{color:'#f0f0f0'}},x:{grid:{display:false},ticks:{font:{size:8}}}}}});
+
+  new Chart(document.getElementById('ml-pos'),{type:'bar',data:{
+    labels:['11/12
+La Liga','12/13
+La Liga','13/14
+La Liga','14/15
+La Liga','15/16
+2ªDivision','16/17
+2ªDiv','17/18
+2ªDiv','18/19
+3rd tier'],
+    datasets:[{label:'League Position',data:[4,6,11,15,null,null,null,null],backgroundColor:[G,G,GOLD,GOLD,GREY,GREY,GREY,RED],borderWidth:0,borderRadius:2}]
+  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{reverse:true,min:1,max:20,ticks:{stepSize:5},grid:{color:'#f0f0f0'},title:{display:true,text:'League Position (lower = better)',font:{size:10}}},x:{grid:{display:false},ticks:{font:{size:8}}}}}});
+})();
+</script>
+
 </body>
 </html>
