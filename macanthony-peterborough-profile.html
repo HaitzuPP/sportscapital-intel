@@ -539,17 +539,7 @@
   Chart.defaults.font={family:'Arial',size:11};Chart.defaults.color='#555';
 
   new Chart(document.getElementById('ma-waterfall'),{type:'bar',data:{
-    labels:['D.Gayle
-bought','D.Gayle
-sold','Assombalonga
-bought','Assombalonga
-sold','I.Toney
-bought','I.Toney
-sold','Marriott
-bought','Marriott
-sold','L.Coulson
-bought','L.Coulson
-sold'],
+    labels:['D.Gayle bought','D.Gayle sold','Assombalonga bought','Assombalonga sold','I.Toney bought','I.Toney sold','Marriott bought','Marriott sold','L.Coulson bought','L.Coulson sold'],
     datasets:[{
       label:'Transfer Fee (£m)',
       data:[0.01,6,0.1,6,0.35,28,0.05,3,0.05,2.5],
@@ -559,8 +549,7 @@ sold'],
   },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{callback:v=>'£'+v+'m'},grid:{color:'#f0f0f0'}},x:{grid:{display:false},ticks:{font:{size:8}}}}}});
 
   new Chart(document.getElementById('ma-profit'),{type:'bar',data:{
-    labels:['I.Toney','D.Gayle','Assombalonga','Marriott','Coulson','Kanu
-+add-ons'],
+    labels:['I.Toney','D.Gayle','Assombalonga','Marriott','Coulson','Kanu +add-ons'],
     datasets:[{label:'Gross Profit (£m)',data:[27.65,5.99,5.9,2.95,2.45,1.5],backgroundColor:[G,G,G,GOLD,GOLD,GOLD],borderWidth:0,borderRadius:3}]
   },options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,ticks:{callback:v=>'£'+v+'m'},grid:{color:'#f0f0f0'}},y:{grid:{display:false}}}}});
 

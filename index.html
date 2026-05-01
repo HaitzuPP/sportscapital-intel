@@ -649,10 +649,7 @@
   },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:10},boxWidth:12,padding:8}}}}});
 
   new Chart(document.getElementById('idx-valuation'),{type:'bar',data:{
-    labels:['Wrexham','Malaga
-(2010)','Peterborough','Venezia','Palermo','Valladolid','Leeds
-(2017)','Leeds
-(2024)'],
+    labels:['Wrexham','Malaga (2010)','Peterborough','Venezia','Palermo','Valladolid','Leeds (2017)','Leeds (2024)'],
     datasets:[{label:'Entry Valuation (€m)',data:[2,34,3,10,10,30,50,180],backgroundColor:[G,G,G,GOLD,GOLD,GOLD,LG,LG],borderWidth:0}]
   },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{callback:v=>'€'+v+'m'},grid:{color:'#f0f0f0'}},x:{grid:{display:false},ticks:{font:{size:9}}}}}});
 })();

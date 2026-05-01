@@ -438,14 +438,7 @@ a:hover { text-decoration: underline; }
   Chart.defaults.font={family:'Arial',size:11};Chart.defaults.color='#555';
 
   new Chart(document.getElementById('lr-wages'),{type:'bar',data:{
-    labels:['17/18
-(Champ)','18/19
-(Champ)','19/20
-(Champ)','20/21
-(PL)','21/22
-(PL)','22/23
-(PL)','23/24
-(Champ)'],
+    labels:['17/18 (Champ)','18/19 (Champ)','19/20 (Champ)','20/21 (PL)','21/22 (PL)','22/23 (PL)','23/24 (Champ)'],
     datasets:[
       {label:'Wage Bill (£m)',data:[30,38,55,100,118,146,84],backgroundColor:[G,G,G,GOLD,GOLD,RED,GOLD],borderWidth:0,borderRadius:2},
       {label:'Estimated Revenue (£m)',data:[50,55,65,195,210,200,100],type:'line',borderColor:G,backgroundColor:'transparent',pointBackgroundColor:G,borderWidth:2,pointRadius:4,tension:0.3}
@@ -453,18 +446,12 @@ a:hover { text-decoration: underline; }
   },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10},boxWidth:12}}},scales:{y:{beginAtZero:true,ticks:{callback:v=>'£'+v+'m'},grid:{color:'#f0f0f0'}},x:{grid:{display:false},ticks:{font:{size:9}}}}}});
 
   new Chart(document.getElementById('lr-val'),{type:'bar',data:{
-    labels:['Cellino → Radrizzani
-(2017)','Radrizzani stake
-2nd tranche (2017)','49ers minority
-(2018)','49ers majority
-(2023 implied)'],
+    labels:['Cellino → Radrizzani (2017)','Radrizzani stake 2nd tranche (2017)','49ers minority (2018)','49ers majority (2023 implied)'],
     datasets:[{label:'Transaction Value (£m)',data:[45,30,10,180],backgroundColor:[G,G,GOLD,RED],borderWidth:0,borderRadius:3}]
   },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{callback:v=>'£'+v+'m'},grid:{color:'#f0f0f0'}},x:{grid:{display:false},ticks:{font:{size:8}}}}}});
 
   new Chart(document.getElementById('lr-cliff'),{type:'bar',data:{
-    labels:['Mid-table Championship
-(no parachute)','Championship with
-parachute payment','PL (bottom 3)','PL (mid-table)','PL (top 6)'],
+    labels:['Mid-table Championship (no parachute)','Championship with parachute payment','PL (bottom 3)','PL (mid-table)','PL (top 6)'],
     datasets:[{label:'Broadcast + Central Revenue (£m)',data:[15,40,130,160,210],backgroundColor:[GREY,GOLD,G,G,G],borderWidth:0,borderRadius:3}]
   },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{callback:v=>'£'+v+'m'},grid:{color:'#f0f0f0'}},x:{grid:{display:false},ticks:{font:{size:9}}}}}});
 })();

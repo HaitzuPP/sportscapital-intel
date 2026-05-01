@@ -518,13 +518,7 @@
   Chart.defaults.font={family:'Arial',size:11};Chart.defaults.color='#555';
 
   new Chart(document.getElementById('ml-flows'),{type:'bar',data:{
-    labels:['Acquisition
-(2010)','Summer
-2011 spend','Summer
-2012 sales','2013
-sales','2017
-sales','Total loans
-from club'],
+    labels:['Acquisition (2010)','Summer 2011 spend','Summer 2012 sales','2013 sales','2017 sales','Total loans from club'],
     datasets:[
       {label:'Capital In / Expenditure (€m)',data:[34,60,0,0,0,27],backgroundColor:RED,borderWidth:0,borderRadius:2},
       {label:'Capital Out / Receipts (€m)',data:[0,0,17,30,33,0],backgroundColor:G,borderWidth:0,borderRadius:2}
@@ -537,26 +531,12 @@ from club'],
   },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{callback:v=>'€'+v+'m'},grid:{color:'#f0f0f0'}},x:{grid:{display:false}}}}});
 
   new Chart(document.getElementById('ml-xfer'),{type:'bar',data:{
-    labels:['Cazorla
-bought','Cazorla
-sold','Isco
-bought','Isco
-sold','Toulalan
-bought','Monreal
-bought'],
+    labels:['Cazorla bought','Cazorla sold','Isco bought','Isco sold','Toulalan bought','Monreal bought'],
     datasets:[{label:'€m',data:[21,17,6,30,11,6],backgroundColor:[RED,G,RED,G,RED,RED],borderWidth:0,borderRadius:3}]
   },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{callback:v=>'€'+v+'m'},grid:{color:'#f0f0f0'}},x:{grid:{display:false},ticks:{font:{size:8}}}}}});
 
   new Chart(document.getElementById('ml-pos'),{type:'bar',data:{
-    labels:['11/12
-La Liga','12/13
-La Liga','13/14
-La Liga','14/15
-La Liga','15/16
-2ªDivision','16/17
-2ªDiv','17/18
-2ªDiv','18/19
-3rd tier'],
+    labels:['11/12 La Liga','12/13 La Liga','13/14 La Liga','14/15 La Liga','15/16 2ªDivision','16/17 2ªDiv','17/18 2ªDiv','18/19 3rd tier'],
     datasets:[{label:'League Position',data:[4,6,11,15,null,null,null,null],backgroundColor:[G,G,GOLD,GOLD,GREY,GREY,GREY,RED],borderWidth:0,borderRadius:2}]
   },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{reverse:true,min:1,max:20,ticks:{stepSize:5},grid:{color:'#f0f0f0'},title:{display:true,text:'League Position (lower = better)',font:{size:10}}},x:{grid:{display:false},ticks:{font:{size:8}}}}}});
 })();

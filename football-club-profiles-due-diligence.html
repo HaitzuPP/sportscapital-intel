@@ -425,12 +425,7 @@
 
   // Valladolid capital flow waterfall
   new Chart(document.getElementById('dd-valla-flow'),{type:'bar',data:{
-    labels:['Entry Price
-(2018)','Additional
-Injection','Cazorla-like
-Amortised Cost','Net Debt
-Assumed','Sale Price
-(2025)','Net Return'],
+    labels:['Entry Price (2018)','Additional Injection','Cazorla-like Amortised Cost','Net Debt Assumed','Sale Price (2025)','Net Return'],
     datasets:[{data:[30,8,12,15,50,20],backgroundColor:[RED,RED,RED,RED,G,GOLD],borderWidth:0,borderRadius:3}]
   },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{callback:v=>'€'+v+'m'},grid:{color:'#f0f0f0'}},x:{grid:{display:false},ticks:{font:{size:9}}}}}});
 
@@ -453,13 +448,7 @@ Assumed','Sale Price
 
   // Comp valuations
   new Chart(document.getElementById('dd-comps'),{type:'bar',data:{
-    labels:['Valladolid
-(Ronaldo, 2018)','Palermo
-(Di Silvio, 2019)','Venezia
-(789, 2020)','Deportivo
-(Abanca debt-eq)','Almeria
-(Mohamed VI)','Bari
-(De Laurentiis)'],
+    labels:['Valladolid (Ronaldo, 2018)','Palermo (Di Silvio, 2019)','Venezia (789, 2020)','Deportivo (Abanca debt-eq)','Almeria (Mohamed VI)','Bari (De Laurentiis)'],
     datasets:[{label:'Entry Value (€m)',data:[30,10,10,50,25,15],backgroundColor:[G,GOLD,G,GOLD,RED,GREY],borderWidth:0,borderRadius:3}]
   },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{callback:v=>'€'+v+'m'},grid:{color:'#f0f0f0'}},x:{grid:{display:false},ticks:{font:{size:9}}}}}});
 })();

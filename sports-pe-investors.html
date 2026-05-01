@@ -318,14 +318,7 @@ body { font-family: Arial, sans-serif; background: #fff; color: #1a1a1a; -webkit
   Chart.defaults.font={family:'Arial',size:11};Chart.defaults.color='#555';
 
   new Chart(document.getElementById('pe-aum'),{type:'bar',data:{
-    labels:['Ares
-Mgmt','Sixth
-Street','Blackstone
-(Blitzer)','Point72
-(Cohen)','Arctos','HBSE','Fenway
-Sports','Wrexham
-(Reynolds)','Josh Harris
-(Assoc)','CVC Capital'],
+    labels:['Ares Mgmt','Sixth Street','Blackstone (Blitzer)','Point72 (Cohen)','Arctos','HBSE','Fenway Sports','Wrexham (Reynolds)','Josh Harris (Assoc)','CVC Capital'],
     datasets:[{label:'AUM ($bn)',data:[447,70,1000,30,4.1,5,8,0.15,10,30],backgroundColor:[G,G,GREY,GOLD,G,GOLD,LG,GOLD,LG,RED],borderWidth:0,borderRadius:2}]
   },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,type:'logarithmic',ticks:{callback:v=>v>=1000?'$'+v/1000+'T':'$'+v+'bn'},grid:{color:'#f0f0f0'}},x:{grid:{display:false},ticks:{font:{size:9}}}}}});
 
@@ -335,13 +328,7 @@ Sports','Wrexham
   },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:9},boxWidth:10,padding:6}}}}});
 
   new Chart(document.getElementById('pe-entry'),{type:'bar',data:{
-    labels:['Blitzer
-(HBSE)','Fenway
-(FSG)','Josh
-Harris','Steve
-Cohen','Arctos','Reynolds
-(Wrexham)','Ares','Sixth
-Street','Ian Charles','Arougheti'],
+    labels:['Blitzer (HBSE)','Fenway (FSG)','Josh Harris','Steve Cohen','Arctos','Reynolds (Wrexham)','Ares','Sixth Street','Ian Charles','Arougheti'],
     datasets:[{label:'First Major Sports Entry',data:[2011,2002,2011,2020,2021,2020,2022,2020,2019,2024],backgroundColor:G,borderWidth:0,borderRadius:2}]
   },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{min:2000,max:2026,ticks:{stepSize:4},grid:{color:'#f0f0f0'}},x:{grid:{display:false},ticks:{font:{size:8}}}}}});
 
